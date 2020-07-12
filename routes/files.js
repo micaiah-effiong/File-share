@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const contoller = require("../contollers").files;
+const contoller = require("../controllers/").files;
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {

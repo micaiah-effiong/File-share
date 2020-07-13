@@ -6,8 +6,6 @@ const {
   asyncHandler,
 } = require("../handlers/index");
 
-fileList().then(console.log);
-
 module.exports = {
   // endpoint controller functions goes here
   getAllFiles: asyncHandler(async (req, res, next) => {

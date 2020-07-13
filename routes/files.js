@@ -1,10 +1,12 @@
 const express = require("express");
+const {
+  files: { getAllFiles, getOneFile, uploadFile, downloadFile, deleteFile },
+} = require("../controllers/index");
 const router = express.Router();
-const contoller = require("../controllers/").files;
 
 /* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
-});
+router.route("/").get(getAllFiles).post(uploadFile);
+router.route("/:id").get(getOneFile).delete(deleteFile);
+router.route("/download/:id").get(downloadFile);
 
 module.exports = router;

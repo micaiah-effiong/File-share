@@ -8,10 +8,10 @@
     <div id="app">
       <div class="container">
         <div class="row">
-          <div class="col-l-3 col-sm-3" v-for="file in files">
+          <div class="col-md-3 col-sm-12" v-for="file in files">
             <div class="card p-2 m-2">
               <div class="card-content">
-                <div>{{file.filename}}</div>
+                <div :title="file.filename">{{file.short}}</div>
                 <hr />
                 <div>
                   <small>
@@ -20,13 +20,14 @@
                 </div>
                 <div>{{file.size}}</div>
               </div>
-              <a :href="file.link">Download</a>
+              <a :href="file.link" class="btn-link">Download</a>
             </div>
           </div>
         </div>
       </div>
     </div>
     <script src="script/vue.js"></script>
+    <script src="script/socket.io.js"></script>
     <script src="script/main.js"></script>
   </body>
 </html>

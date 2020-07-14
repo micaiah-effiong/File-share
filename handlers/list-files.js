@@ -28,10 +28,15 @@ module.exports = async function () {
       let { size, birthtime } = fileDetails;
       let fileType = mime.lookup(_file);
       let link = path.join("/files", _file);
+      let short = _file;
+      short = `${short.substring(0, 15)}...${short.substring(
+        short.lastIndexOf(".") + 1
+      )}`;
 
       // push details to the list<Array>
       list.push({
         filename: _file,
+        short,
         size: convertByte(size),
         createdAt: birthtime,
         link,

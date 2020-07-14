@@ -26,16 +26,27 @@ module.exports = async function () {
 
       // create file details
       let { size, birthtime } = fileDetails;
-      let type = mime.lookup(_file);
+      let fileType = mime.lookup(_file);
       let link = path.join("/files", _file);
-      let details = { size, "created at": birthtime, link, type };
 
       // push details to the list<Array>
       list.push({
         filename: _file,
-        details,
+        size: convertByte(size),
+        createdAt: birthtime,
+        link,
+        fileType,
       });
     }
   }
   return list;
 };
+
+function convertByte(num) {
+  let format = ["b", "kb", "mb", "gb", "tb"],
+    level;
+  for (level = 0; num > 1024; level++) {
+    num = num / 1024;
+  }
+  return `${num.toFixed(2)}${format[level]}`;
+}

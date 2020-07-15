@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>File Share | Dashboard</title>
+    <%- include('./partials/meta-tags.ejs'); -%>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3 col-sm-12" v-for="file in files" v-if="files.length > 0">
+            <div class="card p-2 m-2">
+              <div class="card-content">
+                <div :title="file.filename">{{file.short}}</div>
+                <hr />
+                <div>
+                  <small>
+                    {{file.fileType.substr(file.fileType.indexOf('/')+1)}} file
+                  </small>
+                </div>
+                <div>{{file.size}}</div>
+              </div>
+              <a :href="file.link" class="btn-link">Download</a>
+            </div>
+          </div>
+          <div  v-if="files.length <= 0"> Sorry no files to download</div>
+        </div>
+      </div>
+      <input type="file" class="btn" name="">
+    </div>
+    <script src="script/vue.js"></script>
+    <script src="script/socket.io.js"></script>
+    <script src="script/main.js"></script>
+  </body>
+</html>

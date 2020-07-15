@@ -8,7 +8,7 @@
     <div id="app">
       <div class="container">
         <div class="row">
-          <div class="col-md-3 col-sm-12" v-for="file in files">
+          <div class="col-md-3 col-sm-12" v-for="file in files" v-if="files.length > 0">
             <div class="card p-2 m-2">
               <div class="card-content">
                 <div :title="file.filename">{{file.short}}</div>
@@ -23,8 +23,10 @@
               <a :href="file.link" class="btn-link">Download</a>
             </div>
           </div>
+          <div  v-if="files.length <= 0"> Sorry no files to download</div>
         </div>
       </div>
+      <input type="file" class="btn" name="">
     </div>
     <script src="script/vue.js"></script>
     <script src="script/socket.io.js"></script>

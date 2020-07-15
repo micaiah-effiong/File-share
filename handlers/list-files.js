@@ -27,11 +27,16 @@ module.exports = async function () {
       // create file details
       let { size, birthtime } = fileDetails;
       let fileType = mime.lookup(_file);
-      let link = path.join("/files", _file);
-      let short = _file;
-      short = `${short.substring(0, 15)}...${short.substring(
-        short.lastIndexOf(".") + 1
-      )}`;
+      let link = path.join("api", "files", "download", _file);
+      let short;
+
+      if (_file.length >= 15) {
+        short = `${_file.substring(0, 15)}...${_file.substring(
+          _file.lastIndexOf(".") + 1
+        )}`;
+      } else {
+        short = _file;
+      }
 
       // push details to the list<Array>
       list.push({

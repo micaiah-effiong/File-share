@@ -8,7 +8,11 @@
     <div id="app">
       <div class="container">
         <div class="row">
-          <div class="col-md-3 col-sm-12" v-for="file in files" v-if="files.length > 0">
+          <div
+            class="col-md-3 col-sm-12"
+            v-for="file in files"
+            v-if="files.length > 0"
+          >
             <div class="card p-2 m-2">
               <div class="card-content">
                 <div :title="file.filename">{{file.short}}</div>
@@ -23,10 +27,13 @@
               <a :href="file.link" class="btn-link">Download</a>
             </div>
           </div>
-          <div  v-if="files.length <= 0"> Sorry no files to download</div>
+          <div v-if="files.length <= 0">Sorry no files to download</div>
         </div>
       </div>
-      <input type="file" class="btn" name="">
+      <form method="POST" action="/api/files" enctype="multipart/form-data">
+        <input type="file" class="btn" name="upload" />
+        <input type="submit" class="btn">
+      </form>
     </div>
     <script src="script/vue.js"></script>
     <script src="script/socket.io.js"></script>

@@ -1,8 +1,10 @@
 const express = require("express");
+const fileUpload = require("express-fileupload");
 const {
   files: { getAllFiles, getOneFile, uploadFile, downloadFile, deleteFile },
 } = require("../controllers/index");
 const router = express.Router();
+router.use(fileUpload());
 
 /* GET users listing. */
 router.route("/").get(getAllFiles).post(uploadFile);

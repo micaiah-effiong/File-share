@@ -6,6 +6,7 @@
   </head>
   <body>
     <div id="app">
+      <div v-if="uploadPercent>0">{{uploadPercent}}%</div>
       <div class="container">
         <div class="row">
           <div
@@ -31,8 +32,8 @@
         </div>
       </div>
       <form method="POST" action="/api/files" enctype="multipart/form-data">
-        <input type="file" class="btn" name="upload" />
-        <input type="submit" class="btn">
+        <input type="file" class="btn" name="upload" multiple @change.prevent="upload" />
+        <!-- <input type="submit" class="btn"> -->
       </form>
     </div>
     <script src="script/vue.js"></script>

@@ -13,18 +13,23 @@ new Vue({
   el: "#app",
   data: {
     search: "",
+    appFiles: [],
     files: [],
     uploadPercent: 0,
   },
   created: async function () {
     let res = await fetch("/api/files");
     let files = await res.json();
-    this.files = files.data;
+    this.appFiles = [...files.data];
+    this.files = [...this.appFiles];
 
     socket.on("fileUpdate", async () => {
       let res = await fetch("/api/files");
       let files = await res.json();
-      this.files = files.data;
+      this.appFiles = files.data;
+      if (this.search.length <= 0) {
+        this.files = [...this.files];
+      }
     });
   },
   methods: {
@@ -49,6 +54,16 @@ new Vue({
         }
       };
       ajax.send(file);
+    },
+
+    searchFile: function () {
+      if (this.search.length <= 0) {
+        return (this.files = [...this.appFiles]);
+      }
+      let searchResult = this.appFiles.filter((v) =>
+        v.filename.toLowerCase().includes(this.search.toLowerCase())
+      );
+      this.files = searchResult;
     },
   },
 });

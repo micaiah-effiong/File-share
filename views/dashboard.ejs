@@ -6,7 +6,8 @@
   </head>
   <body>
     <div id="app">
-      <div v-if="uploadPercent>0">{{uploadPercent}}%</div>
+      <input type="search" v-model="search" @input="searchFile">
+      <div v-if="uploadPercent > 0">{{uploadPercent}}%</div>
       <div class="container">
         <div class="row">
           <div

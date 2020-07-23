@@ -7,10 +7,12 @@
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
-    "cookie-parser": "~1.4.4",
+    "cookie-parser": "^1.4.5",
     "debug": "^2.6.9",
+    "dotenv": "^8.2.0",
     "ejs": "^2.6.2",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.7-alpha.3",
     "http-errors": "^1.6.3",
     "morgan": "^1.9.1",
     "socket.io": "^2.3.0"

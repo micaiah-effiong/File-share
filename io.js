@@ -14,13 +14,13 @@ fs.watch(path.resolve(__dirname, "files"), async (err, data) => {
       appFiles.map((e) => e.filename).join()
     )
   ) {
-    io.emit("fileUpdate");
+    io.emit("FILE_UPDATE");
     appFiles = [...dirChange];
   }
 });
 
 io.on("connection", function (client) {
-  io.emit("joined", client.id);
+  io.emit("JOINED", client.id);
 
   client.on("disconnect", function (id) {
     console.log("client disconnected", id); //log client disconnect

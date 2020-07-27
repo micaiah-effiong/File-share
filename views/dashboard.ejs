@@ -7,6 +7,11 @@
   <body>
     <div id="app">
       <input type="search" v-model="search" @input="searchFile">
+      <button @click="sortFiles()">All</button>
+      <button @click="sortFiles('image')">Images</button>
+      <button @click="sortFiles('vidoe')">Vidoes</button>
+      <button @click="sortFiles('zip')">Files</button>
+      <button @click="sortFiles('exe, mis, apk')">Apps</button>
       <div v-if="uploadPercent > 0">{{uploadPercent}}%</div>
       <div class="container">
         <div class="row">
@@ -34,7 +39,6 @@
       </div>
       <form method="POST" action="/api/files" enctype="multipart/form-data">
         <input type="file" class="btn" name="upload" multiple @change.prevent="upload" />
-        <!-- <input type="submit" class="btn"> -->
       </form>
     </div>
     <script src="script/vue.js"></script>

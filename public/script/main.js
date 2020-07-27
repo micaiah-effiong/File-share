@@ -1,12 +1,5 @@
-console.log(
-  `%c File share app running %c App Started %c`,
-  "background:#35495e ; padding: 2px; border-radius: 3px 0 0 3px;  color: #fff",
-  "background:#41b883 ; padding: 2px; border-radius: 0 3px 3px 0;  color: #fff",
-  "background:transparent; padding: 2px"
-);
-
 let socket = io();
-socket.on("joined", (d) => {
+socket.on("JOINED", (d) => {
   console.log(d, "joined");
 });
 new Vue({
@@ -23,7 +16,7 @@ new Vue({
     this.appFiles = [...files.data];
     this.files = [...this.appFiles];
 
-    socket.on("fileUpdate", async () => {
+    socket.on("FILE_UPDATE", async () => {
       let res = await fetch("/api/files");
       let files = await res.json();
       this.appFiles = files.data;
@@ -34,7 +27,7 @@ new Vue({
   },
   methods: {
     upload: async function (event) {
-      let self = this;
+      // let self = this;
       let file = new FormData(event.target.form);
 
       let ajax = new XMLHttpRequest();
@@ -44,12 +37,12 @@ new Vue({
         let { total, loaded, lengthComputable } = event;
         let val = Math.round((loaded / total) * 100);
         if (lengthComputable) {
-          self.uploadPercent = val;
+          this.uploadPercent = val;
         }
 
         if (val === 100) {
           setTimeout(() => {
-            self.uploadPercent = 0;
+            this.uploadPercent = 0;
           }, 1000);
         }
       };
@@ -64,6 +57,12 @@ new Vue({
         v.filename.toLowerCase().includes(this.search.toLowerCase())
       );
       this.files = searchResult;
+    },
+
+    sortFiles: function (type) {
+      if (!type) return (this.files = this.appFiles);
+
+      this.files = this.appFiles.filter((file) => file.fileType.includes(type));
     },
   },
 });

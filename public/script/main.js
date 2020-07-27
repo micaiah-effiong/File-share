@@ -58,5 +58,11 @@ new Vue({
       );
       this.files = searchResult;
     },
+
+    sortFiles: function (type) {
+      if (!type) return (this.files = this.appFiles);
+
+      this.files = this.appFiles.filter((file) => file.fileType.includes(type));
+    },
   },
 });

@@ -2,6 +2,55 @@ let socket = io();
 socket.on("JOINED", (d) => {
   console.log(d, "joined");
 });
+
+Vue.component("file-block", {
+  template: `
+    <div class="row">
+      <div
+        class="col-md-3 col-sm-12"
+        v-for="file in files"
+        v-if="files.length > 0"
+      >
+        <div class="card p-2 m-2">
+          <div class="card-content">
+            <div :title="file.filename">{{file.short}}</div>
+            <hr />
+            <div>
+              <small>
+                {{file.fileType.substr(file.fileType.indexOf('/')+1)}} file
+              </small>
+            </div>
+            <div>{{file.size}}</div>
+          </div>
+          <a :href="file.link" class="btn-link">Download</a>
+        </div>
+      </div>
+      <div v-if="files.length <= 0">Sorry no files to download</div>
+    </div>
+  `,
+  data() {
+    return {
+      files: [],
+      appFiles: [],
+    };
+  },
+  created: async function () {
+    let res = await fetch("/api/files");
+    let files = await res.json();
+    this.appFiles = [...files.data];
+    this.files = [...this.appFiles];
+
+    socket.on("FILE_UPDATE", async () => {
+      let res = await fetch("/api/files");
+      let files = await res.json();
+      this.appFiles = files.data;
+      if (this.search.length <= 0) {
+        this.files = [...this.files];
+      }
+    });
+  },
+});
+
 new Vue({
   el: "#app",
   data: {

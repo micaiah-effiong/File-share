@@ -1,8 +1,32 @@
 body {
-  padding: 50px;
+  /*padding: 50px;*/
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+.app-padd-1 {
+  padding: 10px;
+}
+.app-padd-2 {
+  padding: 20px;
+}
+.app-padd-3 {
+  padding: 30px;
+}
+.app-padd-4 {
+  padding: 40px;
+}
+.app-padd-5 {
+  padding: 50px;
+}
+
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #212529;
+  color: #dae0e5;
+}
+
 a {
-  color: #00B7FF;
+  color: #00b7ff;
 }

@@ -10,7 +10,17 @@ Vue.component("file-box", {
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
       <div class="card p-2 m-2">
         <div class="card-content">
-          <div :title="filename">{{short}}</div>
+          <div :title="filename" class="row">
+            <div class="col-9">{{short}}</div>
+            <div class="col-1">
+              <input
+                type="checkbox"
+                @click="onCheck($event.target)"
+                :name="filename"
+                :data-link="link"
+              />
+            </div>
+          </div>
           <hr />
           <div>
             <small>
@@ -19,7 +29,9 @@ Vue.component("file-box", {
           </div>
           <div>{{size}}</div>
         </div>
-        <a :href="link" class="btn-link">Download</a>
+        <div class="mt-2">
+          <a :href="link" class="btn-link">Download</a>
+        </div>
       </div>
     </div>
   `,
@@ -29,12 +41,13 @@ Vue.component("file-box", {
     short: { required: true },
     size: { required: true },
     link: { required: true },
+    onCheck: { required: true },
   },
 });
 
 Vue.component("file-block", {
   template: `
-    <div class="row">
+    <div class="row app-padd-3">
       <template v-for="file, key of files">
         <file-box
           v-if="files.length > 0"
@@ -43,6 +56,7 @@ Vue.component("file-block", {
           :short="file.short"
           :size="file.size"
           :link="file.link"
+          :onCheck="onCheck"
           :key="key"
         >
         </file-box>
@@ -53,6 +67,7 @@ Vue.component("file-block", {
   data() {
     return {
       search: "",
+      checkedFiles: [],
       files: [],
       appFiles: [],
     };
@@ -75,20 +90,38 @@ Vue.component("file-block", {
 
     AppEvent.$on("searchFile", this.searchFile);
     AppEvent.$on("sortFiles", this.sortFiles);
+    AppEvent.$on("downloadMultiple", this.downloadMultiple);
   },
   methods: {
-    searchFile: function (searchStr) {
+    downloadMultiple: function () {
+      console.log("downloading multiple");
+      this.checkedFiles.map((link) => {
+        let anchor = document.createElement("a");
+        anchor.setAttribute("download", true);
+        anchor.href = link;
+        anchor.click();
+        anchor.remove();
+      });
+    },
+
+    onCheck({ checked: status, name, dataset: { link } }) {
+      status
+        ? this.checkedFiles.push(link)
+        : this.checkedFiles.splice(this.checkedFiles.indexOf(link), 1);
+    },
+
+    searchFile(searchStr) {
       this.search = searchStr;
       if (searchStr.length <= 0) {
         return (this.files = [...this.appFiles]);
       }
-      let searchResult = this.appFiles.filter((v) =>
+      let searchResult = this.files.filter((v) =>
         v.filename.toLowerCase().includes(searchStr.toLowerCase())
       );
       this.files = searchResult;
     },
 
-    sortFiles: function (type) {
+    sortFiles(type) {
       if (!type) return (this.files = this.appFiles);
       type = type.flat();
       this.files = this.appFiles
@@ -113,10 +146,8 @@ Vue.component("file-block", {
 new Vue({
   el: "#app",
   data: {
-    appFiles: [],
-    search: "",
-    files: [],
     uploadPercent: 0,
+    appEvent: AppEvent,
   },
   methods: {
     upload: async function (event) {
@@ -141,13 +172,13 @@ new Vue({
       ajax.send(file);
     },
 
-    searchFile: function () {
-      AppEvent.$emit("searchFile", this.search);
+    searchFile: function (str) {
+      AppEvent.$emit("searchFile", str);
     },
 
     sortFiles: function (type) {
       let format = {
-        IMGAGE: "image",
+        IMAGE: "image",
         VIDEO: "video",
         FILES: ["zip", "gzip"],
         APP: "octet-stream",

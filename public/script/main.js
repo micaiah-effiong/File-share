@@ -24,7 +24,7 @@ Vue.component("file-box", {
           <hr />
           <div>
             <small>
-              {{fileType.substr(fileType.indexOf('/')+1)}} file
+              {{ splitFileType }} file
             </small>
           </div>
           <div>{{size}}</div>
@@ -42,6 +42,11 @@ Vue.component("file-box", {
     size: { required: true },
     link: { required: true },
     onCheck: { required: true },
+  },
+  computed: {
+    splitFileType() {
+      return this.$props.fileType.substr(this.$props.fileType.indexOf("/") + 1);
+    },
   },
 });
 
@@ -79,10 +84,11 @@ Vue.component("file-block", {
     this.files = [...this.appFiles];
 
     socket.on("FILE_UPDATE", async () => {
+      console.log("FILE_UPDATE...");
       let res = await fetch("/api/files");
       let files = await res.json();
       this.appFiles = files.data;
-      this.files = [...this.files];
+      this.files = [...this.appFiles];
       if (this.search.length > 0) {
         this.searchFile(this.search);
       }
@@ -141,6 +147,12 @@ Vue.component("file-block", {
         });
     },
   },
+
+  watch: {
+    files() {
+      return AppEvent.$emit("countFile", this.files.length);
+    },
+  },
 });
 
 new Vue({
@@ -148,6 +160,13 @@ new Vue({
   data: {
     uploadPercent: 0,
     appEvent: AppEvent,
+    numberOfFiles: 0,
+  },
+  created() {
+    AppEvent.$on("countFile", (num) => {
+      console.log("countFile....");
+      this.numberOfFiles = num;
+    });
   },
   methods: {
     upload: async function (event) {

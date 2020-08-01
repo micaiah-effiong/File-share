@@ -8,7 +8,10 @@ let AppEvent = new Vue();
 Vue.component("file-box", {
   template: `
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-      <div class="card p-2 m-2">
+      <div
+        class="card p-2 m-2"
+        :style="{ background: style, backgroundSize: 'cover', backgroundPosition: 'center center'}"
+      >
         <div class="card-content">
           <div :title="filename" class="row">
             <div class="col-9">{{short}}</div>
@@ -30,7 +33,7 @@ Vue.component("file-box", {
           <div>{{size}}</div>
         </div>
         <div class="mt-2">
-          <a :href="link" class="btn-link">Download</a>
+          <a :href="downloadLink" class="btn-link">Download</a>
         </div>
       </div>
     </div>
@@ -41,11 +44,18 @@ Vue.component("file-box", {
     short: { required: true },
     size: { required: true },
     link: { required: true },
+    downloadLink: { required: true },
     onCheck: { required: true },
   },
   computed: {
     splitFileType() {
       return this.$props.fileType.substr(this.$props.fileType.indexOf("/") + 1);
+    },
+
+    style() {
+      return this.$props.fileType.includes("image")
+        ? `url(/${this.$props.link})`
+        : `inherit`;
     },
   },
 });
@@ -61,6 +71,7 @@ Vue.component("file-block", {
           :short="file.short"
           :size="file.size"
           :link="file.link"
+          :downloadLink="file.downloadLink"
           :onCheck="onCheck"
           :key="key"
         >

@@ -27,7 +27,10 @@ module.exports = async function () {
       // create file details
       let { size, birthtime } = fileDetails;
       let fileType = mime.lookup(_file);
-      let link = path.join("api", "files", "download", _file);
+      let link = path
+        .join("api", "files", "download", _file)
+        .replace(/\\/g, "/");
+      let downloadLink = path.join("api", "files", _file).replace(/\\/g, "/");
       let short;
 
       if (_file.length >= 15) {
@@ -45,6 +48,7 @@ module.exports = async function () {
         size: convertByte(size),
         createdAt: birthtime,
         link,
+        downloadLink,
         fileType,
       });
     }

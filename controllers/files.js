@@ -1,5 +1,6 @@
 const { promises: fsPromises } = require("fs");
 const path = require("path");
+// const io = require("../io");
 const {
   listFiles: fileList,
   errorResponse,
@@ -24,10 +25,8 @@ module.exports = {
     if (!file || file.length < 1) {
       return next(errorResponse("Error: Resource not found", 404));
     }
-
-    res.json({
-      status: true,
-    });
+    let filePath = path.resolve(__dirname, "..", "files", fileName);
+    res.sendFile(filePath);
   }),
 
   uploadFile: asyncHandler(async (req, res, next) => {
@@ -47,6 +46,7 @@ module.exports = {
       status: true,
       msg: "Uploads was successful",
     });
+    // io.emit("FILE_UPDATE");
   }),
 
   downloadFile: asyncHandler(async (req, res, next) => {

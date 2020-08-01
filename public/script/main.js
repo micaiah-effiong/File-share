@@ -8,13 +8,10 @@ let AppEvent = new Vue();
 Vue.component("file-box", {
   template: `
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-      <div
-        class="card p-2 m-2"
-        :style="{ background: style, backgroundSize: 'cover', backgroundPosition: 'center center'}"
-      >
-        <div class="card-content">
+      <div class="card  m-2" :style="style" v-if="fileType.includes('image')">
+        <div class="card-content p-2">
           <div :title="filename" class="row">
-            <div class="col-9">{{short}}</div>
+            <div class="col-9"></div>
             <div class="col-1">
               <input
                 type="checkbox"
@@ -25,15 +22,37 @@ Vue.component("file-box", {
             </div>
           </div>
           <hr />
+          <div></div>
+        </div>
+        <div class="mt-2 file-details">
+          <small>{{short}}<br/>{{size}}</small>
           <div>
-            <small>
-              {{ splitFileType }} file
-            </small>
+            <a :href="downloadLink" class="btn-link">Download</a>
           </div>
-          <div>{{size}}</div>
+        </div>
+      </div>
+      <div class="card  m-2 p-2" :style="style" v-if="!fileType.includes('image')">
+        <div class="card-content">
+          <div :title="filename" class="row">
+            <div class="col-9">
+              {{short}}<br/>{{size}}
+            </div>
+            <div class="col-1">
+              <input
+                type="checkbox"
+                @click="onCheck($event.target)"
+                :name="filename"
+                :data-link="link"
+              />
+            </div>
+          </div>
+          <hr />
+          <div></div>
         </div>
         <div class="mt-2">
-          <a :href="downloadLink" class="btn-link">Download</a>
+          <div>
+            <a :href="downloadLink" class="btn-link">Download</a>
+          </div>
         </div>
       </div>
     </div>
@@ -53,9 +72,18 @@ Vue.component("file-box", {
     },
 
     style() {
-      return this.$props.fileType.includes("image")
-        ? `url(/${this.$props.link})`
-        : `inherit`;
+      if (this.$props.fileType.includes("image")) {
+        return {
+          backgroundImage: `url("/${this.$props.link}")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center center",
+          backgroundBlendMode: "color-burn",
+          backgroundColor: "#343a40ba",
+          color: "white",
+        };
+      } else {
+        return { backgroundColor: "inherit" };
+      }
     },
   },
 });

@@ -28,13 +28,13 @@ module.exports = async function () {
       let { size, birthtime } = fileDetails;
       let fileType = mime.lookup(_file);
       let link = path
-        .join("api", "files", "download", _file)
+        .join("api", "files", "download", encodeURIComponent(_file))
         .replace(/\\/g, "/");
       let downloadLink = path.join("api", "files", _file).replace(/\\/g, "/");
       let short;
 
-      if (_file.length >= 15) {
-        short = `${_file.substring(0, 15)}...${_file.substring(
+      if (_file.lastIndexOf(".") > 12) {
+        short = `${_file.substring(0, 12)}...${_file.substring(
           _file.lastIndexOf(".") + 1
         )}`;
       } else {

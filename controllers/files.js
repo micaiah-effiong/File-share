@@ -1,6 +1,5 @@
 const { promises: fsPromises } = require("fs");
 const path = require("path");
-// const io = require("../io");
 const {
   listFiles: fileList,
   errorResponse,
@@ -46,7 +45,6 @@ module.exports = {
       status: true,
       msg: "Uploads was successful",
     });
-    // io.emit("FILE_UPDATE");
   }),
 
   downloadFile: asyncHandler(async (req, res, next) => {

@@ -5,32 +5,61 @@ socket.on("JOINED", (d) => {
 
 let AppEvent = new Vue();
 
+Vue.component("image-file", {
+  data() {
+    return {
+      isChecked: false,
+    };
+  },
+  template: `
+    <div class="card  m-2" v-if="fileType.includes('image')">
+      <div class="card-content p-2">
+        <div :title="filename" class="row">
+          <div class="col-9"></div>
+          <div class="col-1">
+            <input
+              type="checkbox"
+              @click="onCheck($event.target)"
+              :name="filename"
+              :data-link="link"
+            />
+          </div>
+        </div>
+        <hr />
+        <div></div>
+      </div>
+      <div class="mt-2 file-details">
+        <small>{{short}}<br/>{{size}}</small>
+        <div>
+          <a :href="downloadLink" class="btn-link">Download</a>
+        </div>
+      </div>
+    </div>
+  `,
+  props: {
+    filename: { required: true },
+    fileType: { required: true },
+    short: { required: true },
+    size: { required: true },
+    link: { required: true },
+    downloadLink: { required: true },
+    onCheck: { required: true },
+  },
+});
+
 Vue.component("file-box", {
   template: `
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-      <div class="card  m-2" :style="style" v-if="fileType.includes('image')">
-        <div class="card-content p-2">
-          <div :title="filename" class="row">
-            <div class="col-9"></div>
-            <div class="col-1">
-              <input
-                type="checkbox"
-                @click="onCheck($event.target)"
-                :name="filename"
-                :data-link="link"
-              />
-            </div>
-          </div>
-          <hr />
-          <div></div>
-        </div>
-        <div class="mt-2 file-details">
-          <small>{{short}}<br/>{{size}}</small>
-          <div>
-            <a :href="downloadLink" class="btn-link">Download</a>
-          </div>
-        </div>
-      </div>
+      <image-file
+        :filename="filename"
+        :fileType="fileType"
+        :short="short"
+        :size="size"
+        :link="link"
+        :downloadLink="downloadLink"
+        :onCheck="onCheck"
+        :style="style"
+      ></image-file>
       <div class="card  m-2 p-2" :style="style" v-if="!fileType.includes('image')">
         <div class="card-content">
           <div :title="filename" class="row">
@@ -123,7 +152,6 @@ Vue.component("file-block", {
     this.files = [...this.appFiles];
 
     socket.on("FILE_UPDATE", async () => {
-      console.log("FILE_UPDATE...");
       let res = await fetch("/api/files");
       let files = await res.json();
       this.appFiles = files.data;
@@ -139,7 +167,6 @@ Vue.component("file-block", {
   },
   methods: {
     downloadMultiple: function () {
-      console.log("downloading multiple");
       this.checkedFiles.map((link) => {
         let anchor = document.createElement("a");
         anchor.setAttribute("download", true);
@@ -203,7 +230,6 @@ new Vue({
   },
   created() {
     AppEvent.$on("countFile", (num) => {
-      console.log("countFile....");
       this.numberOfFiles = num;
     });
   },

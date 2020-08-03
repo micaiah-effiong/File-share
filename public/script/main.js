@@ -6,11 +6,6 @@ socket.on("JOINED", (d) => {
 let AppEvent = new Vue();
 
 Vue.component("image-file", {
-  data() {
-    return {
-      isChecked: false,
-    };
-  },
   template: `
     <div class="card  m-2" v-if="fileType.includes('image')">
       <div class="card-content p-2">

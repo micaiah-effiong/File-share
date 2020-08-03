@@ -30,21 +30,23 @@ module.exports = {
 
   uploadFile: asyncHandler(async (req, res, next) => {
     // run express file upload to handle file uploading
-    console.log(req.files);
     if (!req.files) return next(errorResponse("No files were uploaded.", 400));
 
-    let files = { ...req.files };
-    if (files.upload.length && files.upload.length > 1) {
-      await files.upload.forEach(async (file) => {
-        await file.mv(path.join(filesDir, file.name)).catch(next);
+    try {
+      let files = { ...req.files };
+      if (files.upload.length && files.upload.length > 1) {
+        await files.upload.forEach(async (file) => {
+          await file.mv(path.join(filesDir, file.name)).catch(next);
+        });
+      } else {
+        await files.upload.mv(path.join(filesDir, files.upload.name));
+      }
+    } finally {
+      res.json({
+        status: true,
+        msg: "Uploads was successful",
       });
-    } else {
-      await files.upload.mv(path.join(filesDir, files.upload.name));
     }
-    res.json({
-      status: true,
-      msg: "Uploads was successful",
-    });
   }),
 
   downloadFile: asyncHandler(async (req, res, next) => {

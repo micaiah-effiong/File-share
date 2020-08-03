@@ -19,7 +19,7 @@ Vue.component("image-file", {
           <div class="col-1">
             <input
               type="checkbox"
-              @click="onCheck($event.target)"
+              @click="onCheck($event)"
               :name="filename"
               :data-link="link"
             />
@@ -69,7 +69,7 @@ Vue.component("file-box", {
             <div class="col-1">
               <input
                 type="checkbox"
-                @click="onCheck($event.target)"
+                @click="onCheck($event)"
                 :name="filename"
                 :data-link="link"
               />
@@ -140,7 +140,7 @@ Vue.component("file-block", {
   data() {
     return {
       search: "",
-      checkedFiles: [],
+      checkedFiles: {},
       files: [],
       appFiles: [],
     };
@@ -167,19 +167,29 @@ Vue.component("file-block", {
   },
   methods: {
     downloadMultiple: function () {
-      this.checkedFiles.map((link) => {
+      Object.keys(this.checkedFiles).map((name) => {
+        let file = this.checkedFiles[name];
         let anchor = document.createElement("a");
         anchor.setAttribute("download", true);
-        anchor.href = link;
+        anchor.href = file.link;
         anchor.click();
         anchor.remove();
+        file.target.checked = !file.target.checked;
+        delete this.checkedFiles[name];
       });
     },
 
-    onCheck({ checked: status, name, dataset: { link } }) {
+    onCheck({
+      target: {
+        checked: status,
+        name,
+        dataset: { link },
+      },
+      target,
+    }) {
       status
-        ? this.checkedFiles.push(link)
-        : this.checkedFiles.splice(this.checkedFiles.indexOf(link), 1);
+        ? (this.checkedFiles[name] = { link, target })
+        : delete this.checkedFiles[name];
     },
 
     searchFile(searchStr) {
@@ -264,7 +274,8 @@ new Vue({
       let format = {
         IMAGE: "image",
         VIDEO: "video",
-        FILES: ["zip", "gzip"],
+        AUDIO: "audio",
+        FILES: ["zip", "gzip", "txt", "gz", "rar"],
         APP: "octet-stream",
       };
 

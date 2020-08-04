@@ -26,7 +26,10 @@ Vue.component("image-file", {
       <div class="mt-2 file-details">
         <small>{{short}}<br/>{{size}}</small>
         <div>
-          <a :href="downloadLink" class="btn-link">Download</a>
+          <a :href="downloadLink" class="btn btn-link btn-outline-primary">
+            <span class="fas fa-download"></span>
+          </a>
+
         </div>
       </div>
     </div>

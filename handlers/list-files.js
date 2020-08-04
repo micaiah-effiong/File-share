@@ -27,10 +27,10 @@ module.exports = async function () {
       // create file details
       let { size, birthtime } = fileDetails;
       let fileType = mime.lookup(_file);
-      let link = path
+      let downloadLink = path
         .join("api", "files", "download", encodeURIComponent(_file))
         .replace(/\\/g, "/");
-      let downloadLink = path.join("api", "files", _file).replace(/\\/g, "/");
+      let link = path.join("api", "files", _file).replace(/\\/g, "/");
       let short;
 
       if (_file.lastIndexOf(".") > 12) {

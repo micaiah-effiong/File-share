@@ -3,12 +3,13 @@
   <head>
     <title>File Share | Dashboard</title>
     <%- include('./partials/meta-tags.ejs'); -%>
+    <link rel="stylesheet" type="text/css" href="/css/all.min.css">
   </head>
   <body>
     <div id="app">
       <div class="pb-3">
         <div class="container">
-          <header><br></header>
+          <header><br /></header>
           <div class="form-group">
             <input
               type="search"
@@ -18,7 +19,12 @@
             />
           </div>
           <div class="form-group">
-            <button class="btn btn-link btn-sm mb-2" @click="appEvent.$emit('downloadMultiple')">Download</button>
+            <button
+              class="btn btn-link btn-sm mb-2"
+              @click="appEvent.$emit('downloadMultiple')"
+            >
+              <span class="fas fa-download"></span>
+            </button>
             <button @click="sortFiles()" class="btn btn-sm mb-2">All</button>
             <button @click="sortFiles('IMAGE')" class="btn btn-sm mb-2">
               Images
@@ -32,7 +38,9 @@
             <button @click="sortFiles('FILES')" class="btn btn-sm mb-2">
               Files
             </button>
-            <button @click="sortFiles('APP')" class="btn btn-sm mb-2">Apps</button>
+            <button @click="sortFiles('APP')" class="btn btn-sm mb-2">
+              Apps
+            </button>
           </div>
           <form method="POST" action="/api/files" enctype="multipart/form-data">
             <input

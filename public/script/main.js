@@ -7,7 +7,7 @@ let AppEvent = new Vue();
 
 Vue.component("image-file", {
   template: `
-    <div class="card  m-2" v-if="fileType.includes('image')">
+    <div class="card m-2">
       <div class="card-content p-2">
         <div :title="filename" class="row">
           <div class="col-9"></div>
@@ -44,6 +44,79 @@ Vue.component("image-file", {
   },
 });
 
+Vue.component("audio-file", {
+  template: `
+      <div class="card  m-2 p-2" v-if="fileType.includes('audio')">
+        <div class="card-content">
+          <div :title="filename" class="row">
+            <div class="col-9">
+              {{short}}<br/>{{size}}
+            </div>
+            <div class="col-1">
+              <input
+                type="checkbox"
+                @click="onCheck($event)"
+                :name="filename"
+                :data-link="link"
+              />
+            </div>
+          </div>
+          <hr />
+          <div></div>
+        </div>
+        <div class="mt-2">
+          <div>
+            <a :href="downloadLink" class="btn-link">
+              <span class="fa fa-download"></span>
+            </a>
+            <label class="ml-2 btn-link" :for="filename.split(' ').join('-')">
+              <span :class="icon"></span>
+            </label>
+            <input type="checkbox" @change="play" :id="filename.split(' ').join('-')" hidden>
+          </div>
+        </div>
+      </div>
+  `,
+  data() {
+    return {
+      icon: "fa fa-play",
+      songLink: this.$props.link,
+    };
+  },
+  props: {
+    filename: { required: true },
+    fileType: { required: true },
+    short: { required: true },
+    size: { required: true },
+    link: { required: true },
+    downloadLink: { required: true },
+    onCheck: { required: true },
+  },
+  methods: {
+    play({ target }) {
+      let player = document.querySelector("#player");
+      if (target.checked) {
+        console.log(
+          "player.src === this.link",
+          player.src,
+          this.songLink,
+          player.src === this.songLink
+        );
+        if (player.src === this.songLink) {
+          player.play();
+        } else {
+          player.src = this.songLink;
+          this.songLink = player.src;
+        }
+        this.icon = "fa fa-pause";
+      } else {
+        player.pause();
+        this.icon = "fa fa-play";
+      }
+    },
+  },
+});
+
 Vue.component("file-box", {
   template: `
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
@@ -57,7 +130,15 @@ Vue.component("file-box", {
         :onCheck="onCheck"
         :style="style"
       ></image-file>
-      <div class="card  m-2 p-2" :style="style" v-if="!fileType.includes('image')">
+      <audio-file v-if="fileType.includes('audio')"
+        :filename="filename"
+        :fileType="fileType"
+        :short="short"
+        :size="size"
+        :link="link"
+        :downloadLink="downloadLink"
+        :onCheck="onCheck"></audio-file>
+      <div class="card  m-2 p-2" :style="style" v-if="!fileType.includes('image') && !fileType.includes('audio')">
         <div class="card-content">
           <div :title="filename" class="row">
             <div class="col-9">

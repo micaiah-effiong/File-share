@@ -93,12 +93,18 @@
           <file-block></file-block>
         </div>
       </div>
+      <audio autoplay id="player" hidden></audio>
       <footer class="card-footer app-footer">
-        {{numberOfItems}}
+        <div class="row">
+          <div class="col-3">
+            {{numberOfFiles}} <span class="fa fa-file"></span>
+          </div>
+          <div class="col-9 text-right"></div>
+        </div>
       </footer>
     </div>
     <script src="script/vue.js"></script>
     <script src="script/socket.io.js"></script>
-    <script src="script/main.js"></script>
+    <script type="module" src="script/main.js"></script>
   </body>
 </html>

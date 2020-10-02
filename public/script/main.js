@@ -80,7 +80,7 @@ Vue.component("audio-file", {
   data() {
     return {
       icon: "fa fa-play",
-      songLink: this.$props.link,
+      songLink: location.href + this.link,
     };
   },
   props: {
@@ -106,7 +106,6 @@ Vue.component("audio-file", {
           player.play();
         } else {
           player.src = this.songLink;
-          this.songLink = player.src;
         }
         this.icon = "fa fa-pause";
       } else {

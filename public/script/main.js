@@ -7,14 +7,14 @@ let AppEvent = new Vue();
 
 Vue.component("image-file", {
   template: `
-    <div class="card  m-2" v-if="fileType.includes('image')">
+    <div class="card m-2">
       <div class="card-content p-2">
         <div :title="filename" class="row">
           <div class="col-9"></div>
           <div class="col-1">
             <input
               type="checkbox"
-              @click="onCheck($event)"
+              @change="onCheck($event)"
               :name="filename"
               :data-link="link"
             />
@@ -26,10 +26,9 @@ Vue.component("image-file", {
       <div class="mt-2 file-details">
         <small>{{short}}<br/>{{size}}</small>
         <div>
-          <a :href="downloadLink" class="btn btn-link btn-outline-primary">
-            <span class="fas fa-download"></span>
+          <a :href="downloadLink" class="btn btn-link">
+            <span class="fa fa-download"></span>
           </a>
-
         </div>
       </div>
     </div>
@@ -45,20 +44,9 @@ Vue.component("image-file", {
   },
 });
 
-Vue.component("file-box", {
+Vue.component("audio-file", {
   template: `
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-      <image-file
-        :filename="filename"
-        :fileType="fileType"
-        :short="short"
-        :size="size"
-        :link="link"
-        :downloadLink="downloadLink"
-        :onCheck="onCheck"
-        :style="style"
-      ></image-file>
-      <div class="card  m-2 p-2" :style="style" v-if="!fileType.includes('image')">
+      <div class="card  m-2 p-2" v-if="fileType.includes('audio')">
         <div class="card-content">
           <div :title="filename" class="row">
             <div class="col-9">
@@ -78,7 +66,100 @@ Vue.component("file-box", {
         </div>
         <div class="mt-2">
           <div>
-            <a :href="downloadLink" class="btn-link">Download</a>
+            <a :href="downloadLink" class="btn-link">
+              <span class="fa fa-download"></span>
+            </a>
+            <label class="ml-2 btn-link" :for="filename.split(' ').join('-')">
+              <span :class="icon"></span>
+            </label>
+            <input type="checkbox" @change="play" :id="filename.split(' ').join('-')" hidden>
+          </div>
+        </div>
+      </div>
+  `,
+  data() {
+    return {
+      icon: "fa fa-play",
+      songLink: location.href + this.link,
+    };
+  },
+  props: {
+    filename: { required: true },
+    fileType: { required: true },
+    short: { required: true },
+    size: { required: true },
+    link: { required: true },
+    downloadLink: { required: true },
+    onCheck: { required: true },
+  },
+  methods: {
+    play({ target }) {
+      let player = document.querySelector("#player");
+      if (target.checked) {
+        console.log(
+          "player.src === this.link",
+          player.src,
+          this.songLink,
+          player.src === this.songLink
+        );
+        if (player.src === this.songLink) {
+          player.play();
+        } else {
+          player.src = this.songLink;
+        }
+        this.icon = "fa fa-pause";
+      } else {
+        player.pause();
+        this.icon = "fa fa-play";
+      }
+    },
+  },
+});
+
+Vue.component("file-box", {
+  template: `
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <image-file v-if="fileType.includes('image')"
+        :filename="filename"
+        :fileType="fileType"
+        :short="short"
+        :size="size"
+        :link="link"
+        :downloadLink="downloadLink"
+        :onCheck="onCheck"
+        :style="style"
+      ></image-file>
+      <audio-file v-if="fileType.includes('audio')"
+        :filename="filename"
+        :fileType="fileType"
+        :short="short"
+        :size="size"
+        :link="link"
+        :downloadLink="downloadLink"
+        :onCheck="onCheck"></audio-file>
+      <div class="card  m-2 p-2" :style="style" v-if="!fileType.includes('image') && !fileType.includes('audio')">
+        <div class="card-content">
+          <div :title="filename" class="row">
+            <div class="col-9">
+              {{short}}<br/>{{size}}
+            </div>
+            <div class="col-1">
+              <input
+                type="checkbox"
+                @click="onCheck($event)"
+                :name="filename"
+                :data-link="link"
+              />
+            </div>
+          </div>
+          <hr />
+          <div></div>
+        </div>
+        <div class="mt-2">
+          <div>
+            <a :href="downloadLink" class="btn-link">
+              <span class="fa fa-download"></span>
+            </a>
           </div>
         </div>
       </div>
@@ -104,7 +185,7 @@ Vue.component("file-box", {
           backgroundImage: `url("/${this.$props.link}")`,
           backgroundSize: "cover",
           backgroundPosition: "center center",
-          backgroundBlendMode: "color-burn",
+          // backgroundBlendMode: "color-burn",
           backgroundColor: "#343a40ba",
           color: "white",
         };
@@ -168,7 +249,7 @@ Vue.component("file-block", {
       Object.keys(this.checkedFiles).map((name) => {
         let file = this.checkedFiles[name];
         let anchor = document.createElement("a");
-        anchor.setAttribute("download", true);
+        anchor.setAttribute("download", name);
         anchor.href = file.link;
         anchor.click();
         anchor.remove();
@@ -186,7 +267,7 @@ Vue.component("file-block", {
       target,
     }) {
       status
-        ? (this.checkedFiles[name] = { link, target })
+        ? (this.checkedFiles[name] = { link, target, name })
         : delete this.checkedFiles[name];
     },
 
@@ -202,9 +283,9 @@ Vue.component("file-block", {
     },
 
     sortFiles(type) {
-      if (!type) return (this.files = this.appFiles);
+      if (!type) return (this.files = [...this.appFiles]);
       type = type.flat();
-      this.files = this.appFiles
+      this.files = [...this.appFiles]
         // create a replica file with pos
         .map(({ filename, fileType }, index) => {
           return { filename, fileType, pos: index };
@@ -258,6 +339,7 @@ new Vue({
         if (val === 100) {
           setTimeout(() => {
             this.uploadPercent = 0;
+            navigator.vibrate(1500);
           }, 1000);
         }
       };
@@ -284,6 +366,12 @@ new Vue({
         extension = [format[type]].flat();
       }
       AppEvent.$emit("sortFiles", extension);
+    },
+  },
+  computed: {
+    numberOfItems() {
+      let wrd = this.numberOfFiles > 1 ? "items" : "item";
+      return `${this.numberOfFiles} ${wrd}`;
     },
   },
 });

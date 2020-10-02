@@ -3,7 +3,7 @@
   <head>
     <title>File Share | Dashboard</title>
     <%- include('./partials/meta-tags.ejs'); -%>
-    <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/all.min.css" />
   </head>
   <body>
     <div id="app">
@@ -18,31 +18,56 @@
               placeholder="Search for files"
             />
           </div>
-          <div class="form-group">
+          <div class="form-group" style="width: fit-content; margin: auto;">
             <button
               class="btn btn-link btn-sm mb-2"
               @click="appEvent.$emit('downloadMultiple')"
             >
               <span class="fas fa-download"></span>
             </button>
-            <button @click="sortFiles()" class="btn btn-sm mb-2">All</button>
-            <button @click="sortFiles('IMAGE')" class="btn btn-sm mb-2">
-              Images
+            <button
+              @click="sortFiles()"
+              class="btn btn-link btn-sm mb-2 ml-1 mr-1"
+            >
+              All
             </button>
-            <button @click="sortFiles('VIDEO')" class="btn btn-sm mb-2">
-              Videos
+            <button
+              @click="sortFiles('IMAGE')"
+              class="btn btn-link btn-sm mb-2 ml-1 mr-1"
+            >
+              <span class="fa fa-image"></span>
             </button>
-            <button @click="sortFiles('audio')" class="btn btn-sm mb-2">
-              Audios
+            <button
+              @click="sortFiles('VIDEO')"
+              class="btn btn-link btn-sm mb-2 ml-1 mr-1"
+            >
+              <span class="fa fa-video"></span>
             </button>
-            <button @click="sortFiles('FILES')" class="btn btn-sm mb-2">
-              Files
+            <button
+              @click="sortFiles('AUDIO')"
+              class="btn btn-link btn-sm mb-2 ml-1 mr-1"
+            >
+              <span class="fa fa-music"></span>
             </button>
-            <button @click="sortFiles('APP')" class="btn btn-sm mb-2">
-              Apps
+            <button
+              @click="sortFiles('FILES')"
+              class="btn btn-link btn-sm mb-2 ml-1 mr-1"
+            >
+              <span class="fa fa-file"></span>
+            </button>
+            <button
+              @click="sortFiles('APP')"
+              class="btn btn-link btn-sm mb-2 ml-1 mr-1"
+            >
+              <i class="fab fa-android"></i>
             </button>
           </div>
-          <form method="POST" action="/api/files" enctype="multipart/form-data">
+          <form
+            method="POST"
+            action="/api/files"
+            enctype="multipart/form-data"
+            class="form"
+          >
             <input
               type="file"
               class="btn"
@@ -50,6 +75,17 @@
               multiple
               @change.prevent="upload"
             />
+
+            <!-- <div class="file-field">
+              <a class="btn-floating mt-0 float-left"></a>
+              <i class="fas fa-cloud-upload-alt"></i>
+              <input
+                type="file"
+                name="upload"
+                multiple
+                @change.prevent="upload"
+              />
+            </div> -->
           </form>
           <div v-if="uploadPercent > 0">{{uploadPercent}}%</div>
         </div>
@@ -57,10 +93,18 @@
           <file-block></file-block>
         </div>
       </div>
-      <footer class="card-footer app-footer">{{numberOfFiles}} items</footer>
+      <audio autoplay id="player" hidden></audio>
+      <footer class="card-footer app-footer">
+        <div class="row">
+          <div class="col-3">
+            {{numberOfFiles}} <span class="fa fa-file"></span>
+          </div>
+          <div class="col-9 text-right"></div>
+        </div>
+      </footer>
     </div>
     <script src="script/vue.js"></script>
     <script src="script/socket.io.js"></script>
-    <script src="script/main.js"></script>
+    <script type="module" src="script/main.js"></script>
   </body>
 </html>

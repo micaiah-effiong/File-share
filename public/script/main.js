@@ -27,8 +27,8 @@ Vue.component("image-file", {
         <div></div>
       </div>
       <div class="container mt-2 file-details" style="bottom: 0; position: absolute;">
-      <div class="row">
-        <small class="col-8">{{short}}<br/>{{size}}</small>
+      <div class="p-1 row">
+        <small class="col-8 txt-white">{{short}}<br/>{{size}}</small>
         <div class="col-3">
           <a :href="downloadLink" class="btn btn-link">
             <span class="fa fa-download"></span>
@@ -101,12 +101,12 @@ Vue.component("audio-file", {
     play({ target }) {
       let player = document.querySelector("#player");
       if (target.checked) {
-        console.log(
+        /*console.log(
           "player.src === this.link",
           player.src,
           this.songLink,
           player.src === this.songLink
-        );
+        );*/
         if (player.src === this.songLink) {
           player.play();
         } else {
@@ -338,7 +338,7 @@ new Vue({
             );
             let _val = progress.reduce((a, b) => a + b);
             let progressPer = parseInt(_val / progress.length);
-            console.log(progressPer);
+            // console.log(progressPer);
             this.uploadPercent = progressPer;
           }
 

@@ -11,8 +11,8 @@ router.get("/", function (req, res, next) {
   res.render("dashboard");
 });
 
-router.get("/dashboard", function (req, res, next) {
-  res.render("dashboard");
+router.get("/p2p", function (req, res, next) {
+  res.render("p2p");
 });
 
 module.exports = router;

@@ -7,28 +7,33 @@ let AppEvent = new Vue();
 
 Vue.component("image-file", {
   template: `
-    <div class="card m-2">
-      <div class="card-content p-2">
+    <div class="card m-2" >
+      <div class="card-content p-2" style="height: 180px;">
+      <input
+        type="checkbox"
+        @change="onCheck($event)"
+        :name="filename"
+        :data-link="link"
+        style="position: absolute; right: 8px;"
+      />
+        <img class="app-img-preview" :src="link"/>
         <div :title="filename" class="row">
-          <div class="col-9"></div>
+          <div class="col-10"></div>
           <div class="col-1">
-            <input
-              type="checkbox"
-              @change="onCheck($event)"
-              :name="filename"
-              :data-link="link"
-            />
+            
           </div>
         </div>
         <hr />
         <div></div>
       </div>
-      <div class="mt-2 file-details">
-        <small>{{short}}<br/>{{size}}</small>
-        <div>
+      <div class="container mt-2 file-details" style="bottom: 0; position: absolute;">
+      <div class="p-1 row">
+        <small class="col-8 txt-white">{{short}}<br/>{{size}}</small>
+        <div class="col-3">
           <a :href="downloadLink" class="btn btn-link">
             <span class="fa fa-download"></span>
           </a>
+        </div>
         </div>
       </div>
     </div>
@@ -49,7 +54,7 @@ Vue.component("audio-file", {
       <div class="card  m-2 p-2" v-if="fileType.includes('audio')">
         <div class="card-content">
           <div :title="filename" class="row">
-            <div class="col-9">
+            <div class="col-10">
               {{short}}<br/>{{size}}
             </div>
             <div class="col-1">
@@ -96,12 +101,12 @@ Vue.component("audio-file", {
     play({ target }) {
       let player = document.querySelector("#player");
       if (target.checked) {
-        console.log(
+        /*console.log(
           "player.src === this.link",
           player.src,
           this.songLink,
           player.src === this.songLink
-        );
+        );*/
         if (player.src === this.songLink) {
           player.play();
         } else {
@@ -127,7 +132,6 @@ Vue.component("file-box", {
         :link="link"
         :downloadLink="downloadLink"
         :onCheck="onCheck"
-        :style="style"
       ></image-file>
       <audio-file v-if="fileType.includes('audio')"
         :filename="filename"
@@ -136,11 +140,12 @@ Vue.component("file-box", {
         :size="size"
         :link="link"
         :downloadLink="downloadLink"
-        :onCheck="onCheck"></audio-file>
-      <div class="card  m-2 p-2" :style="style" v-if="!fileType.includes('image') && !fileType.includes('audio')">
+        :onCheck="onCheck"
+      ></audio-file>
+      <div class="card m-2 p-2" v-if="!fileType.includes('image') && !fileType.includes('audio')">
         <div class="card-content">
           <div :title="filename" class="row">
-            <div class="col-9">
+            <div class="col-10">
               {{short}}<br/>{{size}}
             </div>
             <div class="col-1">
@@ -153,7 +158,7 @@ Vue.component("file-box", {
             </div>
           </div>
           <hr />
-          <div></div>
+          <!--<div></div>-->
         </div>
         <div class="mt-2">
           <div>
@@ -177,21 +182,6 @@ Vue.component("file-box", {
   computed: {
     splitFileType() {
       return this.$props.fileType.substr(this.$props.fileType.indexOf("/") + 1);
-    },
-
-    style() {
-      if (this.$props.fileType.includes("image")) {
-        return {
-          backgroundImage: `url("/${this.$props.link}")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center center",
-          // backgroundBlendMode: "color-burn",
-          backgroundColor: "#343a40ba",
-          color: "white",
-        };
-      } else {
-        return { backgroundColor: "inherit" };
-      }
     },
   },
 });
@@ -313,6 +303,7 @@ Vue.component("file-block", {
 new Vue({
   el: "#app",
   data: {
+    inProgress: {},
     uploadPercent: 0,
     appEvent: AppEvent,
     numberOfFiles: 0,
@@ -324,26 +315,58 @@ new Vue({
   },
   methods: {
     upload: async function (event) {
-      let file = new FormData(event.target.form);
+      // let file = new FormData(event.target.form);
+      let files = [...event.target.form.upload.files];
+      files.forEach((item) => {
+        let file = new FormData();
+        file.append("upload", item);
+        this.inProgress[item.name] = {
+          uploadPercent: 0,
+        };
 
-      let ajax = new XMLHttpRequest();
-      ajax.open("POST", "/api/files", true);
+        let ajax = new XMLHttpRequest();
+        ajax.open("POST", "/api/files", true);
 
-      ajax.upload.onprogress = (event) => {
-        let { total, loaded, lengthComputable } = event;
-        let val = Math.round((loaded / total) * 100);
-        if (lengthComputable) {
-          this.uploadPercent = val;
-        }
+        ajax.upload.onprogress = (event) => {
+          let { total, loaded, lengthComputable } = event;
+          let val = Math.round((loaded / total) * 100);
+          if (lengthComputable) {
+            // this.uploadPercent = val;
+            this.inProgress[item.name].uploadPercent = val;
+            let progress = Object.values(this.inProgress).map(
+              (a) => a.uploadPercent
+            );
+            let _val = progress.reduce((a, b) => a + b);
+            let progressPer = parseInt(_val / progress.length);
+            // console.log(progressPer);
+            this.uploadPercent = progressPer;
+          }
 
-        if (val === 100) {
-          setTimeout(() => {
-            this.uploadPercent = 0;
-            navigator.vibrate(1500);
-          }, 1000);
-        }
-      };
-      ajax.send(file);
+          if (val === 100) {
+            setTimeout(() => {
+              this.uploadPercent = 0;
+              delete this.inProgress[item.name];
+              navigator.vibrate([500, 300]);
+            }, 1000);
+          }
+        };
+
+        ajax.onerror = (e) => {
+          // delete from inProgress
+          // delete this.inProgress[]
+          // this.uploadPercent = 0;
+          console.log(e);
+          delete this.inProgress[item.name];
+          alert("An error occured while uploading a file");
+        };
+
+        ajax.onload = () => {
+          // delete from inProgress
+          // delete this.inProgress[]
+          delete this.inProgress[item.name];
+        };
+        ajax.send(file);
+      });
     },
 
     searchFile: function (str) {

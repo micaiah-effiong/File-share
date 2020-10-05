@@ -68,12 +68,15 @@
             enctype="multipart/form-data"
             class="form"
           >
+            <label for="upload" class="app-upload-btn"><span class="fa fa-upload fa-2"></span></label>
             <input
               type="file"
               class="btn"
               name="upload"
+              id="upload"
               multiple
               @change.prevent="upload"
+              hidden
             />
 
             <!-- <div class="file-field">
@@ -89,7 +92,7 @@
           </form>
           <div v-if="uploadPercent > 0">{{uploadPercent}}%</div>
         </div>
-        <div class="container">
+        <div class="container-fluid">
           <file-block></file-block>
         </div>
       </div>

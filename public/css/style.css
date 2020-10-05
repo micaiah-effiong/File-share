@@ -4,8 +4,31 @@ body {
 }
 
 .file-details {
-  background-color: #212121c2;
+  background-color: #212121f7;
   padding: 5px;
+}
+
+.app-img-preview {
+  max-height: 100%;
+  max-width: 100%;
+  margin: auto;
+  display: block;
+}
+
+.app-upload-btn {
+  padding: 13px;
+  border: 1px solid #007bff;
+  border-radius: 50%;
+  color: white;
+  background-color: #007bff;
+  position: fixed;
+  z-index: 1000;
+  bottom: 10%;
+  right: 10%;
+}
+
+.txt-white {
+  color: white;
 }
 
 .app-padd-1 {

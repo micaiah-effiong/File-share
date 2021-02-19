@@ -13,10 +13,11 @@
     "ejs": "^2.6.2",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.9",
+    "font-awesome": "^4.7.0",
     "http-errors": "^1.6.3",
     "morgan": "^1.9.1",
-    "socket.io": "^2.4.0",
-    "peer": "^0.5.3"
+    "peer": "^0.5.3",
+    "socket.io": "^2.4.0"
   },
   "author": {
     "name": "Micah Effiong",

@@ -5,6 +5,7 @@
  */
 
 const { app, server } = require("../app");
+const io = require("../io");
 const debug = require("debug")("file-share:server");
 const http = require("http");
 const path = require("path");

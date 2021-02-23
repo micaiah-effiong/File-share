@@ -1,5 +1,7 @@
 const { promises: fsPromises } = require("fs");
+const fs = require("fs");
 const path = require("path");
+const zlib = require("zlib");
 const {
   listFiles: fileList,
   errorResponse,
@@ -50,15 +52,28 @@ module.exports = {
   }),
 
   downloadFile: asyncHandler(async (req, res, next) => {
-    let fileName = req.params.id;
-    let filePath = path.resolve(__dirname, "..", "files", fileName);
+    const fileName = req.params.id;
+    const filePath = path.resolve(__dirname, "..", "files", fileName);
+    // const zipPath = filePath + ".gz";
+    // const zipName = path.parse(zipPath).base;
+
+    // const zip = zlib.createGzip();
+    // const rs = fs.createReadStream(filePath);
+    // const ws = fs.createWriteStream(zipPath);
+    // rs.pipe(zip)
+    //   .pipe(ws)
+    //   .on("finish", async (err) => {
+    //     if (err) return console.log(err);
+    //     res.download(zipPath, zipName);
+    //     //     // await fsPromises.unlink(filePath + ".gz").catch(console.log);
+    //   });
     res.download(filePath, fileName);
   }),
 
   deleteFile: asyncHandler(async (req, res, next) => {
     let fileName = req.params.id;
     let filePath = path.resolve(__dirname, "..", "files", fileName);
-    await fsPromises.unlink(fileName);
+    await fsPromises.unlink(filePath);
     res.json({
       status: true,
     });

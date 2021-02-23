@@ -8,13 +8,12 @@ const { listFiles: fileList } = require("./handlers/index");
 let appFiles = [];
 
 fs.watch(path.resolve(__dirname, "files"), async (err, data) => {
+  console.log("data", data);
   let dirChange = await fileList();
-  if (
-    !!(
-      dirChange.map((e) => e.filename).join() !==
-      appFiles.map((e) => e.filename).join()
-    )
-  ) {
+  let isChanged =
+    dirChange.map((e) => e.filename).join() ===
+    appFiles.map((e) => e.filename).join();
+  if (!isChanged) {
     io.emit("FILE_UPDATE");
     appFiles = [...dirChange];
   }

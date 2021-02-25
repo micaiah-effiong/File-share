@@ -29,7 +29,7 @@ Vue.component("image-file", {
       <div class="container mt-2 file-details" style="bottom: 0; position: absolute;">
       <div class="p-1 row">
         <small class="col-8 txt-white">{{short}}<br/>{{size}}</small>
-        <div class="col-3">
+        <div class="col-4">
           <a :href="downloadLink" class="btn btn-link">
             <span class="fa fa-download"></span>
           </a>
@@ -144,24 +144,25 @@ Vue.component("file-box", {
       ></audio-file>
       <div class="card m-2 p-2" v-if="!fileType.includes('image') && !fileType.includes('audio')">
         <div class="card-content">
+          <input
+            type="checkbox"
+            @click="onCheck($event)"
+            :name="filename"
+            :data-link="link"
+            style="position: absolute; right: 8px;"
+          />
           <div :title="filename" class="row">
             <div class="col-10">
               {{short}}<br/>{{size}}
             </div>
-            <div class="col-1">
-              <input
-                type="checkbox"
-                @click="onCheck($event)"
-                :name="filename"
-                :data-link="link"
-              />
-            </div>
+            <div class="col-1"></div>
           </div>
           <hr />
           <!--<div></div>-->
         </div>
-        <div class="mt-2">
-          <div>
+        <div class="p-1 row">
+          <small class="col-9 txt-white"></small>
+          <div class="col-3">
             <a :href="downloadLink" class="btn-link">
               <span class="fa fa-download"></span>
             </a>
@@ -215,16 +216,10 @@ Vue.component("file-block", {
     };
   },
   created: async function () {
-    let res = await fetch("/api/files");
-    let files = await res.json();
-    this.appFiles = [...files.data];
-    this.files = [...this.appFiles];
+    await this.fetchFiles();
 
     socket.on("FILE_UPDATE", async () => {
-      let res = await fetch("/api/files");
-      let files = await res.json();
-      this.appFiles = files.data;
-      this.files = [...this.appFiles];
+      await this.fetchFiles();
       if (this.search.length > 0) {
         this.searchFile(this.search);
       }
@@ -248,6 +243,13 @@ Vue.component("file-block", {
       });
     },
 
+    fetchFiles: async function () {
+      let res = await fetch("/api/files");
+      let files = await res.json();
+      this.appFiles = [...files.data];
+      this.files = [...this.appFiles];
+    },
+
     onCheck({
       target: {
         checked: status,
@@ -262,34 +264,40 @@ Vue.component("file-block", {
     },
 
     searchFile(searchStr) {
-      this.search = searchStr;
-      if (searchStr.length <= 0) {
+      this.search = searchStr.toLowerCase();
+      if (this.search.length <= 0) {
         return (this.files = [...this.appFiles]);
       }
+
       let searchResult = this.files.filter((v) =>
-        v.filename.toLowerCase().includes(searchStr.toLowerCase())
+        v.filename.toLowerCase().includes(this.search)
       );
       this.files = searchResult;
     },
 
     sortFiles(type) {
-      if (!type) return (this.files = [...this.appFiles]);
+      // types is passed by the parent component raise by $event
+      if (!type) {
+        this.files = [...this.appFiles];
+        return this.files;
+      }
+      // ensure type is a one level array
       type = type.flat();
       this.files = [...this.appFiles]
-        // create a replica file with pos
-        .map(({ filename, fileType }, index) => {
+        // create a replica of file with pos
+        /*.map(({ filename, fileType }, index) => {
           return { filename, fileType, pos: index };
-        })
+        })*/
         // filter files checking two way matches
         .filter((item) => {
           return type.includes(item.fileType) || item.fileType.includes(type);
-        })
-        // return files that match the same position and filename
-        .map((file, index) => {
+        });
+      // return files that match the same position and filename
+      /*.map((file, index) => {
           if (this.appFiles[file.pos].filename === file.filename) {
             return this.appFiles[file.pos];
           }
-        });
+        });*/
     },
   },
 
@@ -378,12 +386,21 @@ new Vue({
         IMAGE: "image",
         VIDEO: "video",
         AUDIO: "audio",
-        FILES: ["zip", "gzip", "txt", "gz", "rar"],
+        FILES: [
+          "zip",
+          "gzip",
+          "txt",
+          "gz",
+          "rar",
+          "vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "gz",
+        ],
         APP: "octet-stream",
       };
 
       let extension;
-      if (type == "APP" || type == "FILES") {
+      if (type === "APP" || type === "FILES") {
         extension = [format[type]].flat().map((ext) => "application/" + ext);
       } else {
         extension = [format[type]].flat();

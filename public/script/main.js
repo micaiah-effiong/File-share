@@ -9,7 +9,7 @@ Vue.component("image-file", {
   template: `
     <div class="card m-2" >
       <div
-        class="card-content p-2 img-card"
+        class="p-2 img-card"
         :style="{'background-image': 'url('+ link +')'}"
       >
         <input
@@ -36,7 +36,7 @@ Vue.component("image-file", {
         <small class="col-8 txt-white">{{short}}<br/>{{size}}</small>
         <div class="col-4">
           <a :href="downloadLink" class="btn btn-link">
-            <span class="fa fa-download"></span>
+            <span class="fa fa-download download-icon"></span>
           </a>
         </div>
         </div>
@@ -56,41 +56,46 @@ Vue.component("image-file", {
 
 Vue.component("audio-file", {
   template: `
-      <div class="card  m-2 p-2" v-if="fileType.includes('audio')">
-        <div class="card-content">
-          <div :title="filename" class="row">
-            <div class="col-10">
-              {{short}}<br/>{{size}}
-            </div>
-            <div class="col-1">
+      <div class="card others m-2" v-if="fileType.includes('audio')">
+        <div class="other-files-card-content p-2">
+          <input
+            type="checkbox"
+            @click="onCheck($event)"
+            :name="filename"
+            :data-link="link"
+            style="position: absolute; right: 8px;"
+          />
+          <div :title="filename" class="holder-text">
+          {{filename.split(".").reverse()[0]}}
+          </div>
+        </div>
+        <div class="container file-details">
+          <div class="p-1 row">
+            <small class="col-8 txt-white">{{short}}<br/>{{size}}</small>
+            <div class="col-4" style="display: flex; justify-content: flex-end;">
+              <a :href="downloadLink" class="btn btn-link">
+                <span class="fa fa-download download-icon"></span>
+              </a>
+              <label class="btn btn-link" :for="filename.split(' ').join('-')"
+                style="margin: 0;"
+              >
+                <span :class="icon"></span>
+              </label>
               <input
                 type="checkbox"
-                @click="onCheck($event)"
-                :name="filename"
-                :data-link="link"
-              />
+                @change="play"
+                :id="filename.split(' ').join('-')"
+                hidden
+              >
             </div>
-          </div>
-          <hr />
-          <div></div>
-        </div>
-        <div class="mt-2">
-          <div>
-            <a :href="downloadLink" class="btn-link">
-              <span class="fa fa-download"></span>
-            </a>
-            <label class="ml-2 btn-link" :for="filename.split(' ').join('-')">
-              <span :class="icon"></span>
-            </label>
-            <input type="checkbox" @change="play" :id="filename.split(' ').join('-')" hidden>
           </div>
         </div>
       </div>
   `,
   data() {
     return {
-      icon: "fa fa-play",
-      songLink: location.href + this.link,
+      icon: "fa fa-play download-icon",
+      player: new Audio(this.link),
     };
   },
   props: {
@@ -104,24 +109,95 @@ Vue.component("audio-file", {
   },
   methods: {
     play({ target }) {
-      let player = document.querySelector("#player");
       if (target.checked) {
-        /*console.log(
-          "player.src === this.link",
-          player.src,
-          this.songLink,
-          player.src === this.songLink
-        );*/
-        if (player.src === this.songLink) {
-          player.play();
-        } else {
-          player.src = this.songLink;
-        }
-        this.icon = "fa fa-pause";
+        this.player.play();
+        this.icon = "fa fa-pause hover-color";
       } else {
-        player.pause();
-        this.icon = "fa fa-play";
+        this.player.pause();
+        this.icon = "fa fa-play download-icon";
       }
+    },
+  },
+});
+
+Vue.component("video-file", {
+  template: `
+      <div class="card others m-2" v-if="fileType.includes('video')">
+        <div class="video-card-content p-2" :hidden="hidePlayerWrapper">
+          <video :src="link" ref="video" style="height: 100%; width: 100%;"></video>
+        </div>
+        <div class="other-files-card-content p-2" :hidden="!hidePlayerWrapper">
+          <input
+            type="checkbox"
+            @click="onCheck($event)"
+            :name="filename"
+            :data-link="link"
+            style="position: absolute; right: 8px;"
+          />
+          <div :title="filename" class="holder-text">
+          {{filename.split(".").reverse()[0]}}
+          </div>
+        </div>
+        <div class="container file-details">
+          <div class="p-1 row">
+            <small class="col-8 txt-white">{{short}}<br/>{{size}}</small>
+            <div class="col-4" style="display: flex; justify-content: flex-end;">
+              <a :href="downloadLink" class="btn btn-link">
+                <span class="fa fa-download download-icon"></span>
+              </a>
+              <label class="btn btn-link" :for="filename.split(' ').join('-')"
+                style="margin: 0;"
+              >
+                <span :class="icon"></span>
+              </label>
+              <input
+                type="checkbox"
+                @change="play"
+                :id="filename.split(' ').join('-')"
+                hidden
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+  `,
+  data() {
+    return {
+      icon: "fa fa-play download-icon",
+      player: this.$refs.video,
+      hidePlayerWrapper: true,
+    };
+  },
+  props: {
+    filename: { required: true },
+    fileType: { required: true },
+    short: { required: true },
+    size: { required: true },
+    link: { required: true },
+    downloadLink: { required: true },
+    onCheck: { required: true },
+  },
+  mounted() {
+    this.$refs.video.onended = () => {
+      this.pauseVideo();
+    };
+  },
+  methods: {
+    play({ target }) {
+      if (target.checked) {
+        this.$refs.video.play();
+        this.icon = "fa fa-pause hover-color";
+        this.hidePlayerWrapper = false;
+      } else {
+        this.$refs.video.pause();
+        this.icon = "fa fa-play download-icon";
+        this.hidePlayerWrapper = true;
+      }
+    },
+    pauseVideo() {
+      this.$refs.video.pause();
+      this.icon = "fa fa-play download-icon";
+      this.hidePlayerWrapper = true;
     },
   },
 });
@@ -147,8 +223,17 @@ Vue.component("file-box", {
         :downloadLink="downloadLink"
         :onCheck="onCheck"
       ></audio-file>
-      <div class="card m-2 p-2" v-if="!fileType.includes('image') && !fileType.includes('audio')">
-        <div class="card-content">
+      <video-file v-if="fileType.includes('video')"
+        :filename="filename"
+        :fileType="fileType"
+        :short="short"
+        :size="size"
+        :link="link"
+        :downloadLink="downloadLink"
+        :onCheck="onCheck"
+      ></video-file>
+      <div class="card others m-2" v-if="!fileType.includes('image') && !fileType.includes('audio') && !fileType.includes('video')">
+        <div class="other-files-card-content p-2">
           <input
             type="checkbox"
             @click="onCheck($event)"
@@ -156,24 +241,18 @@ Vue.component("file-box", {
             :data-link="link"
             style="position: absolute; right: 8px;"
           />
-          <div :title="filename" class="row">
-            <div class="col-10">
-              {{short}}<br/>{{size}}
-            </div>
-            <div class="col-1"></div>
+          <div :title="filename" class="holder-text">
+          {{filename.split(".").reverse()[0]}}
           </div>
-          <hr />
-          <!--<div></div>-->
         </div>
-        <div class="p-1 row">
-          <small class="col-9 txt-white"></small>
-          <div class="col-3">
-            <a :href="downloadLink" class="btn-link">
-              <span class="fa fa-download"></span>
-            </a>
-            <!--<a :href="streamLink" class="btn-link">
-              <span class="fa fa-wifi"></span>
-            </a>-->
+        <div class="container file-details">
+          <div class="p-1 row">
+            <small class="col-8 txt-white">{{short}}<br/>{{size}}</small>
+            <div class="col-4">
+              <a :href="downloadLink" class="btn btn-link">
+                <span class="fa fa-download download-icon"></span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

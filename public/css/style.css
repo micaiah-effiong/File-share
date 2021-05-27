@@ -3,9 +3,21 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+.nav .fa,
+.nav a,
+.nav button {
+  color: powderblue;
+  font-size: 16px;
+}
+
 .file-details {
-  background-color: #212121f7;
+  background-color: #1a2125f9;
   padding: 5px;
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  box-shadow: -7px 7px 12px #1a2125, -3px 7px 12px #1a2125;
+  border-radius: 4px;
 }
 
 .app-img-preview {
@@ -25,6 +37,7 @@ body {
   z-index: 1000;
   bottom: 10%;
   right: 10%;
+  box-shadow: #343a40 0 0 10px 2px;
 }
 
 .txt-white {
@@ -50,6 +63,7 @@ body {
 .app-footer {
   position: fixed;
   bottom: 0;
+  border-radius: 0 !important;
   width: 100%;
   background-color: #212529;
   color: #dae0e5;
@@ -57,4 +71,19 @@ body {
 
 a {
   color: #00b7ff;
+}
+.card {
+  border-radius: 7px;
+  border-width: 0;
+}
+
+hr {
+  border-color: #75787bc7 !important;
+}
+
+.img-card {
+  background-size: cover;
+  background-position: center center;
+  height: 180px;
+  border-radius: 3px;
 }

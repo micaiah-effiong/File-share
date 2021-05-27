@@ -8,25 +8,30 @@ let AppEvent = new Vue();
 Vue.component("image-file", {
   template: `
     <div class="card m-2" >
-      <div class="card-content p-2" style="height: 180px;">
-      <input
-        type="checkbox"
-        @change="onCheck($event)"
-        :name="filename"
-        :data-link="link"
-        style="position: absolute; right: 8px;"
-      />
-        <img class="app-img-preview" :src="link"/>
+      <div
+        class="card-content p-2 img-card"
+        :style="{'background-image': 'url('+ link +')'}"
+      >
+        <input
+          type="checkbox"
+          @change="onCheck($event)"
+          :name="filename"
+          :data-link="link"
+          style="position: absolute; right: 8px;"
+        />
+        <!--<img class="app-img-preview" :src="link"/>-->
         <div :title="filename" class="row">
           <div class="col-10"></div>
           <div class="col-1">
             
           </div>
         </div>
-        <hr />
-        <div></div>
+        <!--
+          <hr />
+          <div></div>
+        -->
       </div>
-      <div class="container mt-2 file-details" style="bottom: 0; position: absolute;">
+      <div class="container file-details">
       <div class="p-1 row">
         <small class="col-8 txt-white">{{short}}<br/>{{size}}</small>
         <div class="col-4">
@@ -123,7 +128,7 @@ Vue.component("audio-file", {
 
 Vue.component("file-box", {
   template: `
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12" style="height: 100%;">
       <image-file v-if="fileType.includes('image')"
         :filename="filename"
         :fileType="fileType"
@@ -166,6 +171,9 @@ Vue.component("file-box", {
             <a :href="downloadLink" class="btn-link">
               <span class="fa fa-download"></span>
             </a>
+            <!--<a :href="streamLink" class="btn-link">
+              <span class="fa fa-wifi"></span>
+            </a>-->
           </div>
         </div>
       </div>
@@ -178,6 +186,7 @@ Vue.component("file-box", {
     size: { required: true },
     link: { required: true },
     downloadLink: { required: true },
+    streamLink: { required: true },
     onCheck: { required: true },
   },
   computed: {
@@ -199,6 +208,7 @@ Vue.component("file-block", {
           :size="file.size"
           :link="file.link"
           :downloadLink="file.downloadLink"
+          :streamLink="file.streamLink"
           :onCheck="onCheck"
           :key="key"
         >

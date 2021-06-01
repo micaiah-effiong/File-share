@@ -1,0 +1,15 @@
+{
+  "name": "files-go",
+  "short_name": "files-go",
+  "description": "Share files with friends and family",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "icons": [{
+    "src":"/img/icon-4167.png",
+    "type":"image/png",
+    "sizes":"4167x4167"
+  }],
+  "scope": "/",
+  "theme_color": "#96d376",
+  "background_color": "#1a2125"
+}

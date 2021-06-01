@@ -24,12 +24,15 @@ module.exports = {
   getOneFile: asyncHandler(async (req, res, next) => {
     let fileName = req.params.id;
     let data = await fileList();
-    let file = data.filter((item) => item.filename == fileName);
+    let file = data.filter((item) => item.filename == fileName)[0];
     if (!file || file.length < 1) {
       return next(errorResponse("Error: Resource not found", 404));
     }
     let filePath = path.resolve(__dirname, "..", "files", fileName);
-    res.sendFile(filePath);
+    res.json({
+      status: true,
+      data: file,
+    });
   }),
 
   uploadFile: asyncHandler(async (req, res, next) => {

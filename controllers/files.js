@@ -29,6 +29,11 @@ module.exports = {
       return next(errorResponse("Error: Resource not found", 404));
     }
     let filePath = path.resolve(__dirname, "..", "files", fileName);
+
+    if (req.query.raw === "true") {
+      return res.sendFile(filePath);
+    }
+
     res.json({
       status: true,
       data: file,

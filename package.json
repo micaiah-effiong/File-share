@@ -28,5 +28,10 @@
       "name": "Micah Effiong",
       "email": "micaiah.effiong@gmail.com"
     }
-  ]
+  ],
+  "nodemonConfig": {
+    "ignore": [
+      "public"
+    ]
+  }
 }

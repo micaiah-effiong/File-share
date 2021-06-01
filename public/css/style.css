@@ -1,6 +1,13 @@
 body {
-  /*padding: 50px;*/
+  background-color: #1a2125;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.top-nav {
+  position: sticky;
+  top: 0;
+  background-color: #1a2125;
+  z-index: 10;
 }
 
 .nav .fa,
@@ -116,7 +123,7 @@ hr {
 
 .video-card-content {
   height: 180px;
-  display: grid;
+  /*display: grid;*/
 }
 
 .holder-text {

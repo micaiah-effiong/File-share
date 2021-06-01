@@ -17,6 +17,7 @@ Vue.component("image-file", {
           @change="onCheck($event)"
           :name="filename"
           :data-link="link"
+          :data-download="downloadLink"
           style="position: absolute; right: 8px;"
         />
         <!--<img class="app-img-preview" :src="link"/>-->
@@ -60,6 +61,7 @@ Vue.component("audio-file", {
             @click="onCheck($event)"
             :name="filename"
             :data-link="link"
+            :data-download="downloadLink"
             style="position: absolute; right: 8px;"
           />
           <div :title="filename" class="holder-text">
@@ -135,6 +137,7 @@ Vue.component("video-file", {
           <video
             :src="streamLink" ref="video"
             style="height: 100%; width: 100%;"
+            preload="metadata"
           ></video>
         </div>
         <div class="other-files-card-content p-2" :hidden="!hidePlayerWrapper">
@@ -143,6 +146,7 @@ Vue.component("video-file", {
             @click="onCheck($event)"
             :name="filename"
             :data-link="link"
+            :data-download="downloadLink"
             style="position: absolute; right: 8px;"
           />
           <div :title="filename" class="holder-text">
@@ -201,13 +205,13 @@ Vue.component("video-file", {
   methods: {
     play({ target }) {
       if (target.checked) {
-        this.$refs.video.play();
-        this.icon = "fa fa-pause hover-color";
         this.hidePlayerWrapper = false;
+        this.icon = "fa fa-pause hover-color";
+        this.$refs.video.play();
       } else {
         this.$refs.video.pause();
-        this.icon = "fa fa-play download-icon";
         this.hidePlayerWrapper = true;
+        this.icon = "fa fa-play download-icon";
       }
     },
     pauseVideo() {
@@ -227,6 +231,7 @@ Vue.component("extra-file", {
             @click="onCheck($event)"
             :name="filename"
             :data-link="link"
+            :data-download="downloadLink"
             style="position: absolute; right: 8px;"
           />
           <div :title="filename" class="holder-text">
@@ -445,6 +450,7 @@ Vue.component("file-block", {
     AppEvent.$on("searchFile", this.searchFile);
     AppEvent.$on("sortFiles", this.sortFiles);
     AppEvent.$on("downloadMultiple", this.downloadMultiple);
+    AppEvent.$emit("countFile", this.files.length);
   },
   methods: {
     downloadMultiple: function () {
@@ -452,7 +458,7 @@ Vue.component("file-block", {
         let file = this.checkedFiles[name];
         let anchor = document.createElement("a");
         anchor.setAttribute("download", name);
-        anchor.href = file.link;
+        anchor.href = file.downloadLink;
         anchor.click();
         anchor.remove();
         file.target.checked = !file.target.checked;
@@ -490,11 +496,12 @@ Vue.component("file-block", {
     },
 
     onCheck({ target }) {
+      const downloadLink = target.dataset.download;
       const link = target.dataset.link;
       const name = target.name;
       const status = target.checked;
       status
-        ? (this.checkedFiles[name] = { link, target, name })
+        ? (this.checkedFiles[name] = { link, target, name, downloadLink })
         : delete this.checkedFiles[name];
     },
 

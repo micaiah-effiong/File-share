@@ -30,6 +30,9 @@ module.exports = async function () {
       let downloadLink = path
         .join("api", "files", "download", encodeURIComponent(_file))
         .replace(/\\/g, "/");
+      let streamLink = path
+        .join("api", "files", "stream", encodeURIComponent(_file))
+        .replace(/\\/g, "/");
       let link = path.join("api", "files", _file).replace(/\\/g, "/");
       let short;
 
@@ -49,6 +52,7 @@ module.exports = async function () {
         createdAt: birthtime,
         link,
         downloadLink,
+        streamLink,
         fileType,
       });
     }

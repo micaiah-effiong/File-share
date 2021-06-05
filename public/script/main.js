@@ -8,30 +8,32 @@ let AppEvent = new Vue();
 Vue.component("image-file", {
   template: `
     <div class="card m-2" >
-      <div class="card-content p-2" style="height: 180px;">
-      <input
-        type="checkbox"
-        @change="onCheck($event)"
-        :name="filename"
-        :data-link="link"
-        style="position: absolute; right: 8px;"
-      />
-        <img class="app-img-preview" :src="link"/>
+      <div
+        class="p-2 img-card"
+        :style="{'background-image': 'url('+ streamLink +')'}"
+      >
+        <input
+          type="checkbox"
+          @change="onCheck($event)"
+          :name="filename"
+          :data-link="link"
+          :data-download="downloadLink"
+          style="position: absolute; right: 8px;"
+        />
+        <!--<img class="app-img-preview" :src="link"/>-->
         <div :title="filename" class="row">
           <div class="col-10"></div>
           <div class="col-1">
             
           </div>
         </div>
-        <hr />
-        <div></div>
       </div>
-      <div class="container mt-2 file-details" style="bottom: 0; position: absolute;">
+      <div class="container file-details">
       <div class="p-1 row">
         <small class="col-8 txt-white">{{short}}<br/>{{size}}</small>
-        <div class="col-3">
+        <div class="col-4">
           <a :href="downloadLink" class="btn btn-link">
-            <span class="fa fa-download"></span>
+            <span class="fa fa-download download-icon"></span>
           </a>
         </div>
         </div>
@@ -44,6 +46,7 @@ Vue.component("image-file", {
     short: { required: true },
     size: { required: true },
     link: { required: true },
+    streamLink: { required: true },
     downloadLink: { required: true },
     onCheck: { required: true },
   },
@@ -51,41 +54,47 @@ Vue.component("image-file", {
 
 Vue.component("audio-file", {
   template: `
-      <div class="card  m-2 p-2" v-if="fileType.includes('audio')">
-        <div class="card-content">
-          <div :title="filename" class="row">
-            <div class="col-10">
-              {{short}}<br/>{{size}}
-            </div>
-            <div class="col-1">
+      <div class="card others m-2" v-if="fileType.includes('audio')">
+        <div class="other-files-card-content p-2">
+          <input
+            type="checkbox"
+            @click="onCheck($event)"
+            :name="filename"
+            :data-link="link"
+            :data-download="downloadLink"
+            style="position: absolute; right: 8px;"
+          />
+          <div :title="filename" class="holder-text">
+          {{filename.split(".").reverse()[0]}}
+          </div>
+        </div>
+        <div class="container file-details">
+          <div class="p-1 row">
+            <small class="col-8 txt-white">{{short}}<br/>{{size}}</small>
+            <div class="col-4" style="display: flex; justify-content: flex-end;">
+              <a :href="downloadLink" class="btn btn-link">
+                <span class="fa fa-download download-icon"></span>
+              </a>
+              <label class="btn btn-link" :for="filename.split(' ').join('-')"
+                style="margin: 0;"
+              >
+                <span :class="icon"></span>
+              </label>
               <input
                 type="checkbox"
-                @click="onCheck($event)"
-                :name="filename"
-                :data-link="link"
-              />
+                @change="play"
+                :id="filename.split(' ').join('-')"
+                hidden
+              >
             </div>
-          </div>
-          <hr />
-          <div></div>
-        </div>
-        <div class="mt-2">
-          <div>
-            <a :href="downloadLink" class="btn-link">
-              <span class="fa fa-download"></span>
-            </a>
-            <label class="ml-2 btn-link" :for="filename.split(' ').join('-')">
-              <span :class="icon"></span>
-            </label>
-            <input type="checkbox" @change="play" :id="filename.split(' ').join('-')" hidden>
           </div>
         </div>
       </div>
   `,
   data() {
     return {
-      icon: "fa fa-play",
-      songLink: location.href + this.link,
+      icon: "fa fa-play download-icon",
+      player: new Audio(this.streamLink),
     };
   },
   props: {
@@ -95,35 +104,169 @@ Vue.component("audio-file", {
     size: { required: true },
     link: { required: true },
     downloadLink: { required: true },
+    streamLink: { required: true },
     onCheck: { required: true },
+  },
+  mounted() {
+    this.player.onended = () => {
+      this.pauseAudio();
+    };
   },
   methods: {
     play({ target }) {
-      let player = document.querySelector("#player");
       if (target.checked) {
-        /*console.log(
-          "player.src === this.link",
-          player.src,
-          this.songLink,
-          player.src === this.songLink
-        );*/
-        if (player.src === this.songLink) {
-          player.play();
-        } else {
-          player.src = this.songLink;
-        }
-        this.icon = "fa fa-pause";
+        this.player.play();
+        this.icon = "fa fa-pause hover-color";
       } else {
-        player.pause();
-        this.icon = "fa fa-play";
+        this.player.pause();
+        this.icon = "fa fa-play download-icon";
       }
     },
+    pauseAudio() {
+      this.player.pause();
+      this.icon = "fa fa-play download-icon";
+      this.hidePlayerWrapper = true;
+    },
+  },
+});
+
+Vue.component("video-file", {
+  template: `
+      <div class="card others m-2" v-if="fileType.includes('video')">
+        <div class="video-card-content p-2" :hidden="hidePlayerWrapper">
+          <video
+            :src="streamLink" ref="video"
+            style="height: 100%; width: 100%;"
+            preload="metadata"
+          ></video>
+        </div>
+        <div class="other-files-card-content p-2" :hidden="!hidePlayerWrapper">
+          <input
+            type="checkbox"
+            @click="onCheck($event)"
+            :name="filename"
+            :data-link="link"
+            :data-download="downloadLink"
+            style="position: absolute; right: 8px;"
+          />
+          <div :title="filename" class="holder-text">
+          {{filename.split(".").reverse()[0]}}
+          </div>
+        </div>
+        <div class="container file-details">
+          <div class="p-1 row">
+            <small class="col-8 txt-white"> {{short}}<br/>{{size}}
+            </small>
+            <div 
+              class="col-4"
+              style="display: flex; justify-content: flex-end;"
+            >
+              <a :href="downloadLink" class="btn btn-link">
+                <span class="fa fa-download download-icon"></span>
+              </a>
+              <label class="btn btn-link" :for="filename.split(' ').join('-')"
+                style="margin: 0;"
+              >
+                <span :class="icon"></span>
+              </label>
+              <input
+                type="checkbox"
+                @change="play"
+                :id="filename.split(' ').join('-')"
+                hidden
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+  `,
+  data() {
+    return {
+      icon: "fa fa-play download-icon",
+      player: this.$refs.video,
+      hidePlayerWrapper: true,
+    };
+  },
+  props: {
+    filename: { required: true },
+    fileType: { required: true },
+    short: { required: true },
+    size: { required: true },
+    link: { required: true },
+    streamLink: { required: true },
+    downloadLink: { required: true },
+    onCheck: { required: true },
+  },
+  mounted() {
+    this.$refs.video.onended = () => {
+      this.pauseVideo();
+    };
+  },
+  methods: {
+    play({ target }) {
+      if (target.checked) {
+        this.hidePlayerWrapper = false;
+        this.icon = "fa fa-pause hover-color";
+        this.$refs.video.play();
+      } else {
+        this.$refs.video.pause();
+        this.hidePlayerWrapper = true;
+        this.icon = "fa fa-play download-icon";
+      }
+    },
+    pauseVideo() {
+      this.$refs.video.pause();
+      this.icon = "fa fa-play download-icon";
+      this.hidePlayerWrapper = true;
+    },
+  },
+});
+
+Vue.component("extra-file", {
+  template: `
+      <div class="card others m-2">
+        <div class="other-files-card-content p-2">
+          <input
+            type="checkbox"
+            @click="onCheck($event)"
+            :name="filename"
+            :data-link="link"
+            :data-download="downloadLink"
+            style="position: absolute; right: 8px;"
+          />
+          <div :title="filename" class="holder-text">
+            {{filename.split(".").reverse()[0]}}
+          </div>
+        </div>
+        <div class="container file-details">
+          <div class="p-1 row">
+            <small class="col-8 txt-white">
+              {{short}}<br/>{{size}}
+            </small>
+            <div class="col-4">
+              <a :href="downloadLink" class="btn btn-link">
+                <span class="fa fa-download download-icon">
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+  `,
+  props: {
+    filename: { required: true },
+    fileType: { required: true },
+    short: { required: true },
+    size: { required: true },
+    link: { required: true },
+    downloadLink: { required: true },
+    onCheck: { required: true },
   },
 });
 
 Vue.component("file-box", {
   template: `
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+    <div style="height: 100%;">
       <image-file v-if="fileType.includes('image')"
         :filename="filename"
         :fileType="fileType"
@@ -131,9 +274,33 @@ Vue.component("file-box", {
         :size="size"
         :link="link"
         :downloadLink="downloadLink"
+        :streamLink="streamLink"
         :onCheck="onCheck"
       ></image-file>
-      <audio-file v-if="fileType.includes('audio')"
+      <audio-file
+        v-if="fileType.includes('audio')"
+        :filename="filename"
+        :fileType="fileType"
+        :short="short"
+        :size="size"
+        :link="link"
+        :downloadLink="downloadLink"
+        :streamLink="streamLink"
+        :onCheck="onCheck"
+      ></audio-file>
+      <video-file
+        v-if="fileType.includes('video')"
+        :filename="filename"
+        :fileType="fileType"
+        :short="short"
+        :size="size"
+        :link="link"
+        :downloadLink="downloadLink"
+        :streamLink="streamLink"
+        :onCheck="onCheck"
+      ></video-file>
+      <extra-file
+        v-if="!fileType.includes('image') && !fileType.includes('audio') && !fileType.includes('video')"
         :filename="filename"
         :fileType="fileType"
         :short="short"
@@ -141,33 +308,7 @@ Vue.component("file-box", {
         :link="link"
         :downloadLink="downloadLink"
         :onCheck="onCheck"
-      ></audio-file>
-      <div class="card m-2 p-2" v-if="!fileType.includes('image') && !fileType.includes('audio')">
-        <div class="card-content">
-          <div :title="filename" class="row">
-            <div class="col-10">
-              {{short}}<br/>{{size}}
-            </div>
-            <div class="col-1">
-              <input
-                type="checkbox"
-                @click="onCheck($event)"
-                :name="filename"
-                :data-link="link"
-              />
-            </div>
-          </div>
-          <hr />
-          <!--<div></div>-->
-        </div>
-        <div class="mt-2">
-          <div>
-            <a :href="downloadLink" class="btn-link">
-              <span class="fa fa-download"></span>
-            </a>
-          </div>
-        </div>
-      </div>
+      ></extra-file>
     </div>
   `,
   props: {
@@ -177,6 +318,7 @@ Vue.component("file-box", {
     size: { required: true },
     link: { required: true },
     downloadLink: { required: true },
+    streamLink: { required: true },
     onCheck: { required: true },
   },
   computed: {
@@ -189,19 +331,90 @@ Vue.component("file-box", {
 Vue.component("file-block", {
   template: `
     <div class="row app-padd-3">
-      <template v-for="file, key of files">
-        <file-box
-          v-if="files.length > 0"
-          :filename="file.filename"
-          :fileType="file.fileType"
-          :short="file.short"
-          :size="file.size"
-          :link="file.link"
-          :downloadLink="file.downloadLink"
-          :onCheck="onCheck"
-          :key="key"
-        >
-        </file-box>
+      <template v-for="file of videoFiles">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-if="sortType == 'VIDEO'">
+          <file-box
+            v-if="files.length > 0"
+            :filename="file.filename"
+            :fileType="file.fileType"
+            :short="file.short"
+            :size="file.size"
+            :link="file.link"
+            :downloadLink="file.downloadLink"
+            :streamLink="file.streamLink"
+            :onCheck="onCheck"
+            :key="file.filename"
+          >
+          </file-box>
+        </div>
+      </template>
+      <template v-for="file of audioFiles">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-if="sortType == 'AUDIO'">
+          <file-box
+            v-if="files.length > 0"
+            :filename="file.filename"
+            :fileType="file.fileType"
+            :short="file.short"
+            :size="file.size"
+            :link="file.link"
+            :downloadLink="file.downloadLink"
+            :streamLink="file.streamLink"
+            :onCheck="onCheck"
+            :key="file.filename"
+          >
+          </file-box>
+        </div>
+      </template>
+      <template v-for="file of imageFiles">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-if="sortType == 'IMAGE'">
+          <file-box
+            v-if="files.length > 0"
+            :filename="file.filename"
+            :fileType="file.fileType"
+            :short="file.short"
+            :size="file.size"
+            :link="file.link"
+            :downloadLink="file.downloadLink"
+            :streamLink="file.streamLink"
+            :onCheck="onCheck"
+            :key="file.filename"
+          >
+          </file-box>
+        </div>
+      </template>
+      <template v-for="file of docFiles">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-if="sortType == 'ANY'">
+          <file-box
+            v-if="files.length > 0"
+            :filename="file.filename"
+            :fileType="file.fileType"
+            :short="file.short"
+            :size="file.size"
+            :link="file.link"
+            :downloadLink="file.downloadLink"
+            :streamLink="file.streamLink"
+            :onCheck="onCheck"
+            :key="file.filename"
+          >
+          </file-box>
+        </div>
+      </template>
+      <template v-for="file of files">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-if="sortType == ''">
+          <file-box
+            v-if="files.length > 0"
+            :filename="file.filename"
+            :fileType="file.fileType"
+            :short="file.short"
+            :size="file.size"
+            :link="file.link"
+            :downloadLink="file.downloadLink"
+            :streamLink="file.streamLink"
+            :onCheck="onCheck"
+            :key="file.filename"
+          >
+          </file-box>
+        </div>
       </template>
       <div v-if="files.length <= 0">Sorry no files to download</div>
     </div>
@@ -209,22 +422,26 @@ Vue.component("file-block", {
   data() {
     return {
       search: "",
+      sortType: "",
       checkedFiles: {},
       files: [],
       appFiles: [],
+      videoFiles: [],
+      audioFiles: [],
+      imageFiles: [],
+      docFiles: [],
+      shadowFiles: {},
     };
   },
-  created: async function () {
-    let res = await fetch("/api/files");
-    let files = await res.json();
-    this.appFiles = [...files.data];
-    this.files = [...this.appFiles];
+  mounted: async function () {
+    await this.fetchFiles();
 
-    socket.on("FILE_UPDATE", async () => {
-      let res = await fetch("/api/files");
-      let files = await res.json();
-      this.appFiles = files.data;
-      this.files = [...this.appFiles];
+    socket.on("FILE_UPDATE", async (newFile) => {
+      if (newFile) {
+        return this.appFiles.push(newFile);
+      }
+
+      await this.fetchFiles();
       if (this.search.length > 0) {
         this.searchFile(this.search);
       }
@@ -233,6 +450,7 @@ Vue.component("file-block", {
     AppEvent.$on("searchFile", this.searchFile);
     AppEvent.$on("sortFiles", this.sortFiles);
     AppEvent.$on("downloadMultiple", this.downloadMultiple);
+    AppEvent.$emit("countFile", this.files.length);
   },
   methods: {
     downloadMultiple: function () {
@@ -240,7 +458,7 @@ Vue.component("file-block", {
         let file = this.checkedFiles[name];
         let anchor = document.createElement("a");
         anchor.setAttribute("download", name);
-        anchor.href = file.link;
+        anchor.href = file.downloadLink;
         anchor.click();
         anchor.remove();
         file.target.checked = !file.target.checked;
@@ -248,56 +466,125 @@ Vue.component("file-block", {
       });
     },
 
-    onCheck({
-      target: {
-        checked: status,
-        name,
-        dataset: { link },
-      },
-      target,
-    }) {
+    fetchFiles: async function () {
+      let res = await fetch("/api/files");
+      let files = await res.json();
+      this.appFiles = [...files.data];
+      this.files = [...this.appFiles];
+
+      this.videoFiles = this.appFiles.filter((file) =>
+        file.fileType.includes("video")
+      );
+
+      this.audioFiles = this.appFiles.filter((file) =>
+        file.fileType.includes("audio")
+      );
+      this.imageFiles = this.appFiles.filter((file) =>
+        file.fileType.includes("image")
+      );
+      this.docFiles = this.appFiles.filter(
+        (file) =>
+          !file.fileType.includes("image") &&
+          !file.fileType.includes("video") &&
+          !file.fileType.includes("audio")
+      );
+
+      this.shadowFiles.videoFiles = this.videoFiles;
+      this.shadowFiles.audioFiles = this.audioFiles;
+      this.shadowFiles.imageFiles = this.imageFiles;
+      this.shadowFiles.docFiles = this.docFiles;
+    },
+
+    onCheck({ target }) {
+      const downloadLink = target.dataset.download;
+      const link = target.dataset.link;
+      const name = target.name;
+      const status = target.checked;
       status
-        ? (this.checkedFiles[name] = { link, target, name })
+        ? (this.checkedFiles[name] = { link, target, name, downloadLink })
         : delete this.checkedFiles[name];
     },
 
     searchFile(searchStr) {
-      this.search = searchStr;
-      if (searchStr.length <= 0) {
-        return (this.files = [...this.appFiles]);
+      console.log(searchStr);
+      this.search = searchStr.toLowerCase();
+      let size = 0;
+
+      // all
+      if (!this.sortType || this.sortType === "") {
+        // search all
+        this.files = this.appFiles.filter((v) =>
+          v.filename.toLowerCase().includes(this.search)
+        );
+        size = this.files.length;
       }
-      let searchResult = this.files.filter((v) =>
-        v.filename.toLowerCase().includes(searchStr.toLowerCase())
-      );
-      this.files = searchResult;
+
+      // photos
+      if (this.sortType === "IMAGE") {
+        // search photo
+        this.imageFiles = this.shadowFiles.imageFiles.filter((v) =>
+          v.filename.toLowerCase().includes(this.search)
+        );
+        size = this.imageFiles.length;
+      }
+
+      // audio
+      if (this.sortType === "AUDIO") {
+        // search audio
+        this.audioFiles = this.shadowFiles.audioFiles.filter((v) =>
+          v.filename.toLowerCase().includes(this.search)
+        );
+        size = this.audioFiles.length;
+      }
+
+      // video
+      if (this.sortType === "VIDEO") {
+        // search video
+        this.videoFiles = this.shadowFiles.videoFiles.filter((v) =>
+          v.filename.toLowerCase().includes(this.search)
+        );
+        size = this.videoFiles.length;
+      }
+
+      // docs
+      if (this.sortType === "ANY") {
+        // search any other file
+        this.docFiles = this.shadowFiles.docFiles.filter((v) =>
+          v.filename.toLowerCase().includes(this.search)
+        );
+        size = this.docFiles.length;
+      }
+
+      AppEvent.$emit("countFile", size);
     },
 
     sortFiles(type) {
-      if (!type) return (this.files = [...this.appFiles]);
-      type = type.flat();
-      this.files = [...this.appFiles]
-        // create a replica file with pos
-        .map(({ filename, fileType }, index) => {
-          return { filename, fileType, pos: index };
-        })
-        // filter files checking two way matches
-        .filter((item) => {
-          return type.includes(item.fileType) || item.fileType.includes(type);
-        })
-        // return files that match the same position and filename
-        .map((file, index) => {
-          if (this.appFiles[file.pos].filename === file.filename) {
-            return this.appFiles[file.pos];
-          }
-        });
+      // set sorting type
+      this.sortType = type = type.join().toUpperCase();
+      // this.files = [...this.appFiles];
+      if (!type) {
+        return AppEvent.$emit("countFile", this.files.length);
+      }
+      if (type === "IMAGE") {
+        return AppEvent.$emit("countFile", this.imageFiles.length);
+      }
+      if (type === "VIDEO") {
+        return AppEvent.$emit("countFile", this.videoFiles.length);
+      }
+      if (type === "AUDIO") {
+        return AppEvent.$emit("countFile", this.audioFiles.length);
+      }
+      if (type === "ANY") {
+        return AppEvent.$emit("countFile", this.docFiles.length);
+      }
     },
   },
 
-  watch: {
-    files() {
-      return AppEvent.$emit("countFile", this.files.length);
-    },
-  },
+  // watch: {
+  //   files() {
+  //     return AppEvent.$emit("countFile", this.files.length);
+  //   },
+  // },
 });
 
 new Vue({
@@ -357,13 +644,13 @@ new Vue({
           // this.uploadPercent = 0;
           console.log(e);
           delete this.inProgress[item.name];
-          alert("An error occured while uploading a file");
+          alert(`An error occured while uploading ${item.name}`);
         };
 
         ajax.onload = () => {
           // delete from inProgress
           // delete this.inProgress[]
-          delete this.inProgress[item.name];
+          // delete this.inProgress[item.name];
         };
         ajax.send(file);
       });
@@ -378,13 +665,22 @@ new Vue({
         IMAGE: "image",
         VIDEO: "video",
         AUDIO: "audio",
-        FILES: ["zip", "gzip", "txt", "gz", "rar"],
-        APP: "octet-stream",
+        /*FILES: [
+          "zip",
+          "gzip",
+          "txt",
+          "gz",
+          "rar",
+          "vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "gz",
+        ],
+        APP: "octet-stream",*/
       };
 
       let extension;
-      if (type == "APP" || type == "FILES") {
-        extension = [format[type]].flat().map((ext) => "application/" + ext);
+      if (type === "APP" || type === "FILES") {
+        extension = ["any"];
       } else {
         extension = [format[type]].flat();
       }

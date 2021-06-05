@@ -2,7 +2,14 @@ const express = require("express");
 const fileUpload = require("express-fileupload");
 const path = require("path");
 const {
-  files: { getAllFiles, getOneFile, uploadFile, downloadFile, deleteFile },
+  files: {
+    getAllFiles,
+    getOneFile,
+    uploadFile,
+    downloadFile,
+    deleteFile,
+    streamFile,
+  },
 } = require("../controllers/index");
 
 const router = express.Router();
@@ -18,5 +25,6 @@ router.use(
 router.route("/").get(getAllFiles).post(uploadFile);
 router.route("/:id").get(getOneFile).delete(deleteFile);
 router.route("/download/:id").get(downloadFile);
+router.route("/stream/:id").get(streamFile);
 
 module.exports = router;

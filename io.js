@@ -8,7 +8,7 @@ const { listFiles: fileList } = require("./handlers/index");
 let appFiles = [];
 
 fs.watch(path.resolve(__dirname, "files"), async (err, data) => {
-  console.log("data", data);
+  // console.log("data", data);
   let dirChange = await fileList();
   const appFilesObject = {};
   appFiles.forEach((e) => (appFilesObject[e.filename] = e));
@@ -21,10 +21,10 @@ fs.watch(path.resolve(__dirname, "files"), async (err, data) => {
   console.log("newFile", newFile);
 
   if (isChanged && newFile) {
-    io.emit("FILE_UPDATE", newFile);
+    io.emit("FILE::UPDATE", newFile);
     appFiles = [...dirChange];
   } else if (isChanged && !newFile) {
-    io.emit("FILE_UPDATE");
+    io.emit("FILE::UPDATE");
     appFiles = [...dirChange];
   }
 });

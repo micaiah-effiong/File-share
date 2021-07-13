@@ -436,12 +436,12 @@ Vue.component("file-block", {
   mounted: async function () {
     await this.fetchFiles();
 
-    socket.on("FILE_UPDATE", async (newFile) => {
-      if (newFile) {
-        return this.appFiles.push(newFile);
-      }
-
+    socket.on("FILE::UPDATE", async (newFile) => {
       await this.fetchFiles();
+      // if (newFile) {
+      //   return this.appFiles.push(newFile);
+      // }
+
       if (this.search.length > 0) {
         this.searchFile(this.search);
       }

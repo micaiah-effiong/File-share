@@ -5,7 +5,6 @@
  */
 
 const { app, server } = require("../app");
-const io = require("../io");
 const debug = require("debug")("file-share:server");
 const http = require("http");
 const path = require("path");
@@ -40,6 +39,7 @@ async function findOrCreateStoreDir(dirPath) {
  */
 server.listen(port, async () => {
   await findOrCreateStoreDir(filesPath);
+  require("../io");
   console.log("Server has started");
   console.log(`> \tlocalhost:${port}`);
   console.log(`> \t${await localIp()}:${port}`);

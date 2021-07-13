@@ -12,18 +12,18 @@ module.exports = async function () {
   let list = [];
 
   // get array of all files and folders
-  let folderItemsList = await fsPromises.readdir(appFolder);
+  let folderItemsList = await fsPromises.readdir(appFolder).catch(console.log);
 
   for (let i = 0; i < folderItemsList.length; i++) {
     // file or folder name
     let _file = folderItemsList[i];
     let fullFilePath = path.resolve(appFolder, _file);
 
-    // check if the current item is an actual file
-    if (!!(await fsPromises.stat(fullFilePath)).isFile()) {
-      // get file stats
-      let fileDetails = await fsPromises.stat(fullFilePath);
+    // get file stats
+    let fileDetails = await fsPromises.stat(fullFilePath).catch(console.log);
 
+    // check if the current item is an actual file
+    if (fileDetails && !!fileDetails.isFile()) {
       // create file details
       let { size, birthtime } = fileDetails;
       let fileType = mime.lookup(_file);
@@ -60,11 +60,15 @@ module.exports = async function () {
   return list;
 };
 
+/*
+ * @params num - Number
+ * @return String
+ */
 function convertByte(num) {
   let format = ["b", "kb", "mb", "gb", "tb"],
-    level;
-  for (level = 0; num > 1024; level++) {
-    num = num / 1024;
+    byteSize = 1024, level;
+  for (level = 0; num > byteSize; level++) {
+    num = num / byteSize;
   }
   return `${num.toFixed(2)}${format[level]}`;
 }

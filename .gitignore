@@ -4,3 +4,6 @@ data/
 files/
 public/webfonts/
 public/css/all.min.css
+*.log
+cert/
+

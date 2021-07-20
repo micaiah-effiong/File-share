@@ -38,17 +38,33 @@ io.on("connection", function (socket) {
   });
 });
 
+const peerConnections = [];
 peerIO.on("connection", function (socket) {
-  socket.broadcast.emit("JOINED", socket.id);
-  console.log("P client connected", socket.id); //log client connect
-
-  socket.on("PEER::CONNECTION", (peerId) => {
-    console.log("P peer connected", peerId); //log client connect
-    peerIO.emit("PEER::CONNECTION", peerId);
+  socket.on("PEER::JOINED", (ident, cb) => {
+    socket.broadcast.emit("PEER::JOINED", ident);
+    console.log("Peer connected", ident); //log client connect
+    peerConnections.push(ident);
+    cb(peerConnections);
+    // peerIO.emit("PEER::CONNECTION", peerId);
   });
 
-  socket.on("disconnect", function (id) {
-    console.log("P client disconnected", id); //log client disconnect
+  // console.log("Peer client connected", socket.id); //log client connect
+
+  // socket.on("PEER::CONNECTION", (peerId) => {
+  //   console.log("Peer connected", peerId); //log client connect
+  //   // peerConnections.push(peerId);
+  //   peerIO.emit("PEER::CONNECTION", peerId);
+  // });
+
+  socket.on("disconnect", () => {
+    console.log("Peer client disconnected", socket.id); //log client disconnect
+    const index = peerConnections.findIndex((elt) => elt.soc == socket.id);
+    if (index >= 0) {
+      peerConnections.splice(index, 1);
+    }
+
+    peerIO.emit("PEER::LEFT", socket.id);
   });
 });
+
 module.exports = io;

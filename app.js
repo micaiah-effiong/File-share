@@ -1,12 +1,18 @@
 require("dotenv").config();
 const createError = require("http-errors");
-const http = require("http");
+const http = require("https");
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const indexRouter = require("./routes/index");
 const { ExpressPeerServer } = require("peer");
+
+const options = {
+  key: fs.readFileSync("./cert/key.pem"),
+  cert: fs.readFileSync("./cert/cert.pem"),
+};
 
 const app = express();
 
@@ -14,9 +20,10 @@ const app = express();
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+const server = http.createServer(options, app);
 const peerServer = ExpressPeerServer(server, {
   debug: true,
+  path: "/peer-wrtc",
 });
 
 // view engine setup

@@ -46,8 +46,7 @@ body {
 }
 
 .app-upload-btn {
-  padding: 13px;
-  border: 1px solid #007bff;
+  border: transparent;
   border-radius: 50%;
   color: white;
   background-color: #007bff;
@@ -55,7 +54,12 @@ body {
   z-index: 1000;
   bottom: 10%;
   right: 10%;
-  box-shadow: #343a40 -3px 4px 8px;
+  box-shadow: hsl(202 49% 4% / 1) -3px 4px 8px;
+  height: 2.7rem;
+  width: 2.7rem;
+  display: grid;
+  align-items: center;
+  justify-items: center;
 }
 
 .txt-white {
@@ -132,4 +136,8 @@ hr {
   text-align: center;
   letter-spacing: 5px;
   font-weight: bold;
+}
+
+.no-highlight {
+  user-select: none;
 }

@@ -3,6 +3,11 @@
   <head>
     <title>P2P File share</title>
     <%- include('./partials/meta-tags.ejs'); -%>
+    <style type="text/css">
+      body{
+        color: white;
+      }
+    </style>
   </head>
   <input type="file" id="file">
   <input type="text" id="toPeer">
@@ -11,6 +16,8 @@
   <ul>
     
   </ul>
+
+  <div class="test"></div>
 
   <body>
     <script type="text/javascript" src="script/socket.io.js"></script>

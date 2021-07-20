@@ -332,7 +332,7 @@ Vue.component("file-block", {
   template: `
     <div class="row app-padd-3">
       <template v-for="file of videoFiles">
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-if="sortType == 'VIDEO'">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 no-highlight" v-if="sortType == 'VIDEO'">
           <file-box
             v-if="files.length > 0"
             :filename="file.filename"
@@ -349,7 +349,7 @@ Vue.component("file-block", {
         </div>
       </template>
       <template v-for="file of audioFiles">
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-if="sortType == 'AUDIO'">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 no-highlight" v-if="sortType == 'AUDIO'">
           <file-box
             v-if="files.length > 0"
             :filename="file.filename"
@@ -366,7 +366,7 @@ Vue.component("file-block", {
         </div>
       </template>
       <template v-for="file of imageFiles">
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-if="sortType == 'IMAGE'">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 no-highlight" v-if="sortType == 'IMAGE'">
           <file-box
             v-if="files.length > 0"
             :filename="file.filename"
@@ -383,7 +383,7 @@ Vue.component("file-block", {
         </div>
       </template>
       <template v-for="file of docFiles">
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-if="sortType == 'ANY'">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 no-highlight" v-if="sortType == 'ANY'">
           <file-box
             v-if="files.length > 0"
             :filename="file.filename"
@@ -400,7 +400,7 @@ Vue.component("file-block", {
         </div>
       </template>
       <template v-for="file of files">
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-if="sortType == ''">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 no-highlight" v-if="sortType == ''">
           <file-box
             v-if="files.length > 0"
             :filename="file.filename"

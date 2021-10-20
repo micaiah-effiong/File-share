@@ -12,6 +12,7 @@
         dark:bg-gray-800
         my-24
         space-y-16
+        border-dashed border-4
       "
     >
       <div class="flex items-center justify-between">

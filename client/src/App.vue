@@ -23,6 +23,7 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
 #app {
   background-color: #f1f1f3;
+  height:160vh;
   font-family: "Rubik", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

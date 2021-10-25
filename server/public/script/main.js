@@ -28,6 +28,7 @@ Vue.component("image-file", {
           </div>
         </div>
       </div>
+      <!---- file details--->
       <div class="container file-details">
       <div class="p-1 row">
         <small class="col-8 txt-white">{{short}}<br/>{{size}}</small>

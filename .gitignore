@@ -4,3 +4,4 @@ data/
 files/
 public/webfonts/
 public/css/all.min.css
+package-lock.json

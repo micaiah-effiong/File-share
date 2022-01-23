@@ -1,5 +1,59 @@
 <template>
   <section class="h-screen">
+    <section class="text-gray-600 body-font">
+      <div class="container px-5 py-24 mx-auto grid grid-cols-3 gap-4">
+        <div
+          class="lg:w-5/6 mx-auto"
+          v-for="(box, i) in boxes"
+          :key="box.heading"
+          :class="`box${i}`"
+        >
+          <div class="lg:w-5/6 sm:1/3 p-4">
+            <div class="flex relative">
+              <img
+                alt="gallery"
+                class="
+                  absolute
+                  inset-0
+                  w-full
+                  h-full
+                  object-cover object-center
+                "
+                src="../assets/wallpaper-1.jpg"
+              />
+              <div
+                class="
+                  px-8
+                  py-10
+                  relative
+                  z-10
+                  w-full
+                  border-4 border-gray-200
+                  bg-white
+                  opacity-0
+                  hover:opacity-100
+                "
+              >
+                <h2
+                  class="
+                    tracking-widest
+                    text-sm
+                    title-font
+                    font-medium
+                    text-indigo-500
+                    mb-1
+                  "
+                >
+                  {{ box.heading }}
+                </h2>
+
+                <p class="leading-relaxed">{{ box.details }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     <div
       class="
         max-w-2xl
@@ -9,8 +63,8 @@
         bg-white
         rounded-lg
         shadow-md
-        dark:bg-gray-800
         my-24
+        dark:bg-gray-800
         space-y-16
         border-dashed border-4
       "
@@ -30,12 +84,21 @@
             duration-200
             transform
             cursor-pointer
-         
           "
-          ><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-</svg></a
-        >
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+            /></svg
+        ></a>
       </div>
 
       <div class="mt-2">
@@ -111,6 +174,27 @@
 <script>
 export default {
   name: "UploadPage",
+  data() {
+    return {
+      boxes: [
+        {
+          icon: "/wallpaper-1.jpg",
+          heading: "filename",
+          details: "file size",
+        },
+        {
+          icon: "/wallpaper-2.jpg",
+          heading: "file name",
+          details: "file size",
+        },
+        {
+          icon: "/wallpaper-1.jpg",
+          heading: "filename",
+          details: "file size",
+        },
+      ],
+    };
+  },
 };
 </script>
 <style>

@@ -45,7 +45,10 @@ findOrCreateStoreDir(filesPath).then(() => {
 
     console.log("Server has started");
     console.log(`> \tlocalhost:${port}`);
-    console.log(`> \t${await getMyIPAddress()}:${port}`);
+    const ips: string[] = await getMyIPAddress();
+    ips.forEach((ipAddress) => {
+      console.log(`> \t${ipAddress}:${port}`);
+    });
   });
   server.on("error", onError);
   server.on("listening", onListening);

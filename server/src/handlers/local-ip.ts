@@ -1,8 +1,20 @@
 import { promises } from "dns";
-import { hostname } from "os";
+import { networkInterfaces, NetworkInterfaceInfo } from "os";
 
 const lookup = promises.lookup;
 
-export default async function getMyIPAddress(options?: any): Promise<string> {
-  return (await lookup(hostname(), options)).address;
+const availableNetworkInterfaces = networkInterfaces();
+
+export default async function getMyIPAddress(options?: any): Promise<string[]> {
+  return Object.keys(availableNetworkInterfaces)
+    .map((key: string) => {
+      return availableNetworkInterfaces[key]!;
+    })
+    .flat()
+    .filter((networkCard: NetworkInterfaceInfo) => {
+      return networkCard.family === "IPv4";
+    })
+    .map((networkCard: NetworkInterfaceInfo) => {
+      return networkCard.address;
+    });
 }

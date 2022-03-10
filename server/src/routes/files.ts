@@ -1,5 +1,4 @@
 import express from "express";
-import fileUpload from "express-fileupload";
 import path from "path";
 import { files } from "../controllers";
 const {
@@ -12,14 +11,6 @@ const {
 } = files;
 
 const router = express.Router();
-// router
-//   .use
-// fileUpload({
-//   limits: { fileSize: 5 * 1024 * 1024 * 1024 },
-//   useTempFiles: true,
-//   tempFileDir: path.resolve(__dirname, "..", "files", "tmp"),
-// })
-// ();
 
 /* GET users listing. */
 router.route("/").get(getAllFiles).post(uploadFile);

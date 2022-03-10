@@ -7,16 +7,19 @@ import { FileData } from "./types";
 // import PeerIO from "socket.io"; //(server, { path: "/p2p" });
 import { listFiles as fileList } from "./handlers";
 
-const io: SocketServer = new SocketServer();
+const io: SocketServer = new SocketServer(server, {
+  path: "/socket.io",
+  allowEIO3: true,
+});
 const peerIO: SocketServer = new SocketServer(server, { path: "/p2p" });
 
 let appFiles: FileData[] = new Array();
 
 fs.watch(
   path.resolve(__dirname, "files"),
-  async (err: string, data: string | Buffer) => {
-    if (err) return;
-    console.log("data", data);
+  async (eventType: string, filename: string | Buffer) => {
+    // if (eventType) return;
+    console.log("data", filename);
     let dirChange: FileData[] = await fileList();
     const appFilesObject: any = {};
     appFiles.forEach((e: FileData) => (appFilesObject[e.filename] = e));

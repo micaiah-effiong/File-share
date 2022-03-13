@@ -6,7 +6,9 @@
 
 import { app, server } from "../app";
 import debug from "debug"; //("file-share:server");
-import http from "http";
+// import http from "http";
+import { exec } from "child_process";
+import QRcode from "qrcode";
 import path from "path";
 import { promises as fsPromise } from "fs";
 import getMyIPAddress from "../handlers/local-ip";
@@ -23,11 +25,11 @@ app.set("port", port);
 /**
  * Create a files directory if not exist
  */
-let filesPath = path.resolve(process.cwd(), "dist", "files");
+let filesPath: string = path.resolve(process.cwd(), "dist", "files");
 
 async function findOrCreateStoreDir(dirPath: string): Promise<void> {
   try {
-    const descp = await fsPromise.open(dirPath, "r");
+    const descp: fsPromise.FileHandle = await fsPromise.open(dirPath, "r");
     await descp.close();
   } catch (err: any) {
     if (err.code === "ENOENT") {
@@ -46,8 +48,29 @@ findOrCreateStoreDir(filesPath).then(() => {
     console.log("Server has started");
     console.log(`> \tlocalhost:${port}`);
     const ips: string[] = await getMyIPAddress();
-    ips.forEach((ipAddress) => {
+    ips.forEach(async (ipAddress: string) => {
+      if (ipAddress === "127.0.0.1") return;
       console.log(`> \t${ipAddress}:${port}`);
+
+      const start =
+        process.platform == "darwin"
+          ? "open"
+          : process.platform == "win32"
+          ? "start"
+          : "xdg-open";
+
+      const link: string = `http://${ipAddress}:${port}`;
+      const command: string = `${start} ${link}`;
+
+      // generate qrcode
+      if (process.env.NODE_ENV === "production") {
+        const dUrl: string = await QRcode.toDataURL(link);
+        // exec(`${start} ${dUrl}`);
+        // open an html page with the QRcode
+      } else {
+        const dUrl: string = await QRcode.toString(link, { type: "terminal" });
+        console.log(dUrl);
+      }
     });
   });
   server.on("error", onError);

@@ -6,7 +6,7 @@
     "start": "cross-env NODE_ENV=production node dist/bin/www.js",
     "serve": "cross-env NODE_ENV=development node dist/bin/www.js",
     "start:dev": "cross-env NODE_ENV=development concurrently \"tsc --watch\" \"nodemon dist/bin/www.js\"",
-    "serve:dev": "cross-env NODE_ENV=development tsc-watch --onSuccess \"node dist/bin/www.js\""
+    "serve:dev": "cp -r src/public dist/public/ && cp -r src/views dist/views && cross-env NODE_ENV=development tsc-watch --onSuccess \"node dist/bin/www.js\""
   },
   "engines": {
     "node": "^14.18.0",

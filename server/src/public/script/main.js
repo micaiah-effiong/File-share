@@ -438,8 +438,9 @@ Vue.component("file-block", {
     await this.fetchFiles();
 
     socket.on("FILE_UPDATE", async (newFile) => {
+      console.log({ newFile });
       if (newFile) {
-        return this.appFiles.push(newFile);
+        return this.setFiles(newFile);
       }
 
       await this.fetchFiles();
@@ -469,8 +470,16 @@ Vue.component("file-block", {
 
     fetchFiles: async function () {
       let res = await fetch("/api/files");
-      let files = await res.json();
-      this.appFiles = [...files.data];
+      let { data } = await res.json();
+      this.setFiles(data);
+    },
+
+    setFiles: function (files) {
+      if (!Array.isArray(files)) {
+        this.appFiles.push(files);
+      } else {
+        this.appFiles = [...files];
+      }
       this.files = [...this.appFiles];
 
       this.videoFiles = this.appFiles.filter((file) =>
@@ -494,6 +503,7 @@ Vue.component("file-block", {
       this.shadowFiles.audioFiles = this.audioFiles;
       this.shadowFiles.imageFiles = this.imageFiles;
       this.shadowFiles.docFiles = this.docFiles;
+      AppEvent.$emit("countFile", this.files.length);
     },
 
     onCheck({ target }) {

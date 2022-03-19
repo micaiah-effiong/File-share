@@ -1,5 +1,4 @@
 import express from "express";
-import path from "path";
 import { files } from "../controllers";
 const {
   getAllFiles,

@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 export type MiddlewareFunction = (
   req: Request,
-  res: Respose,
+  res: Response,
   next: NextFunction
 ) => void;
 

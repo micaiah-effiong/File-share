@@ -1,7 +1,4 @@
-import { promises } from "dns";
 import { networkInterfaces, NetworkInterfaceInfo } from "os";
-
-const lookup = promises.lookup;
 
 const availableNetworkInterfaces = networkInterfaces();
 

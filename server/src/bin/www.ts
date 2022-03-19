@@ -7,7 +7,7 @@
 import { app, server } from "../app";
 import debug from "debug"; //("file-share:server");
 // import http from "http";
-import { exec } from "child_process";
+// import { exec } from "child_process";
 import QRcode from "qrcode";
 import path from "path";
 import { promises as fsPromise } from "fs";

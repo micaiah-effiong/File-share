@@ -1,27 +1,62 @@
 <template>
-  <div class="w-full h-full flex gap-14">
+  <div class="w-full h-full flex gap-14 bg-ash-dark">
     <nav class="w-28 border-2 py-5 bg-ash-normal">
       <div class="grid gap-6">
         <div>logo</div>
         <div class="grid gap-8 text-lg text-ash-accent">
-          <div class="grid justify-items-center gap-2">
+          <div
+            class="
+              grid
+              justify-items-center
+              gap-2
+              hover:text-ash-light hover:nav-highlight
+            "
+          >
             <HomeIcon class="w-7" />
             <span class="text-sm uppercase">home</span>
           </div>
-          <div class="grid justify-items-center gap-2">
+          <div
+            class="
+              grid
+              justify-items-center
+              gap-2
+              hover:text-ash-light hover:nav-highlight
+            "
+          >
             <FolderIcon class="w-7" />
             <span class="text-sm uppercase">Recent</span>
           </div>
-          <div class="grid justify-items-center gap-2">
+          <div
+            class="
+              grid
+              justify-items-center
+              gap-2
+              hover:text-ash-light hover:nav-highlight
+            "
+          >
             <VideoCameraIcon class="w-7" />
             <span class="text-sm uppercase">video</span>
           </div>
-          <div class="grid justify-items-center gap-2">
+          <div
+            class="
+              grid
+              justify-items-center
+              gap-2
+              hover:text-ash-light hover:nav-highlight
+            "
+          >
             <PhotographIcon class="w-7" /><span class="text-sm uppercase"
               >phote</span
             >
           </div>
-          <div class="grid justify-items-center gap-2">
+          <div
+            class="
+              grid
+              justify-items-center
+              gap-2
+              hover:text-ash-light hover:nav-highlight
+            "
+          >
             <CogIcon class="w-7" /><span class="text-sm uppercase"
               >settings</span
             >
@@ -69,7 +104,17 @@
         </div>
       </nav>
       <main>
-        <div class="border-2 w-3/12 rounded-lg bg-ash-normal">
+        <div
+          class="
+            border-2
+            w-3/12
+            rounded-lg
+            bg-ash-normal
+            text-ash-accent
+            hover:bg-ash-secondary hover:transition-colors
+            transition-colors
+          "
+        >
           <div class="grid justify-centerborder-2 border-red w-full p-3">
             <div>
               <div class="flex justify-between border py-1">
@@ -176,5 +221,11 @@ export default {
   content: "";
   top: -0.25rem;
   position: absolute;
+}
+
+.hover\:nav-highlight:hover {
+  box-shadow: 2px 0px #86868a;
+  transition-property: color;
+  transition-duration: 0.3s;
 }
 </style>

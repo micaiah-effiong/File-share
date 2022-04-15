@@ -1,8 +1,10 @@
 <template>
   <div class="w-full h-full flex gap-14 dark bg-ocean-blue-light">
-    <nav class="w-28 py-5 bg-white">
+    <nav class="w-28 py-7 bg-white">
       <div class="grid gap-6">
-        <div class="text-ocean-blue-dark">logo</div>
+        <div class="text-ocean-blue-dark flex justify-center">
+          <RssIcon class="w-10" />
+        </div>
         <div class="grid gap-8 text-md text-ocean-blue-dark">
           <div
             class="
@@ -64,22 +66,31 @@
         </div>
       </div>
     </nav>
-    <main class="w-full py-5 gap-8 flex flex-col">
+    <main class="w-full py-7 gap-8 flex flex-col">
       <header class="">
-        <div class="flex justify-between py-3 text-ocean-blue-dark">
-          <div>Logo</div>
-
+        <div class="flex justify-between gap-4 text-ocean-blue-dark">
+          <RssIcon class="w-5" />
+          <div class="flex-1">
+            <input
+              class="w-full outline-none bg-transparent"
+              type="search"
+              name=""
+              id=""
+            />
+          </div>
           <div class="flex gap-5">
-            <div><PlusCircleIcon class="w-5" /></div>
-            <div><SearchIcon class="w-5" /></div>
-            <div><StarIcon class="w-5" /></div>
+            <PlusCircleIcon class="w-5" />
+            <SearchIcon class="w-5" />
+            <StarIcon class="w-5" />
           </div>
         </div>
-        <!-- <div class="cut"></div> -->
-        <nav class="cut">
+        <div class="py-5">
+          <div class="cut"></div>
+        </div>
+        <nav>
           <div class="flex justify-between text-ocean-blue-dark">
-            <div class="flex gap-6 p-3 flex-1">
-              <div class="flex gap-2 shadow-md p-2 rounded-lg">
+            <div class="flex gap-6 flex-1">
+              <div class="flex gap-2 shadow-md p-2 rounded-lg bg-white">
                 <FolderIcon class="w-5" />
                 <ChevronDownIcon class="w-3" />
               </div>
@@ -92,18 +103,24 @@
                   flex
                   justify-between
                   p-2
+                  h-auto
                   rounded-md
                   bottom-2
                   border-black
                   gap-5
                   bg-ocean-blue-accent
+                  shadow-ms shadow-inner
                 "
               >
-                <button class="w-5 h-5">
-                  <MenuIcon class="text-xs" />
+                <button>
+                  <MenuIcon class="text-xs w-5" />
                 </button>
-                <button class="w-5 h-5"><ViewBoardsIcon /></button>
-                <button class="w-5 h-5"><ViewGridIcon /></button>
+                <button class="shadow-md rounded-sm bg-white p-0.5">
+                  <ViewBoardsIcon class="text-md w-5" />
+                </button>
+                <button>
+                  <ViewGridIcon class="text-xs w-5" />
+                </button>
               </div>
             </div>
           </div>
@@ -112,8 +129,10 @@
       <main>
         <div
           class="
+            bg-white
             w-3/12
             rounded-lg
+            shadow-sm
             mono:bg-ash-normal
             mono:text-ash-accent
             mono:hover:bg-ash-secondary
@@ -121,7 +140,7 @@
             transition-colors
           "
         >
-          <div class="grid w-full p-3 border-2 rounded-md">
+          <div class="grid w-full p-3 rounded-md">
             <div>
               <div class="flex justify-between py-1">
                 <button>
@@ -180,7 +199,23 @@
         </div>
       </main>
     </main>
-    <aside class="w-28 py-5 bg-white">side</aside>
+    <aside class="max-w-4/12 w-4/12 py-7 bg-white">
+      <header class="p-3">
+        <div class="flex gap-2 text-ocean-blue-dark">
+          <DocumentTextIcon class="w-5" />
+          <span>File Preview</span>
+        </div>
+        <div class="py-5">
+          <div class="cut"></div>
+        </div>
+      </header>
+      <main class="p-3">
+        <div>File</div>
+        <div>Description</div>
+        <div>Share</div>
+        <div>Extra</div>
+      </main>
+    </aside>
   </div>
 </template>
 
@@ -202,6 +237,8 @@ import {
   PlusCircleIcon,
   SearchIcon,
   ChevronDownIcon,
+  RssIcon,
+  DocumentTextIcon,
 } from "@heroicons/vue/outline";
 import { DocumentIcon } from "@heroicons/vue/solid";
 
@@ -225,6 +262,8 @@ export default {
     PlusCircleIcon,
     SearchIcon,
     ChevronDownIcon,
+    RssIcon,
+    DocumentTextIcon,
   },
 };
 </script>
@@ -244,7 +283,7 @@ export default {
 }
 
 .cut {
-  border-top: 0.5px solid #e5e7eb;
+  border-top: 1.5px solid #e5e7eb;
   position: relative;
 }
 
@@ -260,15 +299,16 @@ export default {
 
 .cut::after,
 .cut::before {
-  height: 0.4rem;
+  height: 0.6rem;
   content: "";
-  top: -0.25rem;
+  top: -0.38rem;
   position: absolute;
 }
 
 .hover\:nav-highlight:hover {
-  box-shadow: 2px 0px #86868a;
-  transition-property: color;
+  box-shadow: 2px 0px #078dee;
+  transition-property: box-shadow;
   transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
 }
 </style>

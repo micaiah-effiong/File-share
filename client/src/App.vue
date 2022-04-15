@@ -127,63 +127,65 @@
         </nav>
       </header>
       <main>
-        <div
-          class="
-            bg-white
-            w-3/12
-            rounded-lg
-            shadow-sm
-            mono:bg-ash-normal
-            mono:text-ash-accent
-            mono:hover:bg-ash-secondary
-            mono:hover:transition-colors
-            transition-colors
-          "
-        >
-          <div class="grid w-full p-3 rounded-md">
-            <div>
-              <div class="flex justify-between py-1">
-                <button>
-                  <StarIcon class="w-5 text-ocean-blue-secondary" />
-                </button>
-                <button>
-                  <DotsVerticalIcon
-                    class="w-5 mono:text-ash-light text-ocean-blue-secondary"
-                  />
-                </button>
-              </div>
-              <div class="grid gap-3 py-5 justify-center text-center">
-                <div class="text-[4rem] flex justify-center">
-                  <span
-                    ><DocumentIcon class="h-16 text-ocean-blue-secondary"
-                  /></span>
-                </div>
-                <div class="text-[0.8rem] text-[#4e788f] font-semibold">
-                  file-name.png
-                </div>
-              </div>
-            </div>
-            <!-- <div class="cut"></div> -->
-            <div class="flex pt-3 pb-2 cut justify-between items-center">
-              <div class="uppercase text-xs text-[#89a5b4]">2mb</div>
+        <div>
+          <div
+            class="
+              bg-white
+              w-4/12
+              rounded-lg
+              shadow-sm
+              mono:bg-ash-normal
+              mono:text-ash-accent
+              mono:hover:bg-ash-secondary
+              mono:hover:transition-colors
+              transition-colors
+            "
+          >
+            <div class="grid w-full p-3 rounded-md">
               <div>
-                <div
-                  class="
-                    outline-1 outline-white
-                    bg-red-500
-                    w-6
-                    h-6
-                    rounded-md
-                    flex
-                    justify-center
-                    items-center
-                    text-sm
-                    font-semibold
-                    text-white
-                    p-1
-                  "
-                >
-                  <span>O</span>
+                <div class="flex justify-between py-1">
+                  <button>
+                    <StarIcon class="w-5 text-ocean-blue-secondary" />
+                  </button>
+                  <button>
+                    <DotsVerticalIcon
+                      class="w-5 mono:text-ash-light text-ocean-blue-secondary"
+                    />
+                  </button>
+                </div>
+                <div class="grid gap-3 py-5 justify-center text-center">
+                  <div class="text-[4rem] flex justify-center">
+                    <span
+                      ><DocumentIcon class="h-16 text-ocean-blue-secondary"
+                    /></span>
+                  </div>
+                  <div class="text-[0.8rem] text-ocean-blue-dark font-semibold">
+                    file-name.png
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="cut"></div> -->
+              <div class="flex pt-3 pb-2 cut justify-between items-center">
+                <div class="uppercase text-xs text-ocean-blue-dark">2mb</div>
+                <div>
+                  <div
+                    class="
+                      outline-1 outline-white
+                      bg-red-500
+                      w-6
+                      h-6
+                      rounded-md
+                      flex
+                      justify-center
+                      items-center
+                      text-sm
+                      font-semibold
+                      text-white
+                      p-1
+                    "
+                  >
+                    <span>O</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -199,22 +201,92 @@
         </div>
       </main>
     </main>
-    <aside class="max-w-4/12 w-4/12 py-7 bg-white">
-      <header class="p-3">
-        <div class="flex gap-2 text-ocean-blue-dark">
-          <DocumentTextIcon class="w-5" />
-          <span>File Preview</span>
+    <aside class="max-w-5/12 w-5/12 py-7 bg-white">
+      <div class="h-full overflow-auto">
+        <header class="px-3">
+          <div class="flex gap-2 text-ocean-blue-dark">
+            <DocumentTextIcon class="w-5" />
+            <span>File Preview</span>
+          </div>
+          <div class="py-5">
+            <div class="cut"></div>
+          </div>
+        </header>
+        <main class="px-10 text-sm text-ocean-blue-dark">
+          <div class="grid gap-7">
+            <div class="grid gap-3">
+              <div class="flex justify-center">
+                <DocumentIcon class="h-48 text-ocean-blue-secondary" />
+              </div>
+              <div class="grid gap-2">
+                <div class="font-semibold break-all">
+                  users-file-screenshots-image-media-somefile.png
+                </div>
+                <div class="text-xs">2.5GB</div>
+              </div>
+            </div>
+            <div class="cut"></div>
+            <div class="break-words grid gap-2">
+              <div class="font-semibold">Description</div>
+              <div class="text-xs leading-5">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
+                tempus suscipit dolor tincidunt gravida. Praesent ac rutrum
+                massa. Cras vestibulum magna a tortor varius, nec interdum dui
+                dapibus.
+              </div>
+            </div>
+            <div class="cut"></div>
+            <div class="grid gap-2">
+              <div class="font-semibold">Shared with:</div>
+              <div class="grid">
+                <div class="flex gap-3 items-center">
+                  <div
+                    class="
+                      outline-1 outline-white
+                      bg-red-500
+                      w-6
+                      h-6
+                      rounded-md
+                      flex
+                      justify-center
+                      items-center
+                      text-sm
+                      font-semibold
+                      text-white
+                      p-1
+                    "
+                  >
+                    <span>S</span>
+                  </div>
+                  <div>Olive Silver</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+        <div class="border-t mt-7 py-5 px-10">
+          <div class="flex justify-between text-xs text-ocean-blue-dark gap-3">
+            <div class="grid gap-3 justify-items-center">
+              <div class="w-6 text-white bg-ocean-blue-normal rounded-md p-1">
+                <ExternalLinkIcon />
+              </div>
+              <div>Share</div>
+            </div>
+            <div class="grid gap-3 justify-items-center">
+              <div class="w-6 text-white bg-ocean-blue-normal rounded-md p-1">
+                <PencilIcon />
+              </div>
+              <div>Edit</div>
+            </div>
+            <div class="grid gap-3 justify-items-center">
+              <div class="w-6 text-white bg-ocean-blue-normal rounded-md p-1">
+                <TrashIcon />
+              </div>
+              <div>Delete</div>
+            </div>
+          </div>
         </div>
-        <div class="py-5">
-          <div class="cut"></div>
-        </div>
-      </header>
-      <main class="p-3">
-        <div>File</div>
-        <div>Description</div>
-        <div>Share</div>
-        <div>Extra</div>
-      </main>
+      </div>
     </aside>
   </div>
 </template>
@@ -239,6 +311,9 @@ import {
   ChevronDownIcon,
   RssIcon,
   DocumentTextIcon,
+  ExternalLinkIcon,
+  PencilIcon,
+  TrashIcon,
 } from "@heroicons/vue/outline";
 import { DocumentIcon } from "@heroicons/vue/solid";
 
@@ -264,6 +339,9 @@ export default {
     ChevronDownIcon,
     RssIcon,
     DocumentTextIcon,
+    ExternalLinkIcon,
+    PencilIcon,
+    TrashIcon,
   },
 };
 </script>
@@ -275,8 +353,6 @@ export default {
   font-family: "Rubik", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
   height: 100vh;
   width: 100%;
   border: 1px solid salmon;

@@ -1,7 +1,18 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import vuePlugin from "@vitejs/plugin-vue";
+import vueJsxPlugin from "@vitejs/plugin-vue-jsx";
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [vue()]
-})
+export default {
+  plugins: [
+    vueJsxPlugin({
+      include: [/\.tesx$/, /\.[jt]sx$/],
+    }),
+    vuePlugin(),
+  ],
+  build: {
+    // to make tests faster
+    minify: false,
+  },
+  optimizeDeps: {
+    disabled: true,
+  },
+};

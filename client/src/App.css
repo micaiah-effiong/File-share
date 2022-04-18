@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+#app {
+  background-color: #fbfafb;
+  font-family: "Rubik", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  width: 100%;
+  border: 1px solid salmon;
+}
+
+.cut {
+  border-top: 1.5px solid #e5e7eb;
+  position: relative;
+}
+
+.cut::before {
+  border-left: 0.3px solid #e5e7eb;
+  left: 0.3rem;
+}
+
+.cut::after {
+  border-right: 0.3px solid #e5e7eb;
+  right: 0.3rem;
+}
+
+.cut::after,
+.cut::before {
+  height: 0.6rem;
+  content: "";
+  top: -0.38rem;
+  position: absolute;
+}
+
+.hover\:nav-highlight:hover {
+  box-shadow: 2px 0px #078dee;
+  transition-property: box-shadow;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+}

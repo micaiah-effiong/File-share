@@ -1,12 +1,19 @@
 <template>
   <div>
     <div
-      className="grid justify-items-center gap-2 nav-item text-ocean-blue-dark  hover:nav-highlight"
+      class="
+        grid
+        justify-items-center
+        gap-2
+        nav-item
+        text-ocean-blue-dark
+        hover:nav-highlight
+      "
     >
       <div class="w-5">
         <slot></slot>
       </div>
-      <span className="text-xs uppercase">{{ text }}</span>
+      <span class="text-xs uppercase">{{ text }}</span>
     </div>
   </div>
 </template>

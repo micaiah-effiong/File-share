@@ -26,7 +26,7 @@
           <div className="flex justify-between text-ocean-blue-dark">
             <div className="flex gap-6 flex-1">
               <div className="flex gap-2 shadow-md p-2 rounded-lg bg-white">
-                <FolderIcon class="w-5" />
+                <FolderIcon class="w-6 text-ocean-blue-normal" />
                 <ChevronDownIcon class="w-3" />
               </div>
               <button>Recent Files</button>
@@ -115,7 +115,7 @@
 <script lang="ts" >
 import { defineComponent } from "vue";
 import {
-  FolderIcon,
+  // FolderIcon,
   MenuIcon,
   ViewGridIcon,
   ViewBoardsIcon,
@@ -126,7 +126,7 @@ import {
   ChevronDownIcon,
   RssIcon,
 } from "@heroicons/vue/outline";
-import { DocumentIcon } from "@heroicons/vue/solid";
+import { DocumentIcon, FolderIcon } from "@heroicons/vue/solid";
 import "./App.css";
 import Nav from "./layouts/Nav/Nav.vue";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";

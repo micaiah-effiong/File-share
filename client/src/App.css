@@ -31,10 +31,3 @@
   top: -0.38rem;
   position: absolute;
 }
-
-.hover\:nav-highlight:hover {
-  box-shadow: 2px 0px #078dee;
-  transition-property: box-shadow;
-  transition-duration: 0.3s;
-  transition-timing-function: ease-in-out;
-}

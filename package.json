@@ -12,7 +12,9 @@
   "scripts": {
     "dev:all": "concurrently \"yarn workspace server start:dev\" \"yarn workspace client serve\"",
     "dev:client": "yarn workspace client dev",
-    "dev:server": "yarn workspace server serve:dev"
+    "dev:server": "yarn workspace server serve:dev",
+    "story": "yarn workspace client storybook",
+    "build-story": "yarn workspace client build-storybook"
   },
   "private": true,
   "engines": {

@@ -31,20 +31,22 @@
               items-center
             "
           >
-            <DotsHorizontalIcon class="w-6" />
+            <button><DotsHorizontalIcon class="w-6" /></button>
           </div>
           <div class="w-11 h-10 justify-center grid items-center">
-            <img
-              src="https://source.unsplash.com/random/128x128?girls"
-              alt="avatar"
-              class="
-                w-8
-                h-8
-                border border-ocean-blue-secondary
-                text-xs
-                rounded-md
-              "
-            />
+            <button>
+              <img
+                src="https://source.unsplash.com/random/128x128?girls"
+                alt="avatar"
+                class="
+                  w-8
+                  h-8
+                  border border-ocean-blue-secondary
+                  text-xs
+                  rounded-md
+                "
+              />
+            </button>
           </div>
         </div>
       </div>

@@ -26,7 +26,7 @@
           <div class="flex justify-between text-ocean-blue-dark">
             <div class="flex gap-6 flex-1">
               <div class="flex gap-2 shadow-md p-2 rounded-lg bg-white">
-                <FolderIcon class="w-6 text-ocean-blue-normal" />
+                <FolderIcon class="w-5 text-ocean-blue-normal" />
                 <ChevronDownIcon class="w-3" />
               </div>
               <button>Recent Files</button>
@@ -37,12 +37,13 @@
                 class="
                   flex
                   justify-between
-                  p-2
+                  py-1
+                  px-2
                   h-auto
                   rounded-md
                   bottom-2
                   border-black
-                  gap-5
+                  gap-4
                   bg-ocean-blue-accent
                   shadow-ms shadow-inner
                 "
@@ -50,7 +51,7 @@
                 <button>
                   <MenuIcon class="text-xs w-5" />
                 </button>
-                <button class="shadow-md rounded-sm bg-white p-0.5">
+                <button class="shadow-md rounded-[4px] bg-white py-1 px-1">
                   <ViewBoardsIcon class="text-md w-5" />
                 </button>
                 <button>

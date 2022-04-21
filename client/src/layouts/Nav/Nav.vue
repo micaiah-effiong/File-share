@@ -1,7 +1,7 @@
 <template>
   <nav className="h-full w-32 py-7 bg-white">
-    <div className="grid gap-6">
-      <div className="text-ocean-blue-dark flex justify-center">
+    <div className="grid h-full gap-6">
+      <div className="text-ocean-blue-dark h-11 flex justify-center">
         <RssIcon class="w-10" />
       </div>
       <div className="grid gap-8 text-md text-ocean-blue-dark">
@@ -10,6 +10,43 @@
         <NavMenuItem text="Video"> <VideoCameraIcon /> </NavMenuItem>
         <NavMenuItem text="Photo"> <PhotographIcon /> </NavMenuItem>
         <NavMenuItem text="Settings"> <CogIcon /> </NavMenuItem>
+      </div>
+
+      <div class="flex justify-center self-end">
+        <div
+          class="
+            grid
+            border-ocean-blue-secondary border
+            bg-ocean-blue-light
+            rounded-md
+          "
+        >
+          <div
+            class="
+              w-11
+              h-10
+              justify-center
+              grid
+              text-ocean-blue-dark
+              items-center
+            "
+          >
+            <DotsHorizontalIcon class="w-6" />
+          </div>
+          <div class="w-11 h-10 justify-center grid items-center">
+            <img
+              src="https://source.unsplash.com/random/128x128?girls"
+              alt="avatar"
+              class="
+                w-8
+                h-8
+                border border-ocean-blue-secondary
+                text-xs
+                rounded-md
+              "
+            />
+          </div>
+        </div>
       </div>
     </div>
   </nav>
@@ -24,6 +61,7 @@ import {
   VideoCameraIcon,
   PhotographIcon,
   CogIcon,
+  DotsHorizontalIcon,
 } from "@heroicons/vue/outline";
 import NavMenuItem from "../../components/NavMenuItem.vue";
 
@@ -36,6 +74,7 @@ export default defineComponent({
     PhotographIcon,
     CogIcon,
     NavMenuItem,
+    DotsHorizontalIcon,
   },
 });
 </script>

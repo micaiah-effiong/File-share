@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full flex gap-14 dark bg-ocean-blue-light">
     <Nav />
-    <main class="h-full w-full py-7 gap-8 flex flex-col">
+    <main class="h-full w-full py-7 gap-8 flex flex-col px-4 md:px-0">
       <header class="">
         <div class="flex justify-between gap-4 text-ocean-blue-dark">
           <RssIcon class="w-5" />
@@ -24,7 +24,7 @@
         </div>
         <nav>
           <div class="flex justify-between text-ocean-blue-dark">
-            <div class="flex gap-6 flex-1">
+            <div class="flex gap-2 md:gap-6 flex-1">
               <div class="flex gap-2 shadow-md p-2 rounded-lg bg-white">
                 <FolderIcon class="w-5 text-ocean-blue-normal" />
                 <ChevronDownIcon class="w-3" />
@@ -67,7 +67,8 @@
           <div
             class="
               bg-white
-              w-4/12
+              md:w-4/12
+              w-1/2
               rounded-lg
               shadow-sm
               mono:bg-ash-normal
@@ -89,7 +90,7 @@
                     />
                   </button>
                 </div>
-                <div class="grid gap-3 py-5 justify-center text-center">
+                <div class="grid gap-3 py-3 justify-center text-center">
                   <div class="text-[4rem] flex justify-center">
                     <span>
                       <DocumentIcon class="h-16 text-ocean-blue-secondary" />

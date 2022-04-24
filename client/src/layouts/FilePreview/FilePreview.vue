@@ -1,5 +1,5 @@
 <template>
-  <aside className="h-full max-w-5/12 w-5/12 py-7 bg-white">
+  <aside className="h-full max-w-5/12 w-5/12 py-7 bg-white hidden md:block">
     <div className="grid h-full ">
       <header className="px-3">
         <div className="flex gap-2 text-ocean-blue-dark">

@@ -65,7 +65,7 @@ import {
   CogIcon,
   DotsHorizontalIcon,
 } from "@heroicons/vue/outline";
-import NavMenuItem from "../../components/NavMenuItem.vue";
+import NavMenuItem from "../../components/NavMenuItem/NavMenuItem.vue";
 
 export default defineComponent({
   components: {

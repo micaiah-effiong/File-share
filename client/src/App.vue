@@ -2,8 +2,20 @@
   <div class="flex flex-col h-full w-full justify-between">
     <div class="w-full h-full flex gap-14 bg-ocean-blue-light">
       <Nav />
-      <main class="h-full w-full py-7 gap-8 flex flex-col px-4 md:px-0">
-        <header class="">
+      <main
+        class="
+          h-full
+          w-full
+          py-7
+          gap-5
+          md:gap-8
+          flex flex-col
+          px-4
+          md:px-0
+          border-red-500
+        "
+      >
+        <header class="sticky bg-ocean-blue-light top-7">
           <div class="flex justify-between gap-4 text-ocean-blue-dark">
             <RssIcon class="w-5" />
             <div class="flex-1">
@@ -15,22 +27,28 @@
                   text-sm
                   align-baseline
                 "
-                type="search"
+                type=""
                 name=""
-                id=""
+                id="searchField"
                 placeholder="search /"
               />
             </div>
             <div class="flex gap-5">
-              <PlusCircleIcon class="w-5" />
-              <SearchIcon class="w-5" />
+              <input type="file" hidden id="uploadField" />
+              <label for="uploadField">
+                <PlusCircleIcon class="w-5" />
+              </label>
+              <label for="searchField">
+                <SearchIcon class="w-5" />
+              </label>
               <StarIcon class="w-5" />
             </div>
           </div>
           <div class="py-5">
             <div class="cut"></div>
           </div>
-          <nav>
+          <!-- nan.hidden.md:block -->
+          <nav class="">
             <div class="flex justify-between text-ocean-blue-dark">
               <div class="flex gap-2 md:gap-6 flex-1">
                 <div class="flex gap-2 shadow-md p-2 rounded-lg bg-white">
@@ -73,8 +91,8 @@
             </div>
           </nav>
         </header>
-        <main>
-          <div>
+        <main class="h-full">
+          <div class="h-full overflow-auto">
             <div
               class="
                 bg-white
@@ -105,10 +123,14 @@
                       />
                     </button>
                   </div>
-                  <div class="grid gap-3 py-3 justify-center text-center">
-                    <div class="text-[4rem] flex justify-center">
+                  <div
+                    class="grid gap-3 pb-3 md:py-3 justify-center text-center"
+                  >
+                    <div class="flex justify-center">
                       <span>
-                        <DocumentIcon class="h-16 text-ocean-blue-secondary" />
+                        <DocumentIcon
+                          class="h-10 md:h-16 text-ocean-blue-secondary"
+                        />
                       </span>
                     </div>
                     <div
@@ -159,7 +181,10 @@
       </main>
       <FilePreview />
     </div>
-    <BottomNav />
+    <!-- <div class="h-16 bg-green-800 bottom-0 border-2 border-red-500"></div> -->
+    <div class="h-16 md:hidden fixed w-full bottom-0">
+      <BottomNav />
+    </div>
   </div>
 </template>
 

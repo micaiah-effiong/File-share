@@ -23,7 +23,7 @@ import { defineComponent } from "vue";
 type NavMenuItemPropsType = {
   text: {
     type: StringConstructor;
-    required: true;
+    required: boolean;
   };
 };
 

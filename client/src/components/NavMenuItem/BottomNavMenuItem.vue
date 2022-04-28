@@ -13,11 +13,31 @@
       </div>
     </div>
 
-    <span class="text-xs">Home</span>
+    <span class="text-xs uppercase" v-if="!text">{{ text }}</span>
   </button>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({});
+import { defineComponent, FunctionalComponent } from "vue";
+type BottomNavMenuItemPropsType = {
+  text: {
+    type: StringConstructor;
+    required: boolean;
+  };
+};
+
+interface IBottomNavMenuItemProps {
+  text: string;
+}
+export default defineComponent<
+  BottomNavMenuItemPropsType,
+  IBottomNavMenuItemProps,
+  unknown
+>({
+  props: { text: { type: String, required: true } },
+  setup(props: IBottomNavMenuItemProps) {
+    const { text } = props;
+    return { text };
+  },
+});
 </script>

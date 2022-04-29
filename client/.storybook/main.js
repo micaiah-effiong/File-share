@@ -3,7 +3,6 @@ module.exports = {
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    // "storybook-addon-jsx",
 
     {
       name: "@storybook/addon-postcss",
@@ -24,9 +23,6 @@ module.exports = {
   //   config.plugins = [
   //     ...config.plugins,
   //     require("@vitejs/plugin-vue").default(),
-  //     require("@vitejs/plugin-vue-jsx").default({
-  //       include: [/\.tesx$/, /\.[jt]sx$/],
-  //     }),
   //   ];
   //   return config;
   // },

@@ -1,6 +1,6 @@
 <template>
   <aside className="h-full max-w-5/12 w-5/12 py-7 bg-white hidden md:block">
-    <div className="grid h-full ">
+    <div className="flex flex-col h-full ">
       <header className="px-3">
         <div className="flex gap-2 text-ocean-blue-dark">
           <DocumentTextIcon class="w-5" />
@@ -10,7 +10,7 @@
           <div className="cut"></div>
         </div>
       </header>
-      <main className="h-full overflow-auto">
+      <main className="h-full grid overflow-auto">
         <main className="px-10 text-sm text-ocean-blue-dark">
           <div className="grid gap-7">
             <div className="grid gap-3">
@@ -50,7 +50,7 @@
             </div>
           </div>
         </main>
-        <div className="border-t mt-7 py-5 px-10">
+        <div className="border-t self-end mt-7 py-5 px-10">
           <div
             className="flex justify-between text-xs text-ocean-blue-dark gap-3"
           >

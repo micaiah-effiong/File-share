@@ -18,11 +18,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, FunctionalComponent } from "vue";
+import { defineComponent } from "vue";
 type BottomNavMenuItemPropsType = {
   text: {
     type: StringConstructor;
-    required: boolean;
+    required: true;
   };
 };
 

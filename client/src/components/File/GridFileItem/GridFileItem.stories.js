@@ -1,6 +1,5 @@
 import { HomeIcon } from "@heroicons/vue/solid";
 import GridFileItem from "./GridFileItem.vue";
-// import "../../../index.css";
 
 export default {
   title: "Example/GridFileItem",

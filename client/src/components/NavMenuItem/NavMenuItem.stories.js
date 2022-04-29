@@ -1,6 +1,5 @@
 import { HomeIcon } from "@heroicons/vue/solid";
 import NavMenuItem from "./NavMenuItem.vue";
-import "../../index.css";
 
 export default {
   title: "Example/NavMenuItem",

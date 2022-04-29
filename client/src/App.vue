@@ -93,81 +93,8 @@
         </header>
         <main class="h-full">
           <div class="h-full overflow-auto">
-            <div
-              class="
-                bg-white
-                md:w-4/12
-                w-1/2
-                rounded-lg
-                shadow-sm
-                mono:bg-ash-normal
-                mono:text-ash-accent
-                mono:hover:bg-ash-secondary
-                mono:hover:transition-colors
-                transition-colors
-              "
-            >
-              <div class="grid w-full p-3 rounded-md">
-                <div>
-                  <div class="flex justify-between py-1">
-                    <button>
-                      <StarIcon class="w-5 text-ocean-blue-secondary" />
-                    </button>
-                    <button>
-                      <DotsVerticalIcon
-                        class="
-                          w-5
-                          mono:text-ash-light
-                          text-ocean-blue-secondary
-                        "
-                      />
-                    </button>
-                  </div>
-                  <div
-                    class="grid gap-3 pb-3 md:py-3 justify-center text-center"
-                  >
-                    <div class="flex justify-center">
-                      <span>
-                        <DocumentIcon
-                          class="h-10 md:h-16 text-ocean-blue-secondary"
-                        />
-                      </span>
-                    </div>
-                    <div
-                      class="text-[0.8rem] text-ocean-blue-dark font-semibold"
-                    >
-                      file-name.png
-                    </div>
-                  </div>
-                </div>
-
-                <!-- <div class="cut"></div> -->
-
-                <div class="flex pt-3 pb-2 cut justify-between items-center">
-                  <div class="uppercase text-xs text-ocean-blue-dark">2mb</div>
-                  <div>
-                    <div
-                      class="
-                        outline-1 outline-white
-                        bg-red-500
-                        w-6
-                        h-6
-                        rounded-md
-                        flex
-                        justify-center
-                        items-center
-                        text-sm
-                        font-semibold
-                        text-white
-                        p-1
-                      "
-                    >
-                      <span>O</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <!-- GRID FILE ITEM -->
+            <GridFileItem filename="file-name.png" size="2mb" />
           </div>
 
           <!-- <div class="grid p-2 gap-1 h-[10rem]">
@@ -207,12 +134,14 @@ import "./App.css";
 import Nav from "./layouts/Nav/Nav.vue";
 import BottomNav from "./layouts/Nav/BottomNav.vue";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";
+import GridFileItem from "./components/File/GridFileItem/GridFileItem.vue";
 
 export default defineComponent({
   components: {
     Nav,
     BottomNav,
     FilePreview,
+    GridFileItem,
     FolderIcon,
     MenuIcon,
     ViewGridIcon,

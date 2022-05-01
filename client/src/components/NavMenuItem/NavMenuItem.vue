@@ -6,7 +6,7 @@
         justify-items-center
         gap-2
         nav-item
-        text-ocean-blue-dark
+        text-center text-ocean-blue-dark
         hover:nav-highlight
       "
     >

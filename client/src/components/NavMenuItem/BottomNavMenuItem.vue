@@ -4,7 +4,7 @@
       grid
       justify-center justify-items-center
       items-center
-      text-ocean-blue-dark
+      text-ocean-blue-dark text-center
     "
   >
     <div class="nav-item px-3">
@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <span class="text-xs uppercase" v-if="!text">{{ text }}</span>
+    <!-- <span class="text-xs uppercase" v-if="text">{{ text }}</span> -->
   </button>
 </template>
 

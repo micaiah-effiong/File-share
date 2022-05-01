@@ -14,7 +14,7 @@ const Template = (args) => ({
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`
-  template: '<MyGridFileItem v-bind="args" class="w-20" />',
+  template: '<MyGridFileItem v-bind="args" class="w-48" />',
 });
 
 export const Primary = Template.bind({});

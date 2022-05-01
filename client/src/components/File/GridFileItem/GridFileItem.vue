@@ -2,8 +2,7 @@
   <div
     class="
       bg-white
-      md:w-4/12 md:max-w-sm
-      w-1/2
+      w-full
       min-w-min
       rounded-lg
       shadow-sm

@@ -41,14 +41,17 @@
               <label for="searchField">
                 <SearchIcon class="w-5" />
               </label>
-              <StarIcon class="w-5" />
+              <label>
+                <StarIcon class="w-5" />
+              </label>
             </div>
           </div>
           <div class="py-5">
             <div class="cut"></div>
           </div>
-          <!-- nan.hidden.md:block -->
-          <nav class="">
+
+          <!-- <nav class=""> -->
+          <nav class="hidden md:block">
             <div class="flex justify-between text-ocean-blue-dark">
               <div class="flex gap-2 md:gap-6 flex-1">
                 <div class="flex gap-2 shadow-md p-2 rounded-lg bg-white">
@@ -62,31 +65,8 @@
               </div>
 
               <div class="flex items-center">
-                <div
-                  class="
-                    flex
-                    justify-between
-                    py-1
-                    px-2
-                    h-auto
-                    rounded-md
-                    bottom-2
-                    border-black
-                    gap-4
-                    bg-ocean-blue-accent
-                    shadow-ms shadow-inner
-                  "
-                >
-                  <button>
-                    <MenuIcon class="text-xs w-5" />
-                  </button>
-                  <button class="shadow-md rounded-[4px] bg-white py-1 px-1">
-                    <ViewBoardsIcon class="text-md w-5" />
-                  </button>
-                  <button>
-                    <ViewGridIcon class="text-xs w-5" />
-                  </button>
-                </div>
+                <!-- VIEW SWITCHER -->
+                <ViewSwitcher />
               </div>
             </div>
           </nav>
@@ -119,9 +99,6 @@
 import { defineComponent } from "vue";
 import {
   // FolderIcon,
-  MenuIcon,
-  ViewGridIcon,
-  ViewBoardsIcon,
   StarIcon,
   DotsVerticalIcon,
   PlusCircleIcon,
@@ -135,6 +112,7 @@ import Nav from "./layouts/Nav/Nav.vue";
 import BottomNav from "./layouts/Nav/BottomNav.vue";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";
 import GridFileItem from "./components/File/GridFileItem/GridFileItem.vue";
+import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
 
 export default defineComponent({
   components: {
@@ -143,9 +121,6 @@ export default defineComponent({
     FilePreview,
     GridFileItem,
     FolderIcon,
-    MenuIcon,
-    ViewGridIcon,
-    ViewBoardsIcon,
     StarIcon,
     DotsVerticalIcon,
     PlusCircleIcon,
@@ -153,6 +128,7 @@ export default defineComponent({
     ChevronDownIcon,
     RssIcon,
     DocumentIcon,
+    ViewSwitcher,
   },
 });
 </script>

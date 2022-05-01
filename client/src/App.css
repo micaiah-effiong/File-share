@@ -8,26 +8,3 @@
   width: 100%;
   border: 1px solid salmon;
 }
-
-.cut {
-  border-top: 1.5px solid #e5e7eb;
-  position: relative;
-}
-
-.cut::before {
-  border-left: 0.3px solid #e5e7eb;
-  left: 0.3rem;
-}
-
-.cut::after {
-  border-right: 0.3px solid #e5e7eb;
-  right: 0.3rem;
-}
-
-.cut::after,
-.cut::before {
-  height: 0.6rem;
-  content: "";
-  top: -0.38rem;
-  position: absolute;
-}

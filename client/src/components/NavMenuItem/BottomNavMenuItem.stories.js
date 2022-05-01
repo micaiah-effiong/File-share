@@ -1,8 +1,8 @@
-import { HomeIcon } from "@heroicons/vue/solid";
+import { HomeIcon } from "@heroicons/vue/outline";
 import BottomNavMenuItem from "./BottomNavMenuItem.vue";
 
 export default {
-  title: "Example/NavMenuItem",
+  title: "Example/BottomNavMenuItem",
   component: BottomNavMenuItem,
 };
 

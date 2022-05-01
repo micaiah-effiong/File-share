@@ -7,7 +7,7 @@
           h-full
           w-full
           py-7
-          gap-5
+          gap-0
           md:gap-8
           flex flex-col
           px-4
@@ -30,7 +30,7 @@
                 type=""
                 name=""
                 id="searchField"
-                placeholder="search /"
+                placeholder="Ctrl + k"
               />
             </div>
             <div class="flex gap-5">
@@ -71,12 +71,23 @@
             </div>
           </nav>
         </header>
-        <main class="h-full">
-          <div class="h-full overflow-auto">
-            <!-- GRID FILE ITEM -->
-            <GridFileItem filename="file-name.png" size="2mb" />
+        <main class="h-[calc(100vh-185px)]">
+          <div class="h-full">
+            <div
+              class="
+                h-full
+                grid
+                gap-3
+                grid-cols-2
+                md:grid-cols-3
+                py-2
+                overflow-auto
+              "
+            >
+              <!-- GRID FILE ITEM -->
+              <GridFileItem filename="file-name.png" size="2mb" />
+            </div>
           </div>
-
           <!-- <div class="grid p-2 gap-1 h-[10rem]">
           <div class="bg-[#81c5f6]">secondary</div>
           <div class="bg-[#e8f0f7]">accent</div>
@@ -88,7 +99,6 @@
       </main>
       <FilePreview />
     </div>
-    <!-- <div class="h-16 bg-green-800 bottom-0 border-2 border-red-500"></div> -->
     <div class="h-16 md:hidden fixed w-full bottom-0">
       <BottomNav />
     </div>
@@ -129,6 +139,16 @@ export default defineComponent({
     RssIcon,
     DocumentIcon,
     ViewSwitcher,
+  },
+
+  setup() {
+    // return { scrollDirection: this.scrollDirection };
+  },
+
+  methods: {
+    scrollDirection(event: MouseEvent) {
+      console.log(event);
+    },
   },
 });
 </script>

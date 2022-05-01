@@ -71,7 +71,7 @@
             </div>
           </nav>
         </header>
-        <main class="h-[calc(100vh-185px)]">
+        <main class="max-h-[calc(100vh-185px)]">
           <div class="h-full">
             <div
               class="
@@ -80,11 +80,21 @@
                 gap-3
                 grid-cols-2
                 md:grid-cols-3
+                xl:grid-cols-6
                 py-2
                 overflow-auto
               "
             >
               <!-- GRID FILE ITEM -->
+              <GridFileItem filename="file-name.png" size="2mb" />
+              <GridFileItem filename="file-name.png" size="2mb" />
+              <GridFileItem filename="file-name.png" size="2mb" />
+              <GridFileItem filename="file-name.png" size="2mb" />
+              <GridFileItem filename="file-name.png" size="2mb" />
+              <GridFileItem filename="file-name.png" size="2mb" />
+              <GridFileItem filename="file-name.png" size="2mb" />
+              <GridFileItem filename="file-name.png" size="2mb" />
+              <GridFileItem filename="file-name.png" size="2mb" />
               <GridFileItem filename="file-name.png" size="2mb" />
             </div>
           </div>

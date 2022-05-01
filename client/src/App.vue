@@ -107,7 +107,8 @@
         </div> -->
         </main>
       </main>
-      <FilePreview />
+      <div v-if="!hidden"></div>
+      <FilePreview v-if="hidden" />
     </div>
     <div class="h-16 md:hidden fixed w-full bottom-0">
       <BottomNav />
@@ -116,7 +117,7 @@
 </template>
 
 <script lang="ts" >
-import { defineComponent } from "vue";
+import { defineComponent, reactive, toRefs } from "vue";
 import {
   // FolderIcon,
   StarIcon,
@@ -150,9 +151,10 @@ export default defineComponent({
     DocumentIcon,
     ViewSwitcher,
   },
-
   setup() {
     // return { scrollDirection: this.scrollDirection };
+    const state = reactive({ hidden: true });
+    return { ...toRefs(state) };
   },
 
   methods: {

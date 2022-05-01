@@ -1,6 +1,6 @@
 <template>
   <nav className="h-full w-32 py-7 bg-white hidden md:block">
-    <div className="grid h-full gap-6">
+    <div className="grid h-full overflow-auto gap-6">
       <div className="text-ocean-blue-dark h-11 flex justify-center">
         <RssIcon class="w-10" />
       </div>
@@ -65,7 +65,7 @@ import {
   CogIcon,
   DotsHorizontalIcon,
 } from "@heroicons/vue/outline";
-import NavMenuItem from "../../components/NavMenuItem/NavMenuItem.vue";
+import NavMenuItem from "../../components/NavMenuItem/SideNavMenuItem.vue";
 
 export default defineComponent({
   components: {

@@ -6,8 +6,8 @@
         class="
           h-full
           w-full
-          py-7
-          gap-0
+          md:py-7
+          gap-5
           md:gap-8
           flex flex-col
           px-4
@@ -15,7 +15,7 @@
           border-red-500
         "
       >
-        <header class="sticky bg-ocean-blue-light top-7">
+        <header class="sticky z-10 bg-ocean-blue-light top-7">
           <div class="flex justify-between gap-4 text-ocean-blue-dark">
             <RssIcon class="w-5" />
             <div class="flex-1">
@@ -71,7 +71,7 @@
             </div>
           </nav>
         </header>
-        <main class="max-h-[calc(100vh-185px)]">
+        <main class="max-h-[calc(100%-87px)] md:max-h-[calc(100%-105px)]">
           <div class="h-full">
             <div
               class="
@@ -80,10 +80,12 @@
                 gap-3
                 grid-cols-2
                 md:grid-cols-3
-                xl:grid-cols-6
-                py-2
+                xl:grid-cols-4
+                2xl:grid-cols-6
+                py-3
                 overflow-auto
               "
+              @scroll="scrollDirection"
             >
               <!-- GRID FILE ITEM -->
               <GridFileItem filename="file-name.png" size="2mb" />
@@ -107,12 +109,10 @@
         </div> -->
         </main>
       </main>
-      <div v-if="!hidden"></div>
-      <FilePreview v-if="hidden" />
+
+      <FilePreview :isClosed="showFilePreview" />
     </div>
-    <div class="h-16 md:hidden fixed w-full bottom-0">
-      <BottomNav />
-    </div>
+    <BottomNav :class="directionClassName" />
   </div>
 </template>
 
@@ -134,6 +134,7 @@ import BottomNav from "./layouts/Nav/BottomNav.vue";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";
 import GridFileItem from "./components/File/GridFileItem/GridFileItem.vue";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
+import { debounce, throttle } from "./utils";
 
 export default defineComponent({
   components: {
@@ -153,16 +154,31 @@ export default defineComponent({
   },
   setup() {
     // return { scrollDirection: this.scrollDirection };
-    const hidden: Ref<boolean> = ref(true);
-    return { hidden };
+    const showFilePreview: Ref<boolean> = ref(true);
+    let initialScrollPosition: Ref<number> = ref(0);
+    let directionClassName: Ref<string> = ref("");
+    const scrollDirection = throttle((event: Event) => {
+      if (!event.target) return;
+      const initialPos = initialScrollPosition.value;
+      const target = event.target as Element;
+      console.log("initial sc pos ", initialPos, target.scrollTop);
+
+      const movementDifference = initialPos - target.scrollTop;
+      const direction =
+        movementDifference === Math.abs(movementDifference) ? "Up" : "Down";
+      directionClassName.value =
+        movementDifference === Math.abs(movementDifference) ? "" : "hide-below";
+
+      console.log({ direction });
+
+      initialScrollPosition.value = target.scrollTop;
+    }, 100);
+    return { showFilePreview, scrollDirection, directionClassName };
   },
 
   methods: {
-    scrollDirection(event: MouseEvent) {
-      console.log(event);
-    },
-    closeFilePreview() {
-      this.hidden = !this.hidden;
+    getContentScrollPositionBeforeScroll(event: Event) {
+      console.log(event.target);
     },
   },
 });

@@ -4,7 +4,8 @@
       bg-white
       w-full
       min-w-min
-      max-h-56
+      max-h-fit
+      h-fit
       rounded-lg
       shadow-sm
       mono:bg-ash-normal

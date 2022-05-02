@@ -1,5 +1,9 @@
 <template>
-  <aside class="h-full max-w-5/12 w-5/12 py-7 bg-white hidden md:block">
+  <aside
+    class="h-full max-w-5/12 w-5/12 py-7 bg-white hidden md:block"
+    v-if="!closed"
+    v-bind="$attrs"
+  >
     <div class="flex flex-col h-full">
       <header class="px-3">
         <div class="flex justify-between text-ocean-blue-dark">
@@ -7,7 +11,7 @@
             <DocumentTextIcon class="w-5" />
             <span>File Preview</span>
           </div>
-          <button class="w-5"><XIcon /></button>
+          <button class="w-5" @click="openPreview"><XIcon /></button>
         </div>
         <div class="py-5">
           <div class="cut"></div>
@@ -91,10 +95,11 @@
       </main>
     </div>
   </aside>
+  <div v-if="closed"></div>
 </template>
 
 <script lang="ts" >
-import { defineComponent } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import {
   DocumentTextIcon,
@@ -112,6 +117,23 @@ export default defineComponent({
     TrashIcon,
     DocumentIcon,
     XIcon,
+  },
+  props: {
+    isClosed: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+    },
+  },
+  setup(props) {
+    // const closed = toRef(props, "isClosed");
+    const closed = ref(false);
+
+    return { closed };
+  },
+  methods: {
+    openPreview() {
+      this.closed = !this.closed;
+    },
   },
 });
 </script>

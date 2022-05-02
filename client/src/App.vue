@@ -117,7 +117,7 @@
 </template>
 
 <script lang="ts" >
-import { defineComponent, reactive, toRefs } from "vue";
+import { defineComponent, Ref, ref } from "vue";
 import {
   // FolderIcon,
   StarIcon,
@@ -153,13 +153,16 @@ export default defineComponent({
   },
   setup() {
     // return { scrollDirection: this.scrollDirection };
-    const state = reactive({ hidden: true });
-    return { ...toRefs(state) };
+    const hidden: Ref<boolean> = ref(true);
+    return { hidden };
   },
 
   methods: {
     scrollDirection(event: MouseEvent) {
       console.log(event);
+    },
+    closeFilePreview() {
+      this.hidden = !this.hidden;
     },
   },
 });

@@ -72,7 +72,7 @@
           </nav>
         </header>
         <main class="max-h-[calc(100%-87px)] md:max-h-[calc(100%-105px)]">
-          <div class="h-full">
+          <div class="h-full outer relative">
             <div
               class="
                 h-full
@@ -183,3 +183,18 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.outer::after {
+  content: "";
+  box-shadow: inset 0px 20px 8px -10px #f5f9fdc7,
+    inset 0px -20px 8px -10px #f5f9fdc7;
+
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  left: 0px;
+  top: 0px;
+  pointer-events: none;
+}
+</style>

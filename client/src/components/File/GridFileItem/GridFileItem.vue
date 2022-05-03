@@ -43,26 +43,10 @@
 
       <div class="flex pt-3 pb-2 cut justify-between items-center">
         <div class="uppercase text-xs text-ocean-blue-dark">{{ size }}</div>
-        <div>
-          <div
-            class="
-              outline-1 outline-white
-              bg-red-500
-              w-6
-              h-6
-              rounded-md
-              flex
-              justify-center
-              items-center
-              text-sm
-              font-semibold
-              text-white
-              p-1
-            "
-          >
-            <span>O</span>
-          </div>
-        </div>
+        <AvatarGroup>
+          <Avatar name="Tim" />
+          <Avatar name="Tim" />
+        </AvatarGroup>
       </div>
     </div>
   </div>
@@ -72,6 +56,8 @@
 import { defineComponent } from "vue";
 import { StarIcon, DotsVerticalIcon } from "@heroicons/vue/outline";
 import { DocumentIcon } from "@heroicons/vue/solid";
+import AvatarGroup from "../../Avatar/AvatarGroup.vue";
+import Avatar from "../../Avatar/Avatar.vue";
 
 interface IGridFileItemProps {
   filename: string;
@@ -102,6 +88,8 @@ export default defineComponent<
     StarIcon,
     DotsVerticalIcon,
     DocumentIcon,
+    AvatarGroup,
+    Avatar,
   },
   setup(props: IGridFileItemProps) {
     const { filename, size } = props;

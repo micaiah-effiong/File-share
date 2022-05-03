@@ -1,10 +1,10 @@
 <template>
-  <nav className="h-full w-32 py-7 bg-white hidden md:block">
-    <div className="grid h-full overflow-auto gap-6">
-      <div className="text-ocean-blue-dark h-11 flex justify-center">
+  <nav class="h-full w-32 py-7 bg-white hidden md:block">
+    <div class="grid h-full overflow-auto gap-6">
+      <div class="text-ocean-blue-dark h-11 flex justify-center">
         <RssIcon class="w-10" />
       </div>
-      <div className="grid gap-8 text-md text-ocean-blue-dark">
+      <div class="grid gap-8 text-md text-ocean-blue-dark">
         <NavMenuItem text="Home"> <HomeIcon /> </NavMenuItem>
         <NavMenuItem text="Recent"> <FolderIcon /> </NavMenuItem>
         <NavMenuItem text="Video"> <VideoCameraIcon /> </NavMenuItem>

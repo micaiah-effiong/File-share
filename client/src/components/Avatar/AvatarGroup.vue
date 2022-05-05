@@ -1,8 +1,6 @@
 <template>
   <div class="flex w-auto px-1">
     <ul class="avatars">
-      <!-- <li>
-      </li> -->
       <slot></slot>
     </ul>
   </div>
@@ -20,12 +18,6 @@ export default defineComponent({
 
 
 <style scoped>
-/*.avatars li {
-  display: flex;
-  margin-left: -0em;
-  margin-right: -0.4em;
-}*/
-
 .avatars {
   display: flex;
   list-style: none;

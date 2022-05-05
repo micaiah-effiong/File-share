@@ -1,7 +1,20 @@
 <template>
-  <li>
-    <div class="avatar">
-      <img class="img" alt="" :src="url" v-if="url" />
+  <li class="flex">
+    <div
+      :class="'rounded-' + round"
+      class="
+        avatar
+        border border-white
+        justify-center
+        items-center
+        content-center
+        flex
+        overflow-hidden
+        bg-red-500
+        round
+      "
+    >
+      <img class="h-auto w-full align-middle" alt="" :src="url" v-if="url" />
       <!-- src="https://randomuser.me/api/portraits/women/21.jpg" -->
       <span class="img text-xs text-white font-semibold" v-if="!url">{{
         name[0].toUpperCase()
@@ -11,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
   props: {
@@ -21,43 +34,45 @@ export default defineComponent({
     },
     url: {
       type: String,
+      // default: "https://randomuser.me/api/portraits/women/21.jpg",
+    },
+    round: {
+      type: String as PropType<"sm" | "md" | "lg" | "xl" | "none" | "full">,
+      default: "md",
     },
   },
   setup(props) {
-    const { name, url } = props;
-    return { name, url };
+    const { name, url, round } = props;
+    return { name, url, round };
   },
 });
 </script>
 
 
 <style scoped>
-.img {
-  height: auto;
-  max-width: 100%;
-  vertical-align: middle;
-}
-
 .align {
   display: grid;
   place-items: center;
 }
 
-.avatar {
-  border: 0.125em solid #fff;
+.o {
   border-radius: 30%;
+  border: 0.125em solid #fff;
   align-content: center;
-  height: 1.5em;
-  overflow: hidden;
   justify-content: center;
-  background-color: theme("colors.red.500");
   display: flex;
-  width: 1.5em;
   align-items: center;
+  overflow: hidden;
+  background-color: theme("colors.red.500");
+}
+
+.avatar {
+  height: 1.5em;
+  width: 1.5em;
 }
 
 li {
-  display: flex;
+  /*display: flex;*/
   margin-left: -0em;
   margin-right: -0.4em;
 }

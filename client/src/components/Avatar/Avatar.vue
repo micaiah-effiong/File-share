@@ -17,7 +17,7 @@
       <img class="h-auto w-full align-middle" alt="" :src="url" v-if="url" />
       <!-- src="https://randomuser.me/api/portraits/women/21.jpg" -->
       <span class="img text-xs text-white font-semibold" v-if="!url">{{
-        name[0].toUpperCase()
+        count ? `+${count}` : label[0].toUpperCase()
       }}</span>
     </div>
   </li>
@@ -28,7 +28,7 @@ import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
   props: {
-    name: {
+    label: {
       type: String,
       required: true,
     },
@@ -40,10 +40,13 @@ export default defineComponent({
       type: String as PropType<"sm" | "md" | "lg" | "xl" | "none" | "full">,
       default: "md",
     },
+    count: {
+      type: Number,
+    },
   },
   setup(props) {
-    const { name, url, round } = props;
-    return { name, url, round };
+    const { label, url, round, count } = props;
+    return { label, url, round, count };
   },
 });
 </script>

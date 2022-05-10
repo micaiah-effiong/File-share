@@ -1,17 +1,32 @@
-<template>
-  <div class="flex w-auto px-1">
-    <ul class="avatars">
-      <slot></slot>
-    </ul>
-  </div>
-</template>
-
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, h, ref } from "vue";
+import Avatar from "./Avatar.vue";
 
 export default defineComponent({
+  components: { Avatar },
+  props: {
+    max: {
+      type: Number,
+    },
+  },
   setup(props, { slots }) {
-    console.log({ slots });
+    const maxSlotItems = ref(props.max || 3);
+    const slotDefaults = Array.from(slots.default());
+
+    if (slotDefaults.length > maxSlotItems.value) {
+      const slotSize = slotDefaults.length;
+      slotDefaults.length = maxSlotItems.value;
+
+      slotDefaults.push(
+        h(Avatar, { count: slotSize - maxSlotItems.value, label: "" })
+      );
+    }
+
+    return () => {
+      return h("div", { class: "flex w-auto px-1" }, [
+        h("ul", { class: "avatars" }, slotDefaults),
+      ]);
+    };
   },
 });
 </script>

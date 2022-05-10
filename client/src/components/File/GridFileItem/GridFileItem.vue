@@ -43,9 +43,13 @@
 
       <div class="flex pt-3 pb-2 cut justify-between items-center">
         <div class="uppercase text-xs text-ocean-blue-dark">{{ size }}</div>
-        <AvatarGroup>
-          <Avatar name="Tim" />
-          <Avatar name="Tim" />
+        <AvatarGroup :max="2">
+          <Avatar label="Tim" />
+          <Avatar
+            label="Tim"
+            url="https://randomuser.me/api/portraits/women/21.jpg"
+          />
+          <Avatar label="something" />
         </AvatarGroup>
       </div>
     </div>

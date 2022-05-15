@@ -88,16 +88,14 @@
               @scroll="scrollDirection"
             >
               <!-- GRID FILE ITEM -->
-              <GridFileItem filename="file-name.png" size="2mb" />
-              <GridFileItem filename="file-name.png" size="2mb" />
-              <GridFileItem filename="file-name.png" size="2mb" />
-              <GridFileItem filename="file-name.png" size="2mb" />
-              <GridFileItem filename="file-name.png" size="2mb" />
-              <GridFileItem filename="file-name.png" size="2mb" />
-              <GridFileItem filename="file-name.png" size="2mb" />
-              <GridFileItem filename="file-name.png" size="2mb" />
-              <GridFileItem filename="file-name.png" size="2mb" />
-              <GridFileItem filename="file-name.png" size="2mb" />
+              <!-- <GridFileItem filename="file-name.png" size="2mb" /> -->
+              <GridFileItem
+                v-for="(file, index) in files"
+                :filename="file.name"
+                :size="file.size"
+                :key="index"
+                @click="toggleFilePreview(true, { file })"
+              />
             </div>
           </div>
           <!-- <div class="grid p-2 gap-1 h-[10rem]">
@@ -110,7 +108,11 @@
         </main>
       </main>
 
-      <FilePreview :isClosed="showFilePreview" />
+      <FilePreview
+        :showFilePreview="showFilePreview"
+        :setShowFilePreview="toggleFilePreview"
+        :fileInformation="previewFileInfo"
+      />
     </div>
     <BottomNav :class="directionClassName" />
   </div>
@@ -153,10 +155,10 @@ export default defineComponent({
     ViewSwitcher,
   },
   setup() {
-    // return { scrollDirection: this.scrollDirection };
-    const showFilePreview: Ref<boolean> = ref(true);
-    let initialScrollPosition: Ref<number> = ref(0);
-    let directionClassName: Ref<string> = ref("");
+    const showFilePreview: Ref<boolean> = ref(false);
+    const previewFileInfo: Ref<any> = ref({});
+    const initialScrollPosition: Ref<number> = ref(0);
+    const directionClassName: Ref<string> = ref("");
     const scrollDirection = throttle((event: Event) => {
       if (!event.target) return;
       const initialPos = initialScrollPosition.value;
@@ -164,21 +166,45 @@ export default defineComponent({
       console.log("initial sc pos ", initialPos, target.scrollTop);
 
       const movementDifference = initialPos - target.scrollTop;
-      const direction =
-        movementDifference === Math.abs(movementDifference) ? "Up" : "Down";
+      // const direction =
+      //   movementDifference === Math.abs(movementDifference) ? "Up" : "Down";
       directionClassName.value =
         movementDifference === Math.abs(movementDifference) ? "" : "hide-below";
 
-      console.log({ direction });
-
       initialScrollPosition.value = target.scrollTop;
     }, 100);
-    return { showFilePreview, scrollDirection, directionClassName };
+
+    const files: Array<{ name: string; size: string }> = [
+      { name: "file", size: "3mb" },
+      { name: "file.png", size: "3mb" },
+      { name: "file.jpg", size: "3kb" },
+      { name: "file.mp3", size: "13mb" },
+      { name: "file", size: "3mb" },
+      { name: "file", size: "3mb" },
+      { name: "file", size: "3mb" },
+      { name: "file", size: "3mb" },
+      { name: "file", size: "3mb" },
+      { name: "file", size: "3mb" },
+      { name: "file", size: "3mb" },
+    ];
+    return {
+      previewFileInfo,
+      scrollDirection,
+      directionClassName,
+      showFilePreview,
+      files,
+    };
   },
 
   methods: {
     getContentScrollPositionBeforeScroll(event: Event) {
       console.log(event.target);
+    },
+
+    toggleFilePreview(display: boolean, option: any) {
+      this.showFilePreview = display;
+      this.previewFileInfo = option.file;
+      console.log("CALLED", { display, state: this.showFilePreview });
     },
   },
 });

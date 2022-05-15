@@ -1,7 +1,7 @@
 <template>
   <aside
     class="h-full max-w-5/12 w-5/12 py-7 bg-white hidden md:block"
-    v-if="!closed"
+    v-if="showFilePreview"
     v-bind="$attrs"
   >
     <div class="flex flex-col h-full">
@@ -11,7 +11,7 @@
             <DocumentTextIcon class="w-5" />
             <span>File Preview</span>
           </div>
-          <button class="w-5" @click="openPreview"><XIcon /></button>
+          <button class="w-5" @click="closePreview"><XIcon /></button>
         </div>
         <div class="py-5">
           <div class="cut"></div>
@@ -26,9 +26,9 @@
               </div>
               <div class="grid gap-2">
                 <div class="font-semibold break-all">
-                  users-file-screenshots-image-media-somefile.png
+                  {{ fileInformation.name }}
                 </div>
-                <div class="text-xs">2.5GB</div>
+                <div class="text-xs">{{ fileInformation.size }}</div>
               </div>
             </div>
             <div class="cut"></div>
@@ -73,11 +73,11 @@
       </main>
     </div>
   </aside>
-  <div v-if="closed"></div>
+  <div v-if="!showFilePreview"></div>
 </template>
 
 <script lang="ts" >
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, toRefs } from "vue";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import {
   DocumentTextIcon,
@@ -101,20 +101,27 @@ export default defineComponent({
     ActionBtn,
   },
   props: {
-    isClosed: {
-      type: Boolean as PropType<boolean>,
+    showFilePreview: {
+      type: Boolean,
       required: true,
+    },
+    setShowFilePreview: {
+      type: Function,
+      required: true,
+    },
+    fileInformation: {
+      type: Object,
     },
   },
   setup(props) {
-    // const closed = toRef(props, "isClosed");
-    const closed = ref(false);
+    console.log("UPDATE", props.showFilePreview);
 
-    return { closed };
+    const { showFilePreview, fileInformation } = toRefs(props);
+    return { showFilePreview, fileInformation };
   },
   methods: {
-    openPreview() {
-      this.closed = !this.closed;
+    closePreview() {
+      this.setShowFilePreview(false);
     },
   },
 });

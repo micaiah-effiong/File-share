@@ -59,24 +59,15 @@
         </main>
         <div class="border-t self-end mt-7 py-5 px-10">
           <div class="flex justify-between text-xs text-ocean-blue-dark gap-3">
-            <div class="grid gap-3 justify-items-center">
-              <div class="w-6 text-white bg-ocean-blue-normal rounded-md p-1">
-                <ExternalLinkIcon />
-              </div>
-              <div>Share</div>
-            </div>
-            <div class="grid gap-3 justify-items-center">
-              <div class="w-6 text-white bg-ocean-blue-normal rounded-md p-1">
-                <PencilIcon />
-              </div>
-              <div>Edit</div>
-            </div>
-            <div class="grid gap-3 justify-items-center">
-              <div class="w-6 text-white bg-ocean-blue-normal rounded-md p-1">
-                <TrashIcon />
-              </div>
-              <div>Delete</div>
-            </div>
+            <ActionBtn label="Share">
+              <ExternalLinkIcon />
+            </ActionBtn>
+            <ActionBtn label="Edit">
+              <PencilIcon />
+            </ActionBtn>
+            <ActionBtn label="Delete">
+              <TrashIcon />
+            </ActionBtn>
           </div>
         </div>
       </main>
@@ -96,6 +87,7 @@ import {
   XIcon,
 } from "@heroicons/vue/outline";
 import AvatarVue from "../../components/Avatar/Avatar.vue";
+import ActionBtn from "../../components/Buttons/ActionBtn.vue";
 
 export default defineComponent({
   components: {
@@ -106,6 +98,7 @@ export default defineComponent({
     DocumentIcon,
     XIcon,
     AvatarVue,
+    ActionBtn,
   },
   props: {
     isClosed: {

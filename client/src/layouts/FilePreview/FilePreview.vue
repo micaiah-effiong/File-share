@@ -44,27 +44,14 @@
             <div class="cut"></div>
             <div class="grid gap-2">
               <div class="font-semibold">Shared with:</div>
-              <div class="grid">
-                <div class="flex gap-3 items-center">
-                  <div
-                    class="
-                      outline-1 outline-white
-                      bg-red-500
-                      w-6
-                      h-6
-                      rounded-md
-                      flex
-                      justify-center
-                      items-center
-                      text-sm
-                      font-semibold
-                      text-white
-                      p-1
-                    "
-                  >
-                    <span>S</span>
-                  </div>
+              <div class="grid gap-1">
+                <div class="flex gap-3">
+                  <AvatarVue label="Olive Silver" />
                   <div>Olive Silver</div>
+                </div>
+                <div class="flex gap-3">
+                  <AvatarVue label="Tom Shedy" />
+                  <div>Tom Shedy</div>
                 </div>
               </div>
             </div>
@@ -108,6 +95,7 @@ import {
   TrashIcon,
   XIcon,
 } from "@heroicons/vue/outline";
+import AvatarVue from "../../components/Avatar/Avatar.vue";
 
 export default defineComponent({
   components: {
@@ -117,6 +105,7 @@ export default defineComponent({
     TrashIcon,
     DocumentIcon,
     XIcon,
+    AvatarVue,
   },
   props: {
     isClosed: {

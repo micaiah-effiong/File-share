@@ -1,5 +1,5 @@
 <template>
-  <nav class="h-full flex-grow-0 py-7 bg-white hidden md:block">
+  <nav class="h-full flex-shrink-0 w-20 min-w-20 py-7 bg-white hidden md:block">
     <div class="grid h-full overflow-auto gap-6">
       <div class="text-ocean-blue-dark h-11 flex justify-center">
         <RssIcon class="w-10" />

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="px-0.5">
     <div
       class="
         grid

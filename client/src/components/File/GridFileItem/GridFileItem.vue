@@ -1,7 +1,7 @@
 <template>
   <div
+    :class="selected ? 'bg-blue-50' : 'bg-white'"
     class="
-      bg-white
       w-full
       min-w-min
       max-h-fit
@@ -57,36 +57,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, toRefs, Ref } from "vue";
 import { StarIcon, DotsVerticalIcon } from "@heroicons/vue/outline";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import AvatarGroup from "../../Avatar/AvatarGroup.vue";
 import Avatar from "../../Avatar/Avatar.vue";
 
-interface IGridFileItemProps {
-  filename: string;
-  size: string;
-}
-
-type GridFileItemPropsType = {
-  filename: {
-    type: StringConstructor;
-    required: true;
-  };
-  size: {
-    type: StringConstructor;
-    required: true;
-  };
-};
-
-export default defineComponent<
-  GridFileItemPropsType,
-  IGridFileItemProps,
-  unknown
->({
+export default defineComponent({
   props: {
     filename: { type: String, required: true },
     size: { type: String, required: true },
+    selected: { type: Boolean, default: false },
   },
   components: {
     StarIcon,
@@ -95,9 +76,11 @@ export default defineComponent<
     AvatarGroup,
     Avatar,
   },
-  setup(props: IGridFileItemProps) {
+  setup(props) {
     const { filename, size } = props;
-    return { filename, size };
+    const selected: Ref<boolean> = toRefs(props).selected;
+
+    return { filename, size, selected };
   },
 });
 </script>

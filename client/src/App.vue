@@ -94,7 +94,8 @@
                 :filename="file.name"
                 :size="file.size"
                 :key="index"
-                @click="toggleFilePreview(true, { file })"
+                :selected="selected === index"
+                @click="() => handleGridClick(file, index)"
               />
             </div>
           </div>
@@ -187,7 +188,11 @@ export default defineComponent({
       { name: "file", size: "3mb" },
       { name: "file", size: "3mb" },
     ];
+
+    const selected: Ref<any> = ref(false);
+
     return {
+      selected,
       previewFileInfo,
       scrollDirection,
       directionClassName,
@@ -205,6 +210,11 @@ export default defineComponent({
       this.showFilePreview = display;
       this.previewFileInfo = option.file;
       console.log("CALLED", { display, state: this.showFilePreview });
+    },
+
+    handleGridClick(file, index) {
+      this.toggleFilePreview(true, { file });
+      this.selected = index;
     },
   },
 });

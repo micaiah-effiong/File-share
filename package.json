@@ -10,13 +10,14 @@
     "client"
   ],
   "scripts": {
-    "dev:all": "concurrently \"yarn workspace server start:dev\" \"yarn workspace client serve\"",
     "client:dev": "yarn workspace client dev",
     "server:dev": "yarn workspace server dev",
     "server:start": "yarn workspace server start",
     "server:build": "yarn workspace server build",
     "story": "yarn workspace client storybook",
-    "build-story": "yarn workspace client build-storybook"
+    "build-story": "yarn workspace client build-storybook",
+    "build": "yarn workspace client build && yarn workspace server build",
+    "postbuild": "copyfiles -u 2 client/dist/** client/dist/**/* server/dist/public"
   },
   "private": true,
   "engines": {
@@ -24,6 +25,6 @@
     "yarn": ">=1.x.x"
   },
   "devDependencies": {
-    "concurrently": "^7.0.0"
+    "copyfiles": "^2.4.1"
   }
 }

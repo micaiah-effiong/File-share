@@ -26,9 +26,9 @@
               </div>
               <div class="grid gap-2">
                 <div class="font-semibold break-all">
-                  {{ fileInformation.name }}
+                  {{ fileInformation?.name }}
                 </div>
-                <div class="text-xs">{{ fileInformation.size }}</div>
+                <div class="text-xs">{{ fileInformation?.size }}</div>
               </div>
             </div>
             <div class="cut"></div>
@@ -73,7 +73,6 @@
       </main>
     </div>
   </aside>
-  <div v-if="!showFilePreview"></div>
 </template>
 
 <script lang="ts" >

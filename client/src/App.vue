@@ -85,7 +85,7 @@
                 py-3
                 overflow-auto
               "
-              @scroll="scrollDirection"
+              @scroll="(e) => scrollDirection(e)"
             >
               <!-- GRID FILE ITEM -->
               <!-- <GridFileItem filename="file-name.png" size="2mb" /> -->
@@ -114,6 +114,7 @@
         :setShowFilePreview="toggleFilePreview"
         :fileInformation="previewFileInfo"
       />
+      <div v-if="!showFilePreview" class="md:block hidden"></div>
     </div>
     <BottomNav :class="directionClassName" />
   </div>
@@ -160,7 +161,7 @@ export default defineComponent({
     const previewFileInfo: Ref<any> = ref({});
     const initialScrollPosition: Ref<number> = ref(0);
     const directionClassName: Ref<string> = ref("");
-    const scrollDirection = throttle((event: Event) => {
+    const scrollDirection: Function = throttle((event: Event) => {
       if (!event.target) return;
       const initialPos = initialScrollPosition.value;
       const target = event.target as Element;
@@ -212,7 +213,7 @@ export default defineComponent({
       console.log("CALLED", { display, state: this.showFilePreview });
     },
 
-    handleGridClick(file, index) {
+    handleGridClick(file: any, index: any) {
       this.toggleFilePreview(true, { file });
       this.selected = index;
     },

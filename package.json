@@ -11,8 +11,10 @@
   ],
   "scripts": {
     "dev:all": "concurrently \"yarn workspace server start:dev\" \"yarn workspace client serve\"",
-    "dev:client": "yarn workspace client dev",
-    "dev:server": "yarn workspace server start:dev",
+    "client:dev": "yarn workspace client dev",
+    "server:dev": "yarn workspace server dev",
+    "server:start": "yarn workspace server start",
+    "server:build": "yarn workspace server build",
     "story": "yarn workspace client storybook",
     "build-story": "yarn workspace client build-storybook"
   },

@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "build": "tsc -p tsconfig.json",
     "start": "cross-env NODE_ENV=production node dist/bin/www.js",
-    "start:dev": "cross-env NODE_ENV=development tsc-watch  --onSuccess 'node --trace-warnings --enable-source-maps ./dist/bin/www.js'"
+    "dev": "cross-env NODE_ENV=development tsc-watch  --onSuccess 'node --trace-warnings --enable-source-maps ./dist/bin/www.js'"
   },
   "engines": {
     "node": ">=14.x.x",

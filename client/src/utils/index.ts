@@ -1,5 +1,7 @@
+import axios from "redaxios";
+
 export function debounce(cb: Function, delay: number): Function {
-  let timeout: NodeJS.Timeout;
+  let timeout: number;
   return (...args: any[]) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
@@ -20,4 +22,20 @@ export function throttle(cb: Function, delay: number): Function {
       shouldWait = false;
     }, delay);
   };
+}
+
+export async function getFiles(): Promise<
+  {
+    filename: string;
+    size: string;
+    short: string;
+    createdAt: string;
+    link: string;
+    downloadLink: string;
+    streamLink: string;
+    fileType: string;
+  }[]
+> {
+  const res = await axios.get("http://localhost:3300/api/files");
+  return res.data.data;
 }

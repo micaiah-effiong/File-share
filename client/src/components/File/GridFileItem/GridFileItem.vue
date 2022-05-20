@@ -34,7 +34,7 @@
             </span>
           </div>
           <div class="text-[0.8rem] text-ocean-blue-dark font-semibold">
-            {{ filename }}
+            {{ file.short }}
           </div>
         </div>
       </div>
@@ -42,7 +42,9 @@
       <!-- <div class="cut"></div> -->
 
       <div class="flex pt-3 pb-2 cut justify-between items-center">
-        <div class="uppercase text-xs text-ocean-blue-dark">{{ size }}</div>
+        <div class="uppercase text-xs text-ocean-blue-dark">
+          {{ file.size }}
+        </div>
         <AvatarGroup :max="2">
           <Avatar label="Tim" />
           <Avatar
@@ -57,16 +59,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, Ref } from "vue";
+import { defineComponent, PropType, toRefs } from "vue";
 import { StarIcon, DotsVerticalIcon } from "@heroicons/vue/outline";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import AvatarGroup from "../../Avatar/AvatarGroup.vue";
 import Avatar from "../../Avatar/Avatar.vue";
 
+type File = {
+  filename: string;
+  size: string;
+  short: string;
+  createdAt: string;
+  link: string;
+  downloadLink: string;
+  streamLink: string;
+  fileType: string;
+};
+
 export default defineComponent({
   props: {
-    filename: { type: String, required: true },
-    size: { type: String, required: true },
+    file: {
+      type: Object as PropType<File>,
+      required: true,
+    },
     selected: { type: Boolean, default: false },
   },
   components: {
@@ -77,10 +92,13 @@ export default defineComponent({
     Avatar,
   },
   setup(props) {
-    const { filename, size } = props;
-    const selected: Ref<boolean> = toRefs(props).selected;
+    const { selected } = toRefs(props);
 
-    return { filename, size, selected };
+    console.log({
+      file: props.file,
+    });
+
+    return { file: props.file, selected };
   },
 });
 </script>

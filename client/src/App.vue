@@ -77,7 +77,7 @@
               class="
                 h-full
                 grid
-                gap-3
+                gap-2
                 grid-cols-2
                 md:grid-cols-3
                 xl:grid-cols-4
@@ -91,8 +91,7 @@
               <!-- <GridFileItem filename="file-name.png" size="2mb" /> -->
               <GridFileItem
                 v-for="(file, index) in files"
-                :filename="file.name"
-                :size="file.size"
+                :file="file"
                 :key="index"
                 :selected="selected === index"
                 @click="() => handleGridClick(file, index)"
@@ -139,6 +138,7 @@ import FilePreview from "./layouts/FilePreview/FilePreview.vue";
 import GridFileItem from "./components/File/GridFileItem/GridFileItem.vue";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
 import { debounce, throttle } from "./utils";
+import { getFiles } from "./utils";
 
 export default defineComponent({
   components: {
@@ -176,20 +176,23 @@ export default defineComponent({
       initialScrollPosition.value = target.scrollTop;
     }, 100);
 
-    const files: Array<{ name: string; size: string }> = [
-      { name: "file", size: "3mb" },
-      { name: "file.png", size: "3mb" },
-      { name: "file.jpg", size: "3kb" },
-      { name: "file.mp3", size: "13mb" },
-      { name: "file", size: "3mb" },
-      { name: "file", size: "3mb" },
-      { name: "file", size: "3mb" },
-      { name: "file", size: "3mb" },
-      { name: "file", size: "3mb" },
-      { name: "file", size: "3mb" },
-      { name: "file", size: "3mb" },
-    ];
+    let files: Ref<
+      | {
+          filename: string;
+          size: string;
+          short: string;
+          createdAt: string;
+          link: string;
+          downloadLink: string;
+          streamLink: string;
+          fileType: string;
+        }[]
+    > = ref([]);
 
+    getFiles().then((data) => {
+      files.value = data;
+      console.log("files =>", data);
+    });
     const selected: Ref<any> = ref(false);
 
     return {

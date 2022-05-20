@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #1a2125;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.top-nav {
+  position: sticky;
+  top: 0;
+  background-color: #1a2125;
+  z-index: 10;
+}
+
+.nav .fa,
+.nav a,
+.nav button {
+  color: #96d376;
+  font-size: 16px;
+}
+
+.nav .fa:hover,
+.nav a:hover,
+.nav button:hover {
+  color: #f9f871;
+  text-decoration: none;
+}
+
+.hover-color {
+  color: #f9f871;
+}
+
+.file-details {
+  background-color: #6a859566;
+  padding: 5px;
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  box-shadow: -7px 7px 10px #19202433, 4px 7px 12px #19202433;
+  border-radius: 4px;
+}
+
+.app-img-preview {
+  max-height: 100%;
+  max-width: 100%;
+  margin: auto;
+  display: block;
+}
+
+.app-upload-btn {
+  padding: 13px;
+  border: 1px solid #007bff;
+  border-radius: 50%;
+  color: white;
+  background-color: #007bff;
+  position: fixed;
+  z-index: 1000;
+  bottom: 10%;
+  right: 10%;
+  box-shadow: #343a40 -3px 4px 8px;
+}
+
+.txt-white {
+  color: white;
+}
+
+.app-padd-1 {
+  padding: 10px;
+}
+.app-padd-2 {
+  padding: 20px;
+}
+.app-padd-3 {
+  padding: 30px;
+}
+.app-padd-4 {
+  padding: 40px;
+}
+.app-padd-5 {
+  padding: 50px;
+}
+
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  border-radius: 0 !important;
+  width: 100%;
+  background-color: #212529;
+  color: #dae0e5;
+}
+
+a {
+  color: #00b7ff;
+}
+.card {
+  border-radius: 7px;
+  border-width: 0;
+}
+
+hr {
+  border-color: #75787bc7 !important;
+}
+
+.img-card {
+  background-size: cover;
+  background-position: center center;
+  height: 180px;
+  border-radius: 3px;
+}
+
+.download-icon {
+  text-shadow: -3px 2px 10px #1a2125;
+  color: #96d376;
+}
+
+.card.others {
+  background-color: #859fad;
+}
+
+.other-files-card-content {
+  height: 180px;
+  display: grid;
+  align-content: center;
+}
+
+.video-card-content {
+  height: 180px;
+  /*display: grid;*/
+}
+
+.holder-text {
+  height: auto;
+  font-size: 3rem;
+  text-align: center;
+  letter-spacing: 5px;
+  font-weight: bold;
+}

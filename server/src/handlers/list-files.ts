@@ -1,22 +1,22 @@
-const fs = require("fs");
-const mime = require("mime");
-const { promises: fsPromises } = require("fs");
-const path = require("path");
+import mime from "mime";
+import { promises as fsPromises } from "fs";
+import path from "path";
+import { FileData } from "../types";
 const appFolder = path.resolve(__dirname, "..", "files");
 
 /**
  * @return Array of files in the file folder
  */
-module.exports = async function () {
+export default async function (): Promise<FileData[]> {
   // Create an array to hold new list
-  let list = [];
+  let list: FileData[] = new Array();
 
   // get array of all files and folders
   let folderItemsList = await fsPromises.readdir(appFolder);
 
   for (let i = 0; i < folderItemsList.length; i++) {
     // file or folder name
-    let _file = folderItemsList[i];
+    let _file: string = folderItemsList[i];
     let fullFilePath = path.resolve(appFolder, _file);
 
     // check if the current item is an actual file
@@ -33,7 +33,7 @@ module.exports = async function () {
       let streamLink = path
         .join("api", "files", "stream", encodeURIComponent(_file))
         .replace(/\\/g, "/");
-      let link = path.join("api", "files", _file).replace(/\\/g, "/");
+      let link: string = path.join("api", "files", _file).replace(/\\/g, "/");
       let short;
 
       if (_file.lastIndexOf(".") > 12) {
@@ -44,23 +44,25 @@ module.exports = async function () {
         short = _file;
       }
 
-      // push details to the list<Array>
-      list.push({
+      const fileData: FileData = {
         filename: _file,
-        short,
+        short: short,
         size: convertByte(size),
         createdAt: birthtime,
         link,
         downloadLink,
         streamLink,
         fileType,
-      });
+      };
+
+      // push details to the list<Array>
+      list.push(fileData);
     }
   }
   return list;
-};
+}
 
-function convertByte(num) {
+function convertByte(num: number): string {
   let format = ["b", "kb", "mb", "gb", "tb"],
     level;
   for (level = 0; num > 1024; level++) {

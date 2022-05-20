@@ -1,5 +1,5 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 const contoller = require("../controllers/index").auth;
 
-module.exports = router;
+export default router;

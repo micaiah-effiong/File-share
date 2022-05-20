@@ -1,0 +1,25 @@
+{
+  "name": "share-box",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:micaiah-effiong/File-share.git",
+  "author": "Micah Effiong <micaiah.effiong@gmail.com>",
+  "license": "MIT",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev:all": "concurrently \"yarn workspace server start:dev\" \"yarn workspace client serve\"",
+    "dev:client": "yarn workspace client serve",
+    "dev:server": "yarn workspace server serve:dev"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=8.0.0",
+    "yarn": ">=1.20.0"
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0"
+  }
+}

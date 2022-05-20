@@ -25,26 +25,18 @@ app.set("port", port);
 /**
  * Create a files directory if not exist
  */
-let filesPath: string = path.resolve(process.cwd(), "dist", "files");
+let filesPath: string =
+  process.env.STORAGE_PATH || path.resolve(process.cwd(), "dist", "files");
 
-async function findOrCreateStoreDir(dirPath: string): Promise<void> {
-  try {
-    const descp: fsPromise.FileHandle = await fsPromise.open(dirPath, "r");
-    await descp.close();
-  } catch (err: any) {
-    if (err.code === "ENOENT") {
-      return await fsPromise.mkdir(dirPath);
-    }
-  }
+async function createStoreDir(dirPath: string): Promise<string | undefined> {
+  return await fsPromise.mkdir(dirPath, { recursive: true });
 }
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-findOrCreateStoreDir(filesPath).then(() => {
+createStoreDir(filesPath).then(() => {
   server.listen(port, async () => {
-    const io = require("../io");
-
     console.log("Server has started");
     console.log(`> \tlocalhost:${port}`);
     const ips: string[] = await getMyIPAddress();

@@ -12,14 +12,14 @@
   "scripts": {
     "dev:all": "concurrently \"yarn workspace server start:dev\" \"yarn workspace client serve\"",
     "dev:client": "yarn workspace client dev",
-    "dev:server": "yarn workspace server serve:dev",
+    "dev:server": "yarn workspace server start:dev",
     "story": "yarn workspace client storybook",
     "build-story": "yarn workspace client build-storybook"
   },
   "private": true,
   "engines": {
-    "node": ">=8.0.0",
-    "yarn": ">=1.20.0"
+    "node": ">=14.x.x",
+    "yarn": ">=1.x.x"
   },
   "devDependencies": {
     "concurrently": "^7.0.0"

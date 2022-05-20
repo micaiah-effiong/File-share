@@ -26,7 +26,7 @@
               </div>
               <div class="grid gap-2">
                 <div class="font-semibold break-all">
-                  {{ fileInformation?.name }}
+                  {{ fileInformation?.filename }}
                 </div>
                 <div class="text-xs">{{ fileInformation?.size }}</div>
               </div>
@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts" >
-import { defineComponent, toRefs } from "vue";
+import { defineComponent, PropType, toRefs } from "vue";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import {
   DocumentTextIcon,
@@ -109,7 +109,16 @@ export default defineComponent({
       required: true,
     },
     fileInformation: {
-      type: Object,
+      type: Object as PropType<{
+        filename: string;
+        size: string;
+        short: string;
+        createdAt: string;
+        link: string;
+        downloadLink: string;
+        streamLink: string;
+        fileType: string;
+      }>,
     },
   },
   setup(props) {

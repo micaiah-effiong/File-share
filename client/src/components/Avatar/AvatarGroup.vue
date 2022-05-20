@@ -11,7 +11,7 @@ export default defineComponent({
   },
   setup(props, { slots }) {
     const maxSlotItems = ref(props.max || 3);
-    const slotDefaults = Array.from(slots.default());
+    const slotDefaults = Array.from(slots.default ? slots.default() : []);
 
     if (slotDefaults.length > maxSlotItems.value) {
       const slotSize = slotDefaults.length;

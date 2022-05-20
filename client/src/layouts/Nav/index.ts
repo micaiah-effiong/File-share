@@ -1,2 +1,2 @@
-import Nav from "./Nav";
+import Nav from "./Nav.vue";
 export default Nav;

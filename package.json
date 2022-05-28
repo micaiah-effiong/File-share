@@ -13,7 +13,7 @@
     "client:dev": "yarn workspace client dev",
     "server:dev": "yarn workspace server dev",
     "server:start": "yarn workspace server start",
-    "server:build": "yarn workspace server build",
+    "start": "yarn workspace server start",
     "story": "yarn workspace client storybook",
     "build-story": "yarn workspace client build-storybook",
     "build": "yarn workspace client build && yarn workspace server build",

@@ -1,38 +1,306 @@
-
 <template>
-  <header>
-    <Navbar />
-  </header>
-  <main>
-    <UploadPage />
-  </main>
-  <footer>
-    <Footer />
-  </footer>
+  <div class="flex flex-col h-full w-full justify-between">
+    <div class="w-full h-full flex gap-14 bg-ocean-blue-light">
+      <Nav />
+      <main
+        class="
+          h-full
+          w-full
+          md:py-7
+          gap-5
+          md:gap-8
+          flex flex-col
+          px-4
+          md:px-0
+          border-red-500
+        "
+      >
+        <header class="sticky z-10 bg-ocean-blue-light top-7">
+          <div class="flex justify-between gap-4 text-ocean-blue-dark">
+            <RssIcon class="w-5" />
+            <div class="flex-1">
+              <input
+                class="
+                  w-full
+                  outline-none
+                  bg-transparent
+                  text-sm
+                  align-baseline
+                "
+                type=""
+                name=""
+                id="searchField"
+                placeholder="Ctrl + k"
+              />
+            </div>
+            <div class="flex gap-5">
+              <input
+                type="file"
+                hidden
+                id="uploadField"
+                @change="uploadFiles($event)"
+              />
+              <label for="uploadField" class="cursor-pointer">
+                <button
+                  class="
+                    pointer-events-none
+                    justify-center
+                    items-center
+                    flex
+                    h-5
+                    w-5
+                  "
+                >
+                  <PlusCircleIcon
+                    class="w-5"
+                    v-if="uploadPercentage === null"
+                  />
+                  <div
+                    v-if="typeof uploadPercentage === 'number'"
+                    class="
+                      rounded-full
+                      border-2 border-ocean-blue-dark
+                      text-[10px]
+                      p-0.5
+                    "
+                  >
+                    {{ uploadPercentage }}
+                  </div>
+                </button>
+              </label>
+              <label for="searchField">
+                <button>
+                  <SearchIcon class="w-5" />
+                </button>
+              </label>
+              <label>
+                <button>
+                  <StarIcon class="w-5" />
+                </button>
+              </label>
+            </div>
+          </div>
+          <div class="py-5">
+            <div class="cut"></div>
+          </div>
+
+          <!-- <nav class=""> -->
+          <nav class="hidden md:block">
+            <div class="flex justify-between text-ocean-blue-dark">
+              <div class="flex gap-2 md:gap-6 flex-1">
+                <div class="flex gap-2 shadow-md p-2 rounded-lg bg-white">
+                  <FolderIcon class="w-5 text-ocean-blue-normal" />
+                  <ChevronDownIcon class="w-3" />
+                </div>
+
+                <button class="hidden align-middle md:block">
+                  Recent Files
+                </button>
+              </div>
+
+              <div class="flex items-center">
+                <!-- VIEW SWITCHER -->
+                <ViewSwitcher />
+              </div>
+            </div>
+          </nav>
+        </header>
+        <main class="max-h-[calc(100%-87px)] md:max-h-[calc(100%-105px)]">
+          <div class="h-full outer relative">
+            <div
+              class="
+                h-full
+                grid
+                gap-2
+                grid-cols-2
+                md:grid-cols-3
+                xl:grid-cols-4
+                2xl:grid-cols-6
+                py-3
+                overflow-auto
+              "
+              @scroll="(e) => scrollDirection(e)"
+            >
+              <!-- GRID FILE ITEM -->
+              <!-- <GridFileItem filename="file-name.png" size="2mb" /> -->
+              <GridFileItem
+                v-for="(file, index) in files"
+                :file="file"
+                :key="index"
+                :selected="selected === index"
+                @click="() => handleGridClick(file, index)"
+              />
+            </div>
+          </div>
+          <!-- <div class="grid p-2 gap-1 h-[10rem]">
+          <div class="bg-[#81c5f6]">secondary</div>
+          <div class="bg-[#e8f0f7]">accent</div>
+          <div class="bg-[#078dee]">normal</div>
+          <div class="bg-[#4d788f]">dark</div>
+          <div class="bg-[#f5f9fd]">bg light</div>
+        </div> -->
+        </main>
+      </main>
+
+      <FilePreview
+        :showFilePreview="showFilePreview"
+        :setShowFilePreview="toggleFilePreview"
+        :fileInformation="previewFileInfo"
+      />
+      <div v-if="!showFilePreview" class="md:block hidden"></div>
+    </div>
+    <BottomNav :class="directionClassName" />
+  </div>
 </template>
 
-<script>
-import Navbar from "./components/Navbar.vue";
-import UploadPage from "./components/UploadPage.vue";
-import Footer from "./components/Footer.vue";
-export default {
-  name: "App",
+<script lang="ts" >
+import { defineComponent, Ref, ref } from "vue";
+import {
+  // FolderIcon,
+  StarIcon,
+  DotsVerticalIcon,
+  PlusCircleIcon,
+  SearchIcon,
+  ChevronDownIcon,
+  RssIcon,
+} from "@heroicons/vue/outline";
+import { DocumentIcon, FolderIcon } from "@heroicons/vue/solid";
+import "./App.css";
+import Nav from "./layouts/Nav/Nav.vue";
+import BottomNav from "./layouts/Nav/BottomNav.vue";
+import FilePreview from "./layouts/FilePreview/FilePreview.vue";
+import GridFileItem from "./components/File/GridFileItem/GridFileItem.vue";
+import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
+import { debounce, throttle, getFiles, upload } from "./utils";
+
+export default defineComponent({
   components: {
-    Navbar,
-    UploadPage,
-    Footer,
+    Nav,
+    BottomNav,
+    FilePreview,
+    GridFileItem,
+    FolderIcon,
+    StarIcon,
+    DotsVerticalIcon,
+    PlusCircleIcon,
+    SearchIcon,
+    ChevronDownIcon,
+    RssIcon,
+    DocumentIcon,
+    ViewSwitcher,
   },
-};
+  setup() {
+    const showFilePreview: Ref<boolean> = ref(false);
+    const previewFileInfo: Ref<any> = ref({});
+    const initialScrollPosition: Ref<number> = ref(0);
+    const directionClassName: Ref<string> = ref("");
+    const scrollDirection: Function = throttle((event: Event) => {
+      if (!event.target) return;
+      const initialPos = initialScrollPosition.value;
+      const target = event.target as Element;
+      console.log("initial sc pos ", initialPos, target.scrollTop);
+
+      const movementDifference = initialPos - target.scrollTop;
+      // const direction =
+      //   movementDifference === Math.abs(movementDifference) ? "Up" : "Down";
+      directionClassName.value =
+        movementDifference === Math.abs(movementDifference) ? "" : "hide-below";
+
+      initialScrollPosition.value = target.scrollTop;
+    }, 100);
+
+    const uploadPercentage: Ref<number | null> = ref(null);
+
+    let files: Ref<
+      | {
+          filename: string;
+          size: string;
+          short: string;
+          createdAt: string;
+          link: string;
+          downloadLink: string;
+          streamLink: string;
+          fileType: string;
+        }[]
+    > = ref([]);
+
+    getFiles().then((data) => {
+      files.value = data;
+      console.log("files =>", data);
+    });
+    const selected: Ref<any> = ref(false);
+
+    function getContentScrollPositionBeforeScroll(event: Event) {
+      console.log(event.target);
+    }
+
+    function toggleFilePreview(display: boolean, option: any) {
+      showFilePreview.value = display;
+      previewFileInfo.value = option.file;
+      console.log("CALLED", { display, state: showFilePreview });
+    }
+
+    function handleGridClick(file: any, index: any) {
+      toggleFilePreview(true, { file });
+      selected.value = index;
+    }
+
+    function uploadFiles(evt: Event) {
+      const evtTarget = evt.target as HTMLInputElement;
+
+      if (!evtTarget.files) return;
+      if (evtTarget.files.length < 0) return;
+
+      const files = Array.from(evtTarget.files);
+      console.log("upload files", files);
+
+      files.forEach(async (file: File) => {
+        let formDataFile = new FormData();
+        formDataFile.append("upload", file);
+        await upload(formDataFile, {
+          onUploadProgress: (event: ProgressEvent) => {
+            if (!event.lengthComputable) return;
+
+            const percentCompleted = Math.round(
+              (event.loaded * 100) / event.total
+            );
+
+            uploadPercentage.value = percentCompleted;
+            console.log(percentCompleted);
+          },
+        });
+
+        uploadPercentage.value = null;
+      });
+    }
+
+    return {
+      selected,
+      previewFileInfo,
+      scrollDirection,
+      directionClassName,
+      showFilePreview,
+      files,
+      toggleFilePreview,
+      handleGridClick,
+      uploadFiles,
+      uploadPercentage,
+    };
+  },
+});
 </script>
 
-<style>
-@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
-#app {
-  background-color: #fbfafb;
-  font-family: "Rubik", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<style scoped>
+.outer::after {
+  content: "";
+  box-shadow: inset 0px 20px 8px -10px #f5f9fdc7,
+    inset 0px -20px 8px -10px #f5f9fdc7;
+
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  left: 0px;
+  top: 0px;
+  pointer-events: none;
 }
 </style>

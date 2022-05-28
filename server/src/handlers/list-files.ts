@@ -27,13 +27,19 @@ export default async function (): Promise<FileData[]> {
       // create file details
       let { size, birthtime } = fileDetails;
       let fileType = mime.lookup(_file);
-      let downloadLink = path
-        .join("api", "files", "download", encodeURIComponent(_file))
-        .replace(/\\/g, "/");
-      let streamLink = path
-        .join("api", "files", "stream", encodeURIComponent(_file))
-        .replace(/\\/g, "/");
-      let link: string = path.join("api", "files", _file).replace(/\\/g, "/");
+      let downloadLink = getHref(
+        path
+          .join("api", "files", "download", encodeURIComponent(_file))
+          .replace(/\\/g, "/")
+      );
+      let streamLink = getHref(
+        path
+          .join("api", "files", "stream", encodeURIComponent(_file))
+          .replace(/\\/g, "/")
+      );
+      let link: string = getHref(
+        path.join("api", "files", _file).replace(/\\/g, "/")
+      );
       let short;
 
       if (_file.lastIndexOf(".") > 12) {
@@ -69,4 +75,8 @@ function convertByte(num: number): string {
     num = num / 1024;
   }
   return `${num.toFixed(2)}${format[level]}`;
+}
+
+function getHref(url: string): string {
+  return new URL(url, process.env.ORIGIN!).href;
 }

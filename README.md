@@ -38,8 +38,11 @@ yarn server:dev
 
 ### Setup environment variables
 
-In the client folder create a file called `.env.[mode]` and add the following.
-Mode is either `development` or `production` depending on the mode you want to run the
+In the client folder create a file called `.env.[mode].local` and add the following.
+Mode is either `development` or `production` depending on the mode you want to run the app in.
+[See Vitejs documentation for more details on .env files](https://vitejs.dev/guide/env-and-mode.html#env-files)
+
+````bash
 
 In development mode, add the external API url of the server to fetch data from.
 
@@ -51,4 +54,4 @@ yarn build
 
 # run server
 yarn start
-```
+````

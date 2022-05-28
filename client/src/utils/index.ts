@@ -12,7 +12,7 @@ export function debounce(cb: Function, delay: number): Function {
 
 export function throttle(cb: Function, delay: number): Function {
   let shouldWait: boolean = false;
-  return (...args: any[]) => {
+  return (...args: any[]): void => {
     if (shouldWait) return;
 
     cb(...args);
@@ -24,7 +24,7 @@ export function throttle(cb: Function, delay: number): Function {
   };
 }
 
-const API_ORIGIN = "http://localhost:3300";
+const API_ORIGIN = import.meta.env.VITE_EXTERNAL_API || "";
 
 export async function getFiles(): Promise<
   {

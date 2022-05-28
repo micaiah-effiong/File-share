@@ -34,15 +34,26 @@
               />
             </div>
             <div class="flex gap-5">
-              <input type="file" hidden id="uploadField" />
-              <label for="uploadField">
-                <PlusCircleIcon class="w-5" />
+              <input
+                type="file"
+                hidden
+                id="uploadField"
+                @change="uploadFiles($event)"
+              />
+              <label for="uploadField" class="cursor-pointer">
+                <button class="pointer-events-none">
+                  <PlusCircleIcon class="w-5" />
+                </button>
               </label>
               <label for="searchField">
-                <SearchIcon class="w-5" />
+                <button>
+                  <SearchIcon class="w-5" />
+                </button>
               </label>
               <label>
-                <StarIcon class="w-5" />
+                <button>
+                  <StarIcon class="w-5" />
+                </button>
               </label>
             </div>
           </div>
@@ -137,8 +148,7 @@ import BottomNav from "./layouts/Nav/BottomNav.vue";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";
 import GridFileItem from "./components/File/GridFileItem/GridFileItem.vue";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
-import { debounce, throttle } from "./utils";
-import { getFiles } from "./utils";
+import { debounce, throttle, getFiles, upload } from "./utils";
 
 export default defineComponent({
   components: {
@@ -195,6 +205,47 @@ export default defineComponent({
     });
     const selected: Ref<any> = ref(false);
 
+    function getContentScrollPositionBeforeScroll(event: Event) {
+      console.log(event.target);
+    }
+
+    function toggleFilePreview(display: boolean, option: any) {
+      showFilePreview.value = display;
+      previewFileInfo.value = option.file;
+      console.log("CALLED", { display, state: showFilePreview });
+    }
+
+    function handleGridClick(file: any, index: any) {
+      toggleFilePreview(true, { file });
+      selected.value = index;
+    }
+
+    function uploadFiles(evt: Event) {
+      const evtTarget = evt.target as HTMLInputElement;
+
+      if (!evtTarget.files) return;
+      if (evtTarget.files.length < 0) return;
+
+      const files = Array.from(evtTarget.files);
+      console.log("upload files", files);
+
+      files.forEach(async (file: File) => {
+        let formDataFile = new FormData();
+        formDataFile.append("upload", file);
+        await upload(formDataFile, {
+          onUploadProgress: (event: ProgressEvent) => {
+            if (!event.lengthComputable) return;
+
+            const percentCompleted = Math.round(
+              (event.loaded * 100) / event.total
+            );
+
+            console.log(percentCompleted);
+          },
+        });
+      });
+    }
+
     return {
       selected,
       previewFileInfo,
@@ -202,24 +253,10 @@ export default defineComponent({
       directionClassName,
       showFilePreview,
       files,
+      toggleFilePreview,
+      handleGridClick,
+      uploadFiles,
     };
-  },
-
-  methods: {
-    getContentScrollPositionBeforeScroll(event: Event) {
-      console.log(event.target);
-    },
-
-    toggleFilePreview(display: boolean, option: any) {
-      this.showFilePreview = display;
-      this.previewFileInfo = option.file;
-      console.log("CALLED", { display, state: this.showFilePreview });
-    },
-
-    handleGridClick(file: any, index: any) {
-      this.toggleFilePreview(true, { file });
-      this.selected = index;
-    },
   },
 });
 </script>

@@ -41,8 +41,31 @@
                 @change="uploadFiles($event)"
               />
               <label for="uploadField" class="cursor-pointer">
-                <button class="pointer-events-none">
-                  <PlusCircleIcon class="w-5" />
+                <button
+                  class="
+                    pointer-events-none
+                    justify-center
+                    items-center
+                    flex
+                    h-5
+                    w-5
+                  "
+                >
+                  <PlusCircleIcon
+                    class="w-5"
+                    v-if="uploadPercentage === null"
+                  />
+                  <div
+                    v-if="typeof uploadPercentage === 'number'"
+                    class="
+                      rounded-full
+                      border-2 border-ocean-blue-dark
+                      text-[10px]
+                      p-0.5
+                    "
+                  >
+                    {{ uploadPercentage }}
+                  </div>
                 </button>
               </label>
               <label for="searchField">
@@ -186,6 +209,8 @@ export default defineComponent({
       initialScrollPosition.value = target.scrollTop;
     }, 100);
 
+    const uploadPercentage: Ref<number | null> = ref(null);
+
     let files: Ref<
       | {
           filename: string;
@@ -240,9 +265,12 @@ export default defineComponent({
               (event.loaded * 100) / event.total
             );
 
+            uploadPercentage.value = percentCompleted;
             console.log(percentCompleted);
           },
         });
+
+        uploadPercentage.value = null;
       });
     }
 
@@ -256,6 +284,7 @@ export default defineComponent({
       toggleFilePreview,
       handleGridClick,
       uploadFiles,
+      uploadPercentage,
     };
   },
 });

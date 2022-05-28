@@ -62,6 +62,11 @@
             <ActionBtn label="Share">
               <ExternalLinkIcon />
             </ActionBtn>
+            <ActionBtn label="Save">
+              <a v-if="fileInformation" :href="fileInformation.downloadLink">
+                <DownloadIcon />
+              </a>
+            </ActionBtn>
             <ActionBtn label="Edit">
               <PencilIcon />
             </ActionBtn>
@@ -84,6 +89,7 @@ import {
   PencilIcon,
   TrashIcon,
   XIcon,
+  DownloadIcon,
 } from "@heroicons/vue/outline";
 import AvatarVue from "../../components/Avatar/Avatar.vue";
 import ActionBtn from "../../components/Buttons/ActionBtn.vue";
@@ -96,6 +102,7 @@ export default defineComponent({
     TrashIcon,
     DocumentIcon,
     XIcon,
+    DownloadIcon,
     AvatarVue,
     ActionBtn,
   },

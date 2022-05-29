@@ -22,9 +22,11 @@
   "private": true,
   "engines": {
     "node": ">=14.x.x",
-    "yarn": ">=1.x.x"
+    "yarn": ">=1.x.x",
+    "npm": ">=8.x.x"
   },
   "devDependencies": {
-    "copyfiles": "^2.4.1"
+    "copyfiles": "^2.4.1",
+    "yarn-audit-fix": "^9.3.1"
   }
 }

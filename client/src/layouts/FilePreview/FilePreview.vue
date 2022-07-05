@@ -1,6 +1,15 @@
 <template>
   <aside
-    class="h-full max-w-5/12 w-5/12 py-7 bg-white hidden md:block"
+    class="
+      h-full
+      max-w-5/12
+      w-5/12
+      py-7
+      bg-white
+      hidden
+      md:block
+      shadow-md shadow-ocean-blue-accent
+    "
     v-if="showFilePreview"
     v-bind="$attrs"
   >
@@ -80,8 +89,8 @@
   </aside>
 </template>
 
-<script lang="ts" >
-import { defineComponent, PropType, toRefs } from "vue";
+<script lang="ts" setup>
+import { PropType } from "vue";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import {
   DocumentTextIcon,
@@ -94,50 +103,30 @@ import {
 import AvatarVue from "../../components/Avatar/Avatar.vue";
 import ActionBtn from "../../components/Buttons/ActionBtn.vue";
 
-export default defineComponent({
-  components: {
-    DocumentTextIcon,
-    ExternalLinkIcon,
-    PencilIcon,
-    TrashIcon,
-    DocumentIcon,
-    XIcon,
-    DownloadIcon,
-    AvatarVue,
-    ActionBtn,
+const props = defineProps({
+  showFilePreview: {
+    type: Boolean,
+    required: true,
   },
-  props: {
-    showFilePreview: {
-      type: Boolean,
-      required: true,
-    },
-    setShowFilePreview: {
-      type: Function,
-      required: true,
-    },
-    fileInformation: {
-      type: Object as PropType<{
-        filename: string;
-        size: string;
-        short: string;
-        createdAt: string;
-        link: string;
-        downloadLink: string;
-        streamLink: string;
-        fileType: string;
-      }>,
-    },
+  setShowFilePreview: {
+    type: Function,
+    required: true,
   },
-  setup(props) {
-    console.log("UPDATE", props.showFilePreview);
-
-    const { showFilePreview, fileInformation } = toRefs(props);
-    return { showFilePreview, fileInformation };
-  },
-  methods: {
-    closePreview() {
-      this.setShowFilePreview(false);
-    },
+  fileInformation: {
+    type: Object as PropType<{
+      filename: string;
+      size: string;
+      short: string;
+      createdAt: string;
+      link: string;
+      downloadLink: string;
+      streamLink: string;
+      fileType: string;
+    }>,
   },
 });
+
+function closePreview() {
+  props.setShowFilePreview(false);
+}
 </script>

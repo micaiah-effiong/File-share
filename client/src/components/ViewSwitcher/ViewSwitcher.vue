@@ -1,6 +1,5 @@
 <template>
-  <div
-    class="
+  <div class="
       flex
       justify-between
       py-1
@@ -12,8 +11,7 @@
       gap-4
       bg-ocean-blue-accent
       shadow-ms shadow-inner
-    "
-  >
+    ">
     <button>
       <MenuIcon class="text-xs w-5" />
     </button>
@@ -26,19 +24,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
 import { MenuIcon, ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/outline";
-
-export default defineComponent({
-  name: "ViewSwitcher",
-  components: {
-    MenuIcon,
-    ViewGridIcon,
-    ViewBoardsIcon,
-  },
-  setup() {},
-});
 </script>
 
 <style scoped>

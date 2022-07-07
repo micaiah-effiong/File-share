@@ -99,8 +99,8 @@
               " @scroll="(e) => scrollDirection(e)">
               <!-- GRID FILE ITEM -->
               <!-- <GridFileItem filename="file-name.png" size="2mb" /> -->
-              <GridFileItem v-for="(file, index) in files" :file="file" :key="index" :selected="selected === index"
-                @click="() => handleGridClick(file, index)" />
+              <GridFileItem v-for="(file, index) in store.state.allFetchedFiles" :file="file" :key="index"
+                :selected="selected === index" @click="() => handleGridClick(file, index)" />
             </div>
           </div>
           <!-- <div class="grid p-2 gap-1 h-[10rem]">
@@ -113,9 +113,8 @@
         </main>
       </main>
 
-      <FilePreview :showFilePreview="showFilePreview" :setShowFilePreview="toggleFilePreview"
-        :fileInformation="previewFileInfo" />
-      <div v-if="!showFilePreview" class="md:block hidden"></div>
+      <FilePreview />
+      <div v-if="!store.state.previewStatus" class="md:block hidden"></div>
     </div>
     <BottomNav :class="directionClassName" />
   </div>
@@ -137,10 +136,12 @@ import BottomNav from "./layouts/Nav/BottomNav.vue";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";
 import GridFileItem from "./components/File/GridFileItem/GridFileItem.vue";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
-import { throttle, getFiles, upload } from "./utils";
+import { throttle, upload } from "./utils";
+import { useStore } from "vuex"
+import { DisplayFile } from "./types"
+import { RootState } from "./store/types";
 
-const showFilePreview: Ref<boolean> = ref(false);
-const previewFileInfo: Ref<any> = ref({});
+const store = useStore<RootState>()
 const initialScrollPosition: Ref<number> = ref(0);
 const directionClassName: Ref<string> = ref("");
 const scrollDirection: Function = throttle((event: Event) => {
@@ -150,47 +151,23 @@ const scrollDirection: Function = throttle((event: Event) => {
   console.log("initial sc pos ", initialPos, target.scrollTop);
 
   const movementDifference = initialPos - target.scrollTop;
-  // const direction =
-  //   movementDifference === Math.abs(movementDifference) ? "Up" : "Down";
   directionClassName.value =
     movementDifference === Math.abs(movementDifference) ? "" : "hide-below";
-
   initialScrollPosition.value = target.scrollTop;
 }, 100);
-
 const uploadPercentage: Ref<number | null> = ref(null);
-
-let files: Ref<
-  | {
-    filename: string;
-    size: string;
-    short: string;
-    createdAt: string;
-    link: string;
-    downloadLink: string;
-    streamLink: string;
-    fileType: string;
-  }[]
-> = ref([]);
-
-getFiles().then((data) => {
-  files.value = data;
-  console.log("files =>", data);
-});
 const selected: Ref<any> = ref(false);
 
-function getContentScrollPositionBeforeScroll(event: Event) {
-  console.log(event.target);
-}
+store.dispatch("fetchAllFiles")
 
-function toggleFilePreview(display: boolean, option: any) {
-  showFilePreview.value = display;
-  previewFileInfo.value = option?.file || {};
-  console.log("CALLED", { display, state: showFilePreview });
-}
-
-function handleGridClick(file: any, index: any) {
-  toggleFilePreview(true, { file });
+function handleGridClick(file: DisplayFile, index: any) {
+  console.log("CALLED", { file, state: store.state.previewStatus });
+  if (selected.value === index) {
+    selected.value = null;
+    return
+  }
+  store.commit("TOGGLE_PREVIEW", true)
+  store.commit("UPDATE_PREVIEW_FILE", file)
   selected.value = index;
 }
 
@@ -221,6 +198,7 @@ function uploadFiles(evt: Event) {
 
     uploadPercentage.value = null;
   });
+  store.dispatch("fetchAllFiles")
 }
 </script>
 

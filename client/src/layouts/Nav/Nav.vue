@@ -15,19 +15,19 @@
         <RssIcon class="w-10" />
       </div>
       <div class="grid gap-8 text-md text-ocean-blue-dark">
-        <NavMenuItem text="Home">
+        <NavMenuItem text="Home" @click="activeTabName = 'Home'" :activeTab="activeTabName">
           <HomeIcon />
         </NavMenuItem>
-        <NavMenuItem text="Recent">
+        <NavMenuItem text="Recent" @click="activeTabName = 'Recent'" :activeTab="activeTabName">
           <FolderIcon />
         </NavMenuItem>
-        <NavMenuItem text="Video">
+        <NavMenuItem text="Video" @click="activeTabName = 'Video'" :activeTab="activeTabName">
           <VideoCameraIcon />
         </NavMenuItem>
-        <NavMenuItem text="Photo">
+        <NavMenuItem text="Photo" @click="activeTabName = 'Photo'" :activeTab="activeTabName">
           <PhotographIcon />
         </NavMenuItem>
-        <NavMenuItem text="Settings">
+        <NavMenuItem text="Settings" @click="activeTabName = 'Settings'" :activeTab="activeTabName">
           <CogIcon />
         </NavMenuItem>
       </div>
@@ -78,5 +78,8 @@ import {
   CogIcon,
   DotsHorizontalIcon,
 } from "@heroicons/vue/outline";
+import { Ref, ref } from "vue";
 import NavMenuItem from "../../components/NavMenuItem/SideNavMenuItem.vue";
+
+let activeTabName: Ref<string> = ref("")
 </script>

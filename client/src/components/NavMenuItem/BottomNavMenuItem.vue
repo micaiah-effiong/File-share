@@ -17,5 +17,5 @@
 
 <script lang="ts" setup>
 import { defineProps } from "vue";
-defineProps({ text: { type: String, required: true } })
+defineProps({ text: { type: String, required: true }, active: Boolean })
 </script>

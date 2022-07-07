@@ -1,5 +1,5 @@
 <template>
-  <div class="px-0.5">
+  <div class="px-0.5 cursor-pointer" :class="text === activeTab && 'active'">
     <div class="
         grid
         justify-items-center
@@ -17,30 +17,21 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, defineProps } from "vue";
-type NavMenuItemPropsType = {
-  text: {
-    type: StringConstructor;
-    required: true;
-  };
-};
-
-interface INavMenuItemProps {
-  text: string;
-}
-
-defineProps({ text: { type: String, required: true } })
+import { defineProps } from "vue";
+defineProps<{ text: string, activeTab: string }>()
 </script>
 
 <style scoped>
-.hover\:nav-highlight:hover {
+.hover\:nav-highlight:hover,
+.active {
   box-shadow: 2px 0px theme("colors.ocean-blue.normal");
   transition-property: box-shadow;
   transition-duration: 0.3s;
   transition-timing-function: ease-in-out;
 }
 
-.nav-item:hover>div {
+.nav-item:hover>div,
+.active>div {
   color: theme("colors.ocean-blue.normal");
   transition-property: color;
   transition-duration: 0.3s;

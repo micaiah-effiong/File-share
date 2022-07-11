@@ -1,7 +1,6 @@
 <template>
   <div :class="selected ? 'bg-blue-50' : 'bg-white'" class="
-      w-full
-      min-w-min
+      min-w-auto
       max-h-fit
       h-fit
       rounded-lg
@@ -56,21 +55,11 @@ import { StarIcon, DotsVerticalIcon } from "@heroicons/vue/outline";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import AvatarGroup from "../../Avatar/AvatarGroup.vue";
 import Avatar from "../../Avatar/Avatar.vue";
-
-type File = {
-  filename: string;
-  size: string;
-  short: string;
-  createdAt: string;
-  link: string;
-  downloadLink: string;
-  streamLink: string;
-  fileType: string;
-};
+import { DisplayFile } from "../../../types";
 
 defineProps({
   file: {
-    type: Object as PropType<File>,
+    type: Object as PropType<DisplayFile>,
     required: true,
   },
   selected: { type: Boolean, default: false },

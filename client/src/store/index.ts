@@ -1,7 +1,7 @@
 import { createStore } from "vuex";
 import { DisplayFile } from "../types";
 import { getFiles } from "../utils";
-import { RootState } from "./types";
+import { FileViewType, RootState } from "./types";
 
 const store = createStore<RootState>({
   /* state, actions, mutations */
@@ -18,6 +18,7 @@ const store = createStore<RootState>({
     },
     allFetchedFiles: [],
     previewStatus: false,
+    fileViewType: "GRID",
   },
   mutations: {
     UPDATE_PREVIEW_FILE(state, payload: DisplayFile) {
@@ -29,6 +30,9 @@ const store = createStore<RootState>({
     SET_FETCHED_FILES(state, payload: DisplayFile[]) {
       state.allFetchedFiles = payload;
     },
+    TOGGLE_FILE_VIEW(state, payload: `${FileViewType}`) {
+      state.fileViewType = payload;
+    },
   },
 
   actions: {
@@ -36,6 +40,10 @@ const store = createStore<RootState>({
       const files = await getFiles();
       context.commit("SET_FETCHED_FILES", files);
       console.log("files =>", files);
+    },
+
+    switchFileView(context, payload: `${FileViewType}`) {
+      context.commit("TOGGLE_FILE_VIEW", payload);
     },
   },
 });

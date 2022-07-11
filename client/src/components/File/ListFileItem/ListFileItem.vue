@@ -1,5 +1,5 @@
 <template>
-  <div :class="selected ? 'bg-blue-50' : 'bg-white'" class="
+  <div :class="isSelected ? 'bg-blue-50' : 'bg-white'" class="
       w-full
       min-w-min
       max-h-fit
@@ -48,17 +48,11 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, defineProps, } from "vue";
+import { defineProps, } from "vue";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import AvatarGroup from "../../Avatar/AvatarGroup.vue";
 import Avatar from "../../Avatar/Avatar.vue";
 import { DisplayFile } from "../../../types";
 
-defineProps({
-  file: {
-    type: Object as PropType<DisplayFile>,
-    required: true,
-  },
-  selected: { type: Boolean, default: false },
-})
+const { file, isSelected = false } = defineProps<{ file: DisplayFile, isSelected: boolean }>()
 </script>

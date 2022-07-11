@@ -39,11 +39,13 @@ createStoreDir(filesPath).then(() => {
   server.listen(port, async () => {
     console.log("Server has started");
     console.log(`> \tlocalhost:${port}`);
+
     const ips: string[] = await getMyIPAddress();
     ips.forEach(async (ipAddress: string) => {
-      if (ipAddress === "127.0.0.1") return;
-      console.log(`> \t${ipAddress}:${port}`);
-      process.env.ORIGIN = process.env.ORIGIN || `http://${ipAddress}:${port}`;
+      if (ipAddress === "127.0.0.1" && process.env.ORIGIN) return;
+      const link: string = `http://${ipAddress || "127.0.0.1"}:${port}`;
+      process.env.ORIGIN = process.env.ORIGIN || link;
+      console.log(`> \t${process.env.ORIGIN}`);
       const start =
         process.platform == "darwin"
           ? "open"
@@ -51,7 +53,6 @@ createStoreDir(filesPath).then(() => {
           ? "start"
           : "xdg-open";
 
-      const link: string = `http://${ipAddress}:${port}`;
       const command: string = `${start} ${link}`;
 
       // generate qrcode

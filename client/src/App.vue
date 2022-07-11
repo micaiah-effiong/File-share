@@ -11,7 +11,7 @@
           flex flex-col
           px-4
           md:px-0
-          border-red-500
+
         ">
         <header class="sticky z-10 bg-ocean-blue-light top-7">
           <div class="flex justify-between gap-4 text-ocean-blue-dark">
@@ -64,7 +64,7 @@
           </div>
 
           <!-- <nav class=""> -->
-          <nav class="hidden md:block">
+          <nav class="hidden md:block py-2 md:py-0">
             <div class="flex justify-between text-ocean-blue-dark">
               <div class="flex gap-2 md:gap-6 flex-1">
                 <div class="flex gap-2 shadow-md p-2 rounded-lg bg-white">
@@ -86,6 +86,14 @@
         </header>
         <main class="max-h-[calc(100%-87px)] md:max-h-[calc(100%-105px)]">
           <div class="h-full outer relative">
+
+            <div class="grid gap-2 h-full
+                py-3
+                overflow-auto" @scroll="(e) => scrollDirection(e)"
+              v-if="store.state.fileViewType === FileViewType.LIST">
+              <ListFileItem v-for="(file, index) in store.state.allFetchedFiles" :file="file" :key="index"
+                :selected="selected === index" @click="() => handleGridClick(file, index)" />
+            </div>
             <div class="
                 h-full
                 grid
@@ -96,7 +104,7 @@
                 2xl:grid-cols-6
                 py-3
                 overflow-auto
-              " @scroll="(e) => scrollDirection(e)">
+              " @scroll="(e) => scrollDirection(e)" v-if="store.state.fileViewType === FileViewType.GRID">
               <!-- GRID FILE ITEM -->
               <!-- <GridFileItem filename="file-name.png" size="2mb" /> -->
               <GridFileItem v-for="(file, index) in store.state.allFetchedFiles" :file="file" :key="index"
@@ -135,11 +143,12 @@ import Nav from "./layouts/Nav/Nav.vue";
 import BottomNav from "./layouts/Nav/BottomNav.vue";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";
 import GridFileItem from "./components/File/GridFileItem/GridFileItem.vue";
+import ListFileItem from "./components/File/ListFileItem/ListFileItem.vue";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
 import { throttle, upload } from "./utils";
 import { useStore } from "vuex"
 import { DisplayFile } from "./types"
-import { RootState } from "./store/types";
+import { RootState, FileViewType } from "./store/types";
 
 const store = useStore<RootState>()
 const initialScrollPosition: Ref<number> = ref(0);

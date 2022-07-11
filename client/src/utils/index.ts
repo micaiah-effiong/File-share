@@ -1,4 +1,5 @@
 import axios from "axios";
+import { DisplayFile } from "../types";
 
 export function debounce(cb: Function, delay: number): Function {
   let timeout: number;
@@ -26,18 +27,7 @@ export function throttle(cb: Function, delay: number): Function {
 
 const API_ORIGIN = import.meta.env.VITE_EXTERNAL_API || "";
 
-export async function getFiles(): Promise<
-  {
-    filename: string;
-    size: string;
-    short: string;
-    createdAt: string;
-    link: string;
-    downloadLink: string;
-    streamLink: string;
-    fileType: string;
-  }[]
-> {
+export async function getFiles(): Promise<DisplayFile[]> {
   const res = await axios.get(`${API_ORIGIN}/api/files`);
   return res.data.data;
 }

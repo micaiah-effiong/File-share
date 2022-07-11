@@ -22,33 +22,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
 import {
   HomeIcon,
   FolderIcon,
   VideoCameraIcon,
   PhotographIcon,
-  CogIcon,
 } from "@heroicons/vue/outline";
 import BottomNavMenuItem from "../../components/NavMenuItem/BottomNavMenuItem.vue";
-
-export default defineComponent({
-  components: {
-    BottomNavMenuItem,
-    HomeIcon,
-    FolderIcon,
-    VideoCameraIcon,
-    PhotographIcon,
-    CogIcon,
-  },
-});
 </script>
 
 <style scoped>
 .bottom-nav {
   transition: 0.3s bottom;
 }
+
 .hide-below {
   bottom: -4rem;
 }

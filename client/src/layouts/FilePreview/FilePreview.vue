@@ -1,9 +1,14 @@
 <template>
-  <aside
-    class="h-full max-w-5/12 w-5/12 py-7 bg-white hidden md:block"
-    v-if="showFilePreview"
-    v-bind="$attrs"
-  >
+  <aside class="
+      h-full
+      max-w-5/12
+      w-5/12
+      py-7
+      bg-white
+      hidden
+      md:block
+      shadow-md shadow-ocean-blue-accent
+    " v-if="store.state.previewStatus" v-bind="$attrs">
     <div class="flex flex-col h-full">
       <header class="px-3">
         <div class="flex justify-between text-ocean-blue-dark">
@@ -11,7 +16,9 @@
             <DocumentTextIcon class="w-5" />
             <span>File Preview</span>
           </div>
-          <button class="w-5" @click="closePreview"><XIcon /></button>
+          <button class="w-5" @click="closePreview">
+            <XIcon />
+          </button>
         </div>
         <div class="py-5">
           <div class="cut"></div>
@@ -26,9 +33,9 @@
               </div>
               <div class="grid gap-2">
                 <div class="font-semibold break-all">
-                  {{ fileInformation?.filename }}
+                  {{ store.state.previewFileInformation?.filename }}
                 </div>
-                <div class="text-xs">{{ fileInformation?.size }}</div>
+                <div class="text-xs">{{ store.state.previewFileInformation?.size }}</div>
               </div>
             </div>
             <div class="cut"></div>
@@ -63,7 +70,7 @@
               <ExternalLinkIcon />
             </ActionBtn>
             <ActionBtn label="Save">
-              <a v-if="fileInformation" :href="fileInformation.downloadLink">
+              <a v-if="store.state.previewFileInformation" :href="store.state.previewFileInformation.downloadLink">
                 <DownloadIcon />
               </a>
             </ActionBtn>
@@ -80,8 +87,7 @@
   </aside>
 </template>
 
-<script lang="ts" >
-import { defineComponent, PropType, toRefs } from "vue";
+<script lang="ts" setup>
 import { DocumentIcon } from "@heroicons/vue/solid";
 import {
   DocumentTextIcon,
@@ -93,51 +99,11 @@ import {
 } from "@heroicons/vue/outline";
 import AvatarVue from "../../components/Avatar/Avatar.vue";
 import ActionBtn from "../../components/Buttons/ActionBtn.vue";
+import { useStore } from "vuex"
+import { RootState } from "../../store/types";
 
-export default defineComponent({
-  components: {
-    DocumentTextIcon,
-    ExternalLinkIcon,
-    PencilIcon,
-    TrashIcon,
-    DocumentIcon,
-    XIcon,
-    DownloadIcon,
-    AvatarVue,
-    ActionBtn,
-  },
-  props: {
-    showFilePreview: {
-      type: Boolean,
-      required: true,
-    },
-    setShowFilePreview: {
-      type: Function,
-      required: true,
-    },
-    fileInformation: {
-      type: Object as PropType<{
-        filename: string;
-        size: string;
-        short: string;
-        createdAt: string;
-        link: string;
-        downloadLink: string;
-        streamLink: string;
-        fileType: string;
-      }>,
-    },
-  },
-  setup(props) {
-    console.log("UPDATE", props.showFilePreview);
-
-    const { showFilePreview, fileInformation } = toRefs(props);
-    return { showFilePreview, fileInformation };
-  },
-  methods: {
-    closePreview() {
-      this.setShowFilePreview(false);
-    },
-  },
-});
+const store = useStore<RootState>()
+function closePreview() {
+  store.commit('TOGGLE_PREVIEW', false)
+}
 </script>

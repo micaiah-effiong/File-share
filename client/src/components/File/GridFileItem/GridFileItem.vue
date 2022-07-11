@@ -1,7 +1,5 @@
 <template>
-  <div
-    :class="selected ? 'bg-blue-50' : 'bg-white'"
-    class="
+  <div :class="selected ? 'bg-blue-50' : 'bg-white'" class="
       w-full
       min-w-min
       max-h-fit
@@ -13,8 +11,7 @@
       mono:hover:bg-ash-secondary
       mono:hover:transition-colors
       transition-colors
-    "
-  >
+    ">
     <div class="grid w-full p-3 rounded-md">
       <div>
         <div class="flex justify-between py-1">
@@ -22,9 +19,7 @@
             <StarIcon class="w-5 text-ocean-blue-secondary" />
           </button>
           <button>
-            <DotsVerticalIcon
-              class="w-5 mono:text-ash-light text-ocean-blue-secondary"
-            />
+            <DotsVerticalIcon class="w-5 mono:text-ash-light text-ocean-blue-secondary" />
           </button>
         </div>
         <div class="grid gap-3 pb-3 md:py-3 justify-center text-center">
@@ -47,10 +42,7 @@
         </div>
         <AvatarGroup :max="2">
           <Avatar label="Tim" />
-          <Avatar
-            label="Tim"
-            url="https://randomuser.me/api/portraits/women/21.jpg"
-          />
+          <Avatar label="Tim" url="https://randomuser.me/api/portraits/women/21.jpg" />
           <Avatar label="something" />
         </AvatarGroup>
       </div>
@@ -58,8 +50,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, toRefs } from "vue";
+<script lang="ts" setup>
+import { PropType, defineProps, } from "vue";
 import { StarIcon, DotsVerticalIcon } from "@heroicons/vue/outline";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import AvatarGroup from "../../Avatar/AvatarGroup.vue";
@@ -76,29 +68,11 @@ type File = {
   fileType: string;
 };
 
-export default defineComponent({
-  props: {
-    file: {
-      type: Object as PropType<File>,
-      required: true,
-    },
-    selected: { type: Boolean, default: false },
+defineProps({
+  file: {
+    type: Object as PropType<File>,
+    required: true,
   },
-  components: {
-    StarIcon,
-    DotsVerticalIcon,
-    DocumentIcon,
-    AvatarGroup,
-    Avatar,
-  },
-  setup(props) {
-    const { selected } = toRefs(props);
-
-    console.log({
-      file: props.file,
-    });
-
-    return { file: props.file, selected };
-  },
-});
+  selected: { type: Boolean, default: false },
+})
 </script>

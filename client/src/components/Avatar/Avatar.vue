@@ -1,8 +1,6 @@
 <template>
   <li class="flex">
-    <div
-      :class="'rounded-' + round"
-      class="
+    <div :class="'rounded-' + round" class="
         avatar
         border border-white
         justify-center
@@ -12,43 +10,36 @@
         overflow-hidden
         bg-red-500
         round
-      "
-    >
+      ">
       <img class="h-auto w-full align-middle" alt="" :src="url" v-if="url" />
       <!-- src="https://randomuser.me/api/portraits/women/21.jpg" -->
       <span class="img text-xs text-white font-semibold" v-if="!url">{{
-        count ? `+${count}` : label[0].toUpperCase()
+          count ? `+${count}` : label[0].toUpperCase()
       }}</span>
     </div>
   </li>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
+<script lang="ts" setup>
+import { defineProps, PropType } from "vue";
 
-export default defineComponent({
-  props: {
-    label: {
-      type: String,
-      required: true,
-    },
-    url: {
-      type: String,
-      // default: "https://randomuser.me/api/portraits/women/21.jpg",
-    },
-    round: {
-      type: String as PropType<"sm" | "md" | "lg" | "xl" | "none" | "full">,
-      default: "md",
-    },
-    count: {
-      type: Number,
-    },
+defineProps({
+  label: {
+    type: String,
+    required: true,
   },
-  setup(props) {
-    const { label, url, round, count } = props;
-    return { label, url, round, count };
+  url: {
+    type: String,
+    // default: "https://randomuser.me/api/portraits/women/21.jpg",
   },
-});
+  round: {
+    type: String as PropType<"sm" | "md" | "lg" | "xl" | "none" | "full">,
+    default: "md",
+  },
+  count: {
+    type: Number,
+  },
+})
 </script>
 
 

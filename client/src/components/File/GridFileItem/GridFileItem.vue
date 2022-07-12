@@ -1,8 +1,8 @@
 <template>
-  <div :class="selected ? 'bg-blue-50' : 'bg-white'" class="
+  <div :class="isSelected ? 'bg-blue-50' : 'bg-white'" class="
       min-w-auto
       max-h-fit
-      h-fit
+      h-auto
       rounded-lg
       shadow-sm
       mono:bg-ash-normal
@@ -11,7 +11,7 @@
       mono:hover:transition-colors
       transition-colors
     ">
-    <div class="grid w-full p-3 rounded-md">
+    <div class="grid w-full p-3 h-full rounded-md">
       <div>
         <div class="flex justify-between py-1">
           <button>
@@ -33,9 +33,7 @@
         </div>
       </div>
 
-      <!-- <div class="cut"></div> -->
-
-      <div class="flex pt-3 pb-2 cut justify-between items-center">
+      <div class="flex pt-3 pb-2 cut flex-wrap gap-2 justify-between items-center">
         <div class="uppercase text-xs text-ocean-blue-dark">
           {{ file.size }}
         </div>
@@ -57,11 +55,5 @@ import AvatarGroup from "../../Avatar/AvatarGroup.vue";
 import Avatar from "../../Avatar/Avatar.vue";
 import { DisplayFile } from "../../../types";
 
-defineProps({
-  file: {
-    type: Object as PropType<DisplayFile>,
-    required: true,
-  },
-  selected: { type: Boolean, default: false },
-})
+const { file, isSelected = false } = defineProps<{ file: DisplayFile, isSelected: boolean }>()
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full w-full justify-between">
+  <div class="flex flex-col h-screen w-full justify-between">
     <div class="w-full h-full flex gap-14 bg-ocean-blue-light">
       <Nav />
       <main class="
@@ -26,7 +26,7 @@
                 " type="" name="" id="searchField" placeholder="Ctrl + k" />
             </div>
             <div class="flex gap-5">
-              <input type="file" hidden id="uploadField" @change="uploadFiles($event)" />
+              <input type="file" multiple hidden id="uploadField" @change="uploadFiles($event)" />
               <label for="uploadField" class="cursor-pointer">
                 <button class="
                     pointer-events-none
@@ -84,40 +84,12 @@
             </div>
           </nav>
         </header>
-        <main class="max-h-[calc(100%-87px)] md:max-h-[calc(100%-105px)]">
+        <main class="max-h-[calc(100%-90px)] md:max-h-[calc(100%-105px)">
           <div class="h-full outer relative">
 
-            <div class="grid gap-2 h-full
-                py-3
-                overflow-auto" @scroll="(e) => scrollDirection(e)"
-              v-if="store.state.fileViewType === FileViewType.LIST">
-              <ListFileItem v-for="(file, index) in store.state.allFetchedFiles" :file="file" :key="index"
-                :selected="selected === index" @click="() => handleGridClick(file, index)" />
-            </div>
-            <div class="
-                h-full
-                grid
-                gap-2
-                grid-cols-2
-                md:grid-cols-3
-                xl:grid-cols-4
-                2xl:grid-cols-6
-                py-3
-                overflow-auto
-              " @scroll="(e) => scrollDirection(e)" v-if="store.state.fileViewType === FileViewType.GRID">
-              <!-- GRID FILE ITEM -->
-              <!-- <GridFileItem filename="file-name.png" size="2mb" /> -->
-              <GridFileItem v-for="(file, index) in store.state.allFetchedFiles" :file="file" :key="index"
-                :selected="selected === index" @click="() => handleGridClick(file, index)" />
-            </div>
+            <AllFilesMenu :files="store.state.allFetchedFiles" :handle-scroll="scrollDirection">
+            </AllFilesMenu>
           </div>
-          <!-- <div class="grid p-2 gap-1 h-[10rem]">
-          <div class="bg-[#81c5f6]">secondary</div>
-          <div class="bg-[#e8f0f7]">accent</div>
-          <div class="bg-[#078dee]">normal</div>
-          <div class="bg-[#4d788f]">dark</div>
-          <div class="bg-[#f5f9fd]">bg light</div>
-        </div> -->
         </main>
       </main>
 
@@ -142,13 +114,11 @@ import "./App.css";
 import Nav from "./layouts/Nav/Nav.vue";
 import BottomNav from "./layouts/Nav/BottomNav.vue";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";
-import GridFileItem from "./components/File/GridFileItem/GridFileItem.vue";
-import ListFileItem from "./components/File/ListFileItem/ListFileItem.vue";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
+import AllFilesMenu from "./layouts/AllFilesMenu/AllFilesMenu.vue"
 import { throttle, upload } from "./utils";
 import { useStore } from "vuex"
-import { DisplayFile } from "./types"
-import { RootState, FileViewType } from "./store/types";
+import { RootState } from "./store/types";
 
 const store = useStore<RootState>()
 const initialScrollPosition: Ref<number> = ref(0);
@@ -165,20 +135,8 @@ const scrollDirection: Function = throttle((event: Event) => {
   initialScrollPosition.value = target.scrollTop;
 }, 100);
 const uploadPercentage: Ref<number | null> = ref(null);
-const selected: Ref<any> = ref(false);
 
 store.dispatch("fetchAllFiles")
-
-function handleGridClick(file: DisplayFile, index: any) {
-  console.log("CALLED", { file, state: store.state.previewStatus });
-  if (selected.value === index) {
-    selected.value = null;
-    return
-  }
-  store.commit("TOGGLE_PREVIEW", true)
-  store.commit("UPDATE_PREVIEW_FILE", file)
-  selected.value = index;
-}
 
 function uploadFiles(evt: Event) {
   const evtTarget = evt.target as HTMLInputElement;
@@ -204,7 +162,7 @@ function uploadFiles(evt: Event) {
         console.log(percentCompleted);
       },
     });
-
+    alert("Upload complete")
     uploadPercentage.value = null;
   });
   store.dispatch("fetchAllFiles")

@@ -15,8 +15,11 @@ const Template = (args) => ({
   },
   // And then the `args` are bound to your component with `v-bind="args"`
   template:
-    '<MySideNavMenuItem v-bind="args" class="w-20"><HomeIcon /></MySideNavMenuItem>',
+    '<MySideNavMenuItem v-bind="args" class="w-20"><template #icon><HomeIcon /></template></MySideNavMenuItem>',
 });
 
 export const Primary = Template.bind({});
-Primary.args = { text: "Hi mom" };
+Primary.args = { text: "Home", activeTab: "" };
+
+export const Active = Template.bind({});
+Active.args = { text: "Home", activeTab: "Home" };

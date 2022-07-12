@@ -14,8 +14,14 @@ const Template = (args) => ({
   },
 
   template:
-    '<BottomNavMenuItem v-bind="args" class="w-20"><HomeIcon /></BottomNavMenuItem>',
+    '<BottomNavMenuItem v-bind="args" class="w-20"><template #icon><HomeIcon /></template></BottomNavMenuItem>',
 });
 
 export const Primary = Template.bind({});
-Primary.args = { text: "Hi mom" };
+Primary.args = { text: "Home", activeTab: "", showText: false };
+
+export const Active = Template.bind({});
+Active.args = { text: "Home", activeTab: "Home", showText: false };
+
+export const WithText = Template.bind({});
+WithText.args = { text: "Home", activeTab: "", showText: true };

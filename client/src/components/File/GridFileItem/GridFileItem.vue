@@ -1,5 +1,7 @@
 <template>
-  <div :class="isSelected ? 'bg-blue-50' : 'bg-white'" class="
+  <div
+    :class="isSelected ? 'bg-blue-50' : 'bg-white'"
+    class="
       min-w-auto
       max-h-fit
       h-auto
@@ -10,7 +12,8 @@
       mono:hover:bg-ash-secondary
       mono:hover:transition-colors
       transition-colors
-    ">
+    "
+  >
     <div class="grid w-full p-3 h-full rounded-md">
       <div>
         <div class="flex justify-between py-1">
@@ -18,7 +21,9 @@
             <StarIcon class="w-5 text-ocean-blue-secondary" />
           </button>
           <button>
-            <DotsVerticalIcon class="w-5 mono:text-ash-light text-ocean-blue-secondary" />
+            <DotsVerticalIcon
+              class="w-5 mono:text-ash-light text-ocean-blue-secondary"
+            />
           </button>
         </div>
         <div class="grid gap-3 pb-3 md:py-3 justify-center text-center">
@@ -33,13 +38,18 @@
         </div>
       </div>
 
-      <div class="flex pt-3 pb-2 cut flex-wrap gap-2 justify-between items-center">
+      <div
+        class="flex pt-3 pb-2 cut flex-wrap gap-2 justify-between items-center"
+      >
         <div class="uppercase text-xs text-ocean-blue-dark">
           {{ file.size }}
         </div>
         <AvatarGroup :max="2">
           <Avatar label="Tim" />
-          <Avatar label="Tim" url="https://randomuser.me/api/portraits/women/21.jpg" />
+          <Avatar
+            label="Tim"
+            url="https://randomuser.me/api/portraits/women/21.jpg"
+          />
           <Avatar label="something" />
         </AvatarGroup>
       </div>
@@ -48,12 +58,14 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, defineProps, } from "vue";
+import { defineProps } from "vue";
 import { StarIcon, DotsVerticalIcon } from "@heroicons/vue/outline";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import AvatarGroup from "../../Avatar/AvatarGroup.vue";
 import Avatar from "../../Avatar/Avatar.vue";
 import { DisplayFile } from "../../../types";
 
-const { file, isSelected = false } = defineProps<{ file: DisplayFile, isSelected: boolean }>()
+withDefaults(defineProps<{ file: DisplayFile; isSelected?: boolean }>(), {
+  isSelected: false,
+});
 </script>

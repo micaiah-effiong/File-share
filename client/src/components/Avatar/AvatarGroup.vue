@@ -31,7 +31,6 @@ export default defineComponent({
 });
 </script>
 
-
 <style scoped>
 .avatars {
   display: flex;

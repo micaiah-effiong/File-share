@@ -1,48 +1,60 @@
 <template>
   <div class="flex flex-col h-screen w-full justify-between">
     <div class="w-full h-full flex gap-14 bg-ocean-blue-light">
-      <Nav />
-      <main class="
-          h-full
-          w-full
-          md:py-7
-          gap-5
-          md:gap-8
-          flex flex-col
-          px-4
-          md:px-0
-
-        ">
+      <SideNav />
+      <main
+        class="h-full w-full md:py-7 gap-5 md:gap-8 flex flex-col px-2 md:px-0"
+      >
         <header class="sticky z-10 bg-ocean-blue-light top-7">
           <div class="flex justify-between gap-4 text-ocean-blue-dark">
             <RssIcon class="w-5" />
             <div class="flex-1">
-              <input class="
+              <input
+                class="
                   w-full
                   outline-none
                   bg-transparent
                   text-sm
                   align-baseline
-                " type="" name="" id="searchField" placeholder="Ctrl + k" />
+                "
+                type=""
+                name=""
+                id="searchField"
+                placeholder="Ctrl + k"
+              />
             </div>
             <div class="flex gap-5">
-              <input type="file" multiple hidden id="uploadField" @change="uploadFiles($event)" />
+              <input
+                type="file"
+                multiple
+                hidden
+                id="uploadField"
+                @change="uploadFiles($event)"
+              />
               <label for="uploadField" class="cursor-pointer">
-                <button class="
+                <button
+                  class="
                     pointer-events-none
                     justify-center
                     items-center
                     flex
                     h-5
                     w-5
-                  ">
-                  <PlusCircleIcon class="w-5" v-if="uploadPercentage === null" />
-                  <div v-if="typeof uploadPercentage === 'number'" class="
+                  "
+                >
+                  <PlusCircleIcon
+                    class="w-5"
+                    v-if="uploadPercentage === null"
+                  />
+                  <div
+                    v-if="typeof uploadPercentage === 'number'"
+                    class="
                       rounded-full
                       border-2 border-ocean-blue-dark
                       text-[10px]
                       p-0.5
-                    ">
+                    "
+                  >
                     {{ uploadPercentage }}
                   </div>
                 </button>
@@ -86,8 +98,10 @@
         </header>
         <main class="max-h-[calc(100%-90px)] md:max-h-[calc(100%-105px)">
           <div class="h-full outer relative">
-
-            <AllFilesMenu :files="store.state.allFetchedFiles" :handle-scroll="scrollDirection">
+            <AllFilesMenu
+              :files="store.state.allFetchedFiles"
+              :handle-scroll="scrollDirection"
+            >
             </AllFilesMenu>
           </div>
         </main>
@@ -96,7 +110,7 @@
       <FilePreview />
       <div v-if="!store.state.previewStatus" class="md:block hidden"></div>
     </div>
-    <BottomNav :class="directionClassName" />
+    <ButtomNav :should-hide="shouldHideButtomNav" />
   </div>
 </template>
 
@@ -111,18 +125,17 @@ import {
 } from "@heroicons/vue/outline";
 import { FolderIcon } from "@heroicons/vue/solid";
 import "./App.css";
-import Nav from "./layouts/Nav/Nav.vue";
-import BottomNav from "./layouts/Nav/BottomNav.vue";
+import { SideNav, ButtomNav } from "./layouts/Nav";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
-import AllFilesMenu from "./layouts/AllFilesMenu/AllFilesMenu.vue"
+import AllFilesMenu from "./layouts/AllFilesMenu/AllFilesMenu.vue";
 import { throttle, upload } from "./utils";
-import { useStore } from "vuex"
+import { useStore } from "vuex";
 import { RootState } from "./store/types";
 
-const store = useStore<RootState>()
+const store = useStore<RootState>();
 const initialScrollPosition: Ref<number> = ref(0);
-const directionClassName: Ref<string> = ref("");
+const shouldHideButtomNav: Ref<boolean> = ref(false);
 const scrollDirection: Function = throttle((event: Event) => {
   if (!event.target) return;
   const initialPos = initialScrollPosition.value;
@@ -130,13 +143,13 @@ const scrollDirection: Function = throttle((event: Event) => {
   console.log("initial sc pos ", initialPos, target.scrollTop);
 
   const movementDifference = initialPos - target.scrollTop;
-  directionClassName.value =
-    movementDifference === Math.abs(movementDifference) ? "" : "hide-below";
+  shouldHideButtomNav.value =
+    movementDifference !== Math.abs(movementDifference);
   initialScrollPosition.value = target.scrollTop;
 }, 100);
 const uploadPercentage: Ref<number | null> = ref(null);
 
-store.dispatch("fetchAllFiles")
+store.dispatch("fetchAllFiles");
 
 function uploadFiles(evt: Event) {
   const evtTarget = evt.target as HTMLInputElement;
@@ -154,18 +167,16 @@ function uploadFiles(evt: Event) {
       onUploadProgress: (event: ProgressEvent) => {
         if (!event.lengthComputable) return;
 
-        const percentCompleted = Math.round(
-          (event.loaded * 100) / event.total
-        );
+        const percentCompleted = Math.round((event.loaded * 100) / event.total);
 
         uploadPercentage.value = percentCompleted;
         console.log(percentCompleted);
       },
     });
-    alert("Upload complete")
+    alert("Upload complete");
     uploadPercentage.value = null;
   });
-  store.dispatch("fetchAllFiles")
+  store.dispatch("fetchAllFiles");
 }
 </script>
 

@@ -8,7 +8,7 @@ import {
 } from "sequelize";
 import { sequelize } from "./db/config";
 
-export interface FileModel
+interface FileModel
   extends Model<
     InferAttributes<FileModel>,
     InferCreationAttributes<FileModel>

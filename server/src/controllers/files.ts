@@ -4,7 +4,14 @@ import mime from "mime";
 import path from "path";
 // import zlib from "zlib";
 import { Request, Response, NextFunction } from "express";
-import { upload } from "../handlers";
+import {
+  convertByte,
+  getDownloadLink,
+  getFileLink,
+  getShortName,
+  getStreamLink,
+  upload,
+} from "../handlers";
 
 import {
   listFiles as fileList,
@@ -12,6 +19,8 @@ import {
   asyncHandler,
   processRange,
 } from "../handlers";
+import { DBManager } from "../models";
+import { File } from "../models/file";
 const filesDir: string = path.resolve(__dirname, "..", "files");
 
 // endpoint controller functions goes here
@@ -48,7 +57,20 @@ export const getOneFile = asyncHandler(
 
 export const uploadFile = [
   upload.single("upload"),
-  asyncHandler(async (_: Request, res: Response, __: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.file) throw errorResponse("No file was uploaded", 400);
+
+    const filename = req.file.filename;
+    await DBManager(File).create({
+      filename: filename,
+      short: getShortName(filename),
+      downloadLink: getDownloadLink(filename),
+      size: convertByte(req.file.size),
+      fileType: mime.lookup(filename),
+      link: getFileLink(filename),
+      streamLink: getStreamLink(filename),
+    });
+
     res.json({
       status: true,
       msg: "Uploads was successful",

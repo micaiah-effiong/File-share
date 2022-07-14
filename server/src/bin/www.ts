@@ -8,10 +8,12 @@ import { app, server } from "../app";
 import debug from "debug"; //("file-share:server");
 // import http from "http";
 // import { exec } from "child_process";
+import { DB } from "../models";
 import QRcode from "qrcode";
 import path from "path";
 import { promises as fsPromise } from "fs";
 import getMyIPAddress from "../handlers/local-ip";
+import config from "../config/env";
 
 const fileShareDebugger: debug.Debugger = debug("file-share:server");
 
@@ -35,17 +37,21 @@ async function createStoreDir(dirPath: string): Promise<string | undefined> {
 /**
  * Listen on provided port, on all network interfaces.
  */
-createStoreDir(filesPath).then(() => {
+createStoreDir(filesPath).then(async () => {
+  await DB.sync({ force: false });
   server.listen(port, async () => {
     console.log("Server has started");
     console.log(`> \tlocalhost:${port}`);
 
     const ips: string[] = await getMyIPAddress();
-    ips.forEach(async (ipAddress: string) => {
-      if (ipAddress === "127.0.0.1" && process.env.ORIGIN) return;
-      const link: string = `http://${ipAddress || "127.0.0.1"}:${port}`;
-      process.env.ORIGIN = process.env.ORIGIN || link;
-      console.log(`> \t${process.env.ORIGIN}`);
+    ips.forEach(async (ipAddress: string, _: number, arr: string[]) => {
+      const localhost: string = "127.0.0.1";
+      if (ipAddress === localhost && config.ORIGIN) return;
+      if (ipAddress === localhost && !config.ORIGIN && arr.length > 1) return;
+      config.ORIGIN =
+        config.ORIGIN || `http://${ipAddress || localhost}:${port}`;
+
+      console.log(`> \t${config.ORIGIN}`);
       const start =
         process.platform == "darwin"
           ? "open"
@@ -53,15 +59,17 @@ createStoreDir(filesPath).then(() => {
           ? "start"
           : "xdg-open";
 
-      const command: string = `${start} ${link}`;
+      const command: string = `${start} ${config.ORIGIN}`;
 
       // generate qrcode
       if (process.env.NODE_ENV === "production") {
-        const dUrl: string = await QRcode.toDataURL(link);
+        const dUrl: string = await QRcode.toDataURL(config.ORIGIN);
         // exec(`${start} ${dUrl}`);
         // open an html page with the QRcode
       } else {
-        const dUrl: string = await QRcode.toString(link, { type: "terminal" });
+        const dUrl: string = await QRcode.toString(config.ORIGIN, {
+          type: "terminal",
+        });
         console.log(dUrl);
       }
     });

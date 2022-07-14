@@ -2,6 +2,13 @@ import mime from "mime";
 import { promises as fsPromises } from "fs";
 import path from "path";
 import { FileData } from "../types";
+import {
+  convertByte,
+  getDownloadLink,
+  getFileLink,
+  getShortName,
+  getStreamLink,
+} from ".";
 const appFolder = path.resolve(__dirname, "..", "files");
 
 /**
@@ -27,28 +34,10 @@ export default async function (): Promise<FileData[]> {
       // create file details
       let { size, birthtime } = fileDetails;
       let fileType = mime.lookup(_file);
-      let downloadLink = getHref(
-        path
-          .join("api", "files", "download", encodeURIComponent(_file))
-          .replace(/\\/g, "/")
-      );
-      let streamLink = getHref(
-        path
-          .join("api", "files", "stream", encodeURIComponent(_file))
-          .replace(/\\/g, "/")
-      );
-      let link: string = getHref(
-        path.join("api", "files", _file).replace(/\\/g, "/")
-      );
-      let short;
-
-      if (_file.lastIndexOf(".") > 12) {
-        short = `${_file.substring(0, 12)}...${_file.substring(
-          _file.lastIndexOf(".") + 1
-        )}`;
-      } else {
-        short = _file;
-      }
+      let downloadLink = getDownloadLink(_file);
+      let streamLink = getStreamLink(_file);
+      let link: string = getFileLink(_file);
+      let short: string = getShortName(_file);
 
       const fileData: FileData = {
         filename: _file,
@@ -66,17 +55,4 @@ export default async function (): Promise<FileData[]> {
     }
   }
   return list;
-}
-
-function convertByte(num: number): string {
-  let format = ["b", "kb", "mb", "gb", "tb"],
-    level;
-  for (level = 0; num > 1024; level++) {
-    num = num / 1024;
-  }
-  return `${num.toFixed(2)}${format[level]}`;
-}
-
-function getHref(url: string): string {
-  return new URL(url, process.env.ORIGIN!).href;
 }

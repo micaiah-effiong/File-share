@@ -29,7 +29,7 @@
                 multiple
                 hidden
                 id="uploadField"
-                @change="uploadFiles($event)"
+                @change="uploadFiles($event, updateProgress)"
               />
               <label for="uploadField" class="cursor-pointer">
                 <button
@@ -129,7 +129,7 @@ import { SideNav, ButtomNav } from "./layouts/Nav";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
 import AllFilesMenu from "./layouts/AllFilesMenu/AllFilesMenu.vue";
-import { throttle, upload } from "./utils";
+import { throttle, uploadFiles } from "./utils";
 import { useStore } from "vuex";
 import { RootState } from "./store/types";
 
@@ -151,32 +151,9 @@ const uploadPercentage: Ref<number | null> = ref(null);
 
 store.dispatch("fetchAllFiles");
 
-function uploadFiles(evt: Event) {
-  const evtTarget = evt.target as HTMLInputElement;
-
-  if (!evtTarget.files) return;
-  if (evtTarget.files.length < 0) return;
-
-  const files = Array.from(evtTarget.files);
-  console.log("upload files", files);
-
-  files.forEach(async (file: File) => {
-    let formDataFile = new FormData();
-    formDataFile.append("upload", file);
-    await upload(formDataFile, {
-      onUploadProgress: (event: ProgressEvent) => {
-        if (!event.lengthComputable) return;
-
-        const percentCompleted = Math.round((event.loaded * 100) / event.total);
-
-        uploadPercentage.value = percentCompleted;
-        console.log(percentCompleted);
-      },
-    });
-    alert("Upload complete");
-    uploadPercentage.value = null;
-  });
-  store.dispatch("fetchAllFiles");
+function updateProgress(num: number | null) {
+  uploadPercentage.value = num;
+  if (num === null) store.dispatch("fetchAllFiles");
 }
 </script>
 

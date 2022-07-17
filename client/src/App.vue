@@ -99,7 +99,7 @@
         <main class="max-h-[calc(100%-90px)] md:max-h-[calc(100%-105px)">
           <div class="h-full outer relative">
             <AllFilesMenu
-              :files="store.state.allFetchedFiles"
+              :files="mainStore.allFetchedFiles"
               :handle-scroll="scrollDirection"
             >
             </AllFilesMenu>
@@ -108,7 +108,7 @@
       </main>
 
       <FilePreview />
-      <div v-if="!store.state.previewStatus" class="md:block hidden"></div>
+      <div v-if="!mainStore.previewStatus" class="md:block hidden"></div>
     </div>
     <ButtomNav :should-hide="shouldHideButtomNav" />
   </div>
@@ -130,10 +130,9 @@ import FilePreview from "./layouts/FilePreview/FilePreview.vue";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
 import AllFilesMenu from "./layouts/AllFilesMenu/AllFilesMenu.vue";
 import { throttle, uploadFiles } from "./utils";
-import { useStore } from "vuex";
-import { RootState } from "./store/types";
+import { useMainStore } from "./store";
 
-const store = useStore<RootState>();
+const mainStore = useMainStore();
 const initialScrollPosition: Ref<number> = ref(0);
 const shouldHideButtomNav: Ref<boolean> = ref(false);
 const scrollDirection: Function = throttle((event: Event) => {
@@ -149,11 +148,11 @@ const scrollDirection: Function = throttle((event: Event) => {
 }, 100);
 const uploadPercentage: Ref<number | null> = ref(null);
 
-store.dispatch("fetchAllFiles");
+mainStore.fetchAllFiles();
 
 function updateProgress(num: number | null) {
   uploadPercentage.value = num;
-  if (num === null) store.dispatch("fetchAllFiles");
+  if (num === null) mainStore.fetchAllFiles();
 }
 </script>
 

@@ -6,8 +6,8 @@
 import { computed, h, ref, toRef } from "vue";
 import BottomNavMenuItem from "../../components/NavMenuItem/BottomNavMenuItem.vue";
 import { navItems } from "../../layouts/Nav/NavItemsList";
-const props = defineProps<{ shouldHide: boolean }>();
 
+const props = defineProps<{ shouldHide: boolean }>();
 let activeTabName = ref<string>("Home");
 const showTabText = ref<boolean>(false);
 const shouldHide = toRef(props, "shouldHide");

@@ -1,11 +1,10 @@
-import { RemovableRef } from "@vueuse/core";
 import { DisplayFile } from "../types";
 
 export interface RootState {
   previewFileInformation: DisplayFile;
   previewStatus: boolean;
   allFetchedFiles: Array<DisplayFile>;
-  fileViewType: RemovableRef<FileViewTypesList>;
+  fileViewType: FileViewTypesList;
 }
 export interface RootActions {
   fetchAllFiles: () => void;

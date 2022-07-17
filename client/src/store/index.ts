@@ -1,51 +1,50 @@
-import { createStore } from "vuex";
+import { defineStore } from "pinia";
 import { DisplayFile } from "../types";
 import { getFiles } from "../utils";
-import { FileViewType, RootState } from "./types";
+import { FileViewTypesList, RootActions, RootState } from "./types";
 
-const store = createStore<RootState>({
-  /* state, actions, mutations */
-  state: {
-    previewFileInformation: {
-      filename: "",
-      size: "",
-      short: "",
-      createdAt: "",
-      link: "",
-      downloadLink: "",
-      streamLink: "",
-      fileType: "",
-    },
-    allFetchedFiles: [],
-    previewStatus: false,
-    fileViewType: "GRID",
-  },
-  mutations: {
-    UPDATE_PREVIEW_FILE(state, payload: DisplayFile) {
-      state.previewFileInformation = payload;
-    },
-    TOGGLE_PREVIEW(state, payload: boolean) {
-      state.previewStatus = payload;
-    },
-    SET_FETCHED_FILES(state, payload: DisplayFile[]) {
-      state.allFetchedFiles = payload;
-    },
-    TOGGLE_FILE_VIEW(state, payload: `${FileViewType}`) {
-      state.fileViewType = payload;
-    },
-  },
+export const useMainStore = defineStore<any, RootState, {}, RootActions>(
+  "mainStore",
+  {
+    state: (): RootState => ({
+      previewFileInformation: {
+        filename: "",
+        size: "",
+        short: "",
+        createdAt: "",
+        link: "",
+        downloadLink: "",
+        streamLink: "",
+        fileType: "",
+      },
+      allFetchedFiles: [],
+      previewStatus: false,
+      fileViewType: "GRID",
+    }),
+    actions: {
+      async fetchAllFiles() {
+        const files = await getFiles();
+        this.allFetchedFiles = files;
+        console.log("files =>", files);
+      },
 
-  actions: {
-    async fetchAllFiles(context) {
-      const files = await getFiles();
-      context.commit("SET_FETCHED_FILES", files);
-      console.log("files =>", files);
-    },
+      switchFileView(payload: FileViewTypesList) {
+        this.fileViewType = payload;
+      },
 
-    switchFileView(context, payload: `${FileViewType}`) {
-      context.commit("TOGGLE_FILE_VIEW", payload);
+      // mutations
+      updatePreviewFile(payload: DisplayFile) {
+        this.previewFileInformation = payload;
+      },
+      togglePreview(payload: boolean) {
+        this.previewStatus = payload;
+      },
+      setFetchedFiles(payload: DisplayFile[]) {
+        this.allFetchedFiles = payload;
+      },
+      toggleFileView(payload: FileViewTypesList) {
+        this.fileViewType = payload;
+      },
     },
-  },
-});
-
-export default store;
+  }
+);

@@ -1,6 +1,8 @@
 <template>
   <li class="flex">
-    <div :class="'rounded-' + round" class="
+    <div
+      :class="'rounded-' + round"
+      class="
         avatar
         border border-white
         justify-center
@@ -10,38 +12,30 @@
         overflow-hidden
         bg-red-500
         round
-      ">
+      "
+    >
       <img class="h-auto w-full align-middle" alt="" :src="url" v-if="url" />
       <!-- src="https://randomuser.me/api/portraits/women/21.jpg" -->
       <span class="img text-xs text-white font-semibold" v-if="!url">{{
-          count ? `+${count}` : label[0].toUpperCase()
+        count ? `+${count}` : label[0].toUpperCase()
       }}</span>
     </div>
   </li>
 </template>
 
 <script lang="ts" setup>
-import { defineProps, PropType } from "vue";
+import { defineProps, withDefaults } from "vue";
 
-defineProps({
-  label: {
-    type: String,
-    required: true,
-  },
-  url: {
-    type: String,
-    // default: "https://randomuser.me/api/portraits/women/21.jpg",
-  },
-  round: {
-    type: String as PropType<"sm" | "md" | "lg" | "xl" | "none" | "full">,
-    default: "md",
-  },
-  count: {
-    type: Number,
-  },
-})
+withDefaults(
+  defineProps<{
+    label: string;
+    url?: string;
+    round?: "sm" | "md" | "lg" | "xl" | "none" | "full";
+    count?: number;
+  }>(),
+  { round: "md" }
+);
 </script>
-
 
 <style scoped>
 .align {

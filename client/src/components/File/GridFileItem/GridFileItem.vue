@@ -32,7 +32,9 @@
               <DocumentIcon class="h-10 md:h-16 text-ocean-blue-secondary" />
             </span>
           </div>
-          <div class="text-[0.8rem] text-ocean-blue-dark font-semibold">
+          <div
+            class="text-[0.8rem] break-all text-ocean-blue-dark font-semibold"
+          >
             {{ file.short }}
           </div>
         </div>
@@ -58,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from "vue";
+import { defineProps, withDefaults } from "vue";
 import { StarIcon, DotsVerticalIcon } from "@heroicons/vue/outline";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import AvatarGroup from "../../Avatar/AvatarGroup.vue";

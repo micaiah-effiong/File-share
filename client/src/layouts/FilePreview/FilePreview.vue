@@ -1,5 +1,6 @@
 <template>
-  <aside class="
+  <aside
+    class="
       h-full
       max-w-5/12
       w-5/12
@@ -8,7 +9,10 @@
       hidden
       md:block
       shadow-md shadow-ocean-blue-accent
-    " v-if="store.state.previewStatus" v-bind="$attrs">
+    "
+    v-if="mainStore.previewStatus"
+    v-bind="$attrs"
+  >
     <div class="flex flex-col h-full">
       <header class="px-3">
         <div class="flex justify-between text-ocean-blue-dark">
@@ -33,9 +37,11 @@
               </div>
               <div class="grid gap-2">
                 <div class="font-semibold break-all">
-                  {{ store.state.previewFileInformation?.filename }}
+                  {{ mainStore.previewFileInformation?.filename }}
                 </div>
-                <div class="text-xs">{{ store.state.previewFileInformation?.size }}</div>
+                <div class="text-xs">
+                  {{ mainStore.previewFileInformation?.size }}
+                </div>
               </div>
             </div>
             <div class="cut"></div>
@@ -70,7 +76,10 @@
               <ExternalLinkIcon />
             </ActionBtn>
             <ActionBtn label="Save">
-              <a v-if="store.state.previewFileInformation" :href="store.state.previewFileInformation.downloadLink">
+              <a
+                v-if="mainStore.previewFileInformation"
+                :href="mainStore.previewFileInformation.downloadLink"
+              >
                 <DownloadIcon />
               </a>
             </ActionBtn>
@@ -99,11 +108,10 @@ import {
 } from "@heroicons/vue/outline";
 import AvatarVue from "../../components/Avatar/Avatar.vue";
 import ActionBtn from "../../components/Buttons/ActionBtn.vue";
-import { useStore } from "vuex"
-import { RootState } from "../../store/types";
+import { useMainStore } from "../../store";
 
-const store = useStore<RootState>()
+const mainStore = useMainStore();
 function closePreview() {
-  store.commit('TOGGLE_PREVIEW', false)
+  mainStore.togglePreview(true);
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div
     class="grid gap-2 h-full py-3 overflow-auto px-1"
-    v-if="store.state.fileViewType === FileViewType.LIST"
+    v-if="mainStore.fileViewType === FileViewTypes.LIST"
     @scroll="scrollHandler"
   >
     <ListFileItem
@@ -26,7 +26,7 @@
       px-1
     "
     v-bind="$attrs"
-    v-if="store.state.fileViewType === FileViewType.GRID"
+    v-if="mainStore.fileViewType === FileViewTypes.GRID"
     @scroll="scrollHandler"
   >
     <GridFileItem
@@ -40,24 +40,24 @@
 </template>
 <script setup lang="ts">
 import { defineProps, ref } from "vue";
-import { useStore } from "vuex";
+import { useMainStore } from "../../store";
 import { DisplayFile } from "../../types";
-import { FileViewType } from "../../store/types";
+import { FileViewTypes } from "../../store/types";
 import GridFileItem from "../../components/File/GridFileItem/GridFileItem.vue";
 import ListFileItem from "../../components/File/ListFileItem/ListFileItem.vue";
 
 const props = defineProps<{ files: DisplayFile[]; handleScroll: Function }>();
-const store = useStore();
+const mainStore = useMainStore();
 const selectedFileName = ref<string | null>("");
 
 function handleClick(file: DisplayFile, fileName: string) {
-  console.log("CALLED", { file, state: store.state.previewStatus });
+  console.log("CALLED", { file, state: mainStore.previewStatus });
   if (selectedFileName.value === fileName) {
     selectedFileName.value = null;
     return;
   }
-  store.commit("TOGGLE_PREVIEW", true);
-  store.commit("UPDATE_PREVIEW_FILE", file);
+  mainStore.togglePreview(true);
+  mainStore.updatePreviewFile(file);
   selectedFileName.value = fileName;
 }
 

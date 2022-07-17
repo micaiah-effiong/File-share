@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useStorage } from "@vueuse/core";
 import { DisplayFile } from "../types";
 import { getFiles } from "../utils";
 import { FileViewTypesList, RootActions, RootState } from "./types";
@@ -19,7 +20,7 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>(
       },
       allFetchedFiles: [],
       previewStatus: false,
-      fileViewType: "GRID",
+      fileViewType: useStorage<FileViewTypesList>("fileViewType", "GRID"),
     }),
     actions: {
       async fetchAllFiles() {

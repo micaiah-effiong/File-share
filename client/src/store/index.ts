@@ -27,7 +27,7 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>(
       previewStatus: false,
       fileViewType: useStorage<FileViewTypesList>(
         "fileViewType",
-        FileViewTypes.SEMI_LIST
+        FileViewTypes.GRID
       ),
     }),
     actions: {

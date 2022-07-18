@@ -5,6 +5,7 @@ type ServerConfig = {
   ORIGIN: string;
   NODE_ENV: string;
   DB_STORAGE: string;
+  FILE_STORAGE_PATH: string;
 };
 
 const port = 3300;
@@ -17,6 +18,8 @@ const config: ServerConfig = {
     process.env.DB_STORAGE || "../data/",
     "database.sqlite"
   ),
+  FILE_STORAGE_PATH:
+    process.env.FILE_STORAGE_PATH || path.resolve(__dirname, "..", "files"),
 };
 
 // TODO: create a function that check all required env in config

@@ -8,6 +8,8 @@ import {
   NonNullFindOptions,
   UpdateOptions,
   DestroyOptions,
+  CreationAttributes,
+  BuildOptions,
 } from "sequelize";
 import { MakeNullishOptional } from "sequelize/types/utils";
 
@@ -17,7 +19,7 @@ class DatabaseManager<T extends Model> {
     this.model = model;
   }
 
-  async find(query: FindOptions<InferAttributes<T>>) {
+  async find(query: FindOptions<InferAttributes<T>> = {}) {
     return await this.model.findAll(query);
   }
 
@@ -31,6 +33,10 @@ class DatabaseManager<T extends Model> {
 
   async create(payload: MakeNullishOptional<InferCreationAttributes<T>>) {
     return await this.model.create(payload);
+  }
+
+  build(payload: CreationAttributes<T>, option?: BuildOptions) {
+    return this.model.build(payload, option);
   }
 
   async update(

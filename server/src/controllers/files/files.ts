@@ -11,46 +11,30 @@ import {
   getShortName,
   getStreamLink,
   upload,
-} from "../handlers";
+} from "../../handlers";
 
-import {
-  listFiles as fileList,
-  errorResponse,
-  asyncHandler,
-  processRange,
-} from "../handlers";
-import { DBManager } from "../models";
-import { File } from "../models/file";
-const filesDir: string = path.resolve(__dirname, "..", "files");
+import { errorResponse, asyncHandler, processRange } from "../../handlers";
+import { DBManager } from "../../models";
+import { File } from "../../models/file";
+import { fetchFile, listFiles } from "./files.service";
+import config from "../../config/env";
 
 // endpoint controller functions goes here
-export const getAllFiles = asyncHandler(
-  async (_: Request, res: Response, next: NextFunction) => {
-    let data = await fileList();
-    res.json({
-      status: true,
-      data,
-    });
-  }
-);
+export const getAllFiles = asyncHandler(async (_: Request, res: Response) => {
+  let data = await listFiles();
+  res.json({
+    status: true,
+    data,
+  });
+});
 
 export const getOneFile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    let fileName = req.params.id;
-    let data = await fileList();
-    let file = data.find((item) => item.filename === fileName);
-    if (!file) {
-      return next(errorResponse("Error: Resource not found", 404));
-    }
-    let filePath = path.resolve(__dirname, "..", "files", fileName);
-
-    if (req.query.raw === "true") {
-      return res.sendFile(filePath);
-    }
+    let data = await fetchFile(req.params.id);
 
     res.json({
       status: true,
-      data: file,
+      data,
     });
   }
 );
@@ -61,15 +45,24 @@ export const uploadFile = [
     if (!req.file) throw errorResponse("No file was uploaded", 400);
 
     const filename = req.file.filename;
-    await DBManager(File).create({
+    const fileSample = DBManager(File).build({
       filename: filename,
-      short: getShortName(filename),
-      downloadLink: getDownloadLink(filename),
       size: convertByte(req.file.size),
       fileType: mime.lookup(filename),
-      link: getFileLink(filename),
-      streamLink: getStreamLink(filename),
+      short: "",
+      downloadLink: "",
+      link: "",
+      streamLink: "",
     });
+
+    fileSample.set({
+      short: getShortName(fileSample.id),
+      downloadLink: getDownloadLink(fileSample.id),
+      link: getFileLink(fileSample.id),
+      streamLink: getStreamLink(fileSample.id),
+    });
+
+    await fileSample.save();
 
     res.json({
       status: true,
@@ -81,7 +74,7 @@ export const uploadFile = [
 export const downloadFile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const fileName = req.params.id;
-    const filePath = path.resolve(__dirname, "..", "files", fileName);
+    const filePath = path.resolve(config.FILE_STORAGE_PATH, fileName);
 
     // const zipPath = filePath + ".gz";
     // const zipName = path.parse(zipPath).base;

@@ -47,7 +47,7 @@ app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
     // A Multer error occurred when uploading.
   }
 
-  res.status(err.status || 500);
+  res.status(err.statusCode || 500);
   res.json({
     success: false,
     error: err.name || "SERVER ERROR",

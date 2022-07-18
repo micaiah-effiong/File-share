@@ -1,8 +1,6 @@
 package-lock.json
 node_modules/
-data/
+src/data/
 .env
-files/
-public/webfonts/
-public/css/all.min.css
+src/files/
 dist/

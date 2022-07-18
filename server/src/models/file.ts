@@ -7,20 +7,11 @@ import {
   ModelOptions,
 } from "sequelize";
 import { sequelize } from "./db/config";
+import type { FileData } from "../types";
 
-interface FileModel
-  extends Model<
-    InferAttributes<FileModel>,
-    InferCreationAttributes<FileModel>
-  > {
-  filename: string;
-  short: string;
-  size: string;
-  link: string;
-  downloadLink: string;
-  streamLink: string;
-  fileType: string;
-
+export interface FileModel
+  extends Model<InferAttributes<FileModel>, InferCreationAttributes<FileModel>>,
+    FileData {
   id: CreationOptional<string>;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;

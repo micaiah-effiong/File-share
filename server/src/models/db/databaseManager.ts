@@ -46,7 +46,7 @@ class DatabaseManager<T extends Model> {
     return await this.model.update(payload, filter);
   }
 
-  async delete(filter: DestroyOptions<InferCreationAttributes<T>>) {
+  async remove(filter: DestroyOptions<InferCreationAttributes<T>>) {
     return await this.model.destroy(filter);
   }
 }

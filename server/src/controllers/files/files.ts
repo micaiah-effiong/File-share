@@ -73,23 +73,11 @@ export const uploadFile = [
 
 export const downloadFile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const fileName = req.params.id;
-    const filePath = path.resolve(config.FILE_STORAGE_PATH, fileName);
+    const file = await DBManager(File).findById(req.params.id);
+    if (!file) throw errorResponse("File not found", 404);
 
-    // const zipPath = filePath + ".gz";
-    // const zipName = path.parse(zipPath).base;
-
-    // const zip = zlib.createGzip();
-    // const rs = fs.createReadStream(filePath);
-    // const ws = fs.createWriteStream(zipPath);
-    // rs.pipe(zip)
-    //   .pipe(ws)
-    //   .on("finish", async (err) => {
-    //     if (err) return console.log(err);
-    //     res.download(zipPath, zipName);
-    //     //     // await fsPromises.unlink(filePath + ".gz").catch(console.log);
-    //   });
-    res.download(filePath, fileName);
+    const filePath = path.resolve(config.FILE_STORAGE_PATH, file.filename);
+    res.download(filePath, file.filename);
   }
 );
 

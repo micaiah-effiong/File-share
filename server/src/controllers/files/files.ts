@@ -139,9 +139,15 @@ export const streamFile = asyncHandler(
 
 export const deleteFile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    let fileName = req.params.id;
-    let filePath = path.resolve(__dirname, "..", "files", fileName);
-    await fsPromises.unlink(filePath);
+    const file = await DBManager(File).findById(req.params.id);
+    if (!file) throw errorResponse("File does not exist", 400);
+
+    const filePath = path.resolve(config.FILE_STORAGE_PATH, file.filename);
+    await Promise.all([
+      file.destroy(),
+      fsPromises.unlink(filePath).catch((error) => console.error(error)),
+    ]);
+
     res.json({
       status: true,
     });

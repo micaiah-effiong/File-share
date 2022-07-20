@@ -31,6 +31,11 @@ const config: ServerConfig = {
 };
 console.log(config);
 
-// TODO: create a function that check all required env in config
-// should throw error if any of the variables is not initialized
+(function (env: Record<string, string | number | undefined>) {
+  Object.keys(env).map((item: string) => {
+    if (typeof env[item] === "undefined")
+      throw new Error(`Incomplete setup: Missing ${item} in env`);
+  });
+})(config);
+
 export default config;

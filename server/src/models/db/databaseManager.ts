@@ -10,6 +10,7 @@ import {
   DestroyOptions,
   CreationAttributes,
   BuildOptions,
+  Attributes,
 } from "sequelize";
 import { MakeNullishOptional } from "sequelize/types/utils";
 
@@ -23,8 +24,11 @@ class DatabaseManager<T extends Model> {
     return await this.model.findAll(query);
   }
 
-  async findById(id: Identifier) {
-    return await this.model.findByPk(id);
+  async findById(
+    id: Identifier,
+    options?: Omit<FindOptions<Attributes<T>>, "where">
+  ) {
+    return await this.model.findByPk(id, options);
   }
 
   async findOne(query: NonNullFindOptions<InferAttributes<T>>) {

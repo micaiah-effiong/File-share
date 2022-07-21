@@ -7,10 +7,13 @@ type ServerConfig = {
   DB_STORAGE: string;
   FILE_STORAGE_PATH: string;
   MAX_UPLOAD_SIZE: number;
+  STREAM_CUNK_SIZE: number;
 };
 
 const port = 3300;
-const MAX_UPLOAD_SIZE = 5 * 1024 * 1024 * 1024;
+const MAX_UPLOAD_SIZE = 5 * 10 ** 9; //5GB
+const STREAM_CUNK_SIZE = 10 ** 6; //1MB
+
 const config: ServerConfig = {
   NODE_ENV: process.env.NODE_ENV || "development",
   ORIGIN: process.env.ORIGIN || "",
@@ -28,8 +31,9 @@ const config: ServerConfig = {
   ),
   MAX_UPLOAD_SIZE:
     parseInt(process.env.FILE_UPLOAD_LIMIT as string) || MAX_UPLOAD_SIZE,
+  STREAM_CUNK_SIZE:
+    parseInt(process.env.STREAM_CUNK_SIZE as string) || STREAM_CUNK_SIZE,
 };
-console.log(config);
 
 (function (env: Record<string, string | number | undefined>) {
   Object.keys(env).map((item: string) => {

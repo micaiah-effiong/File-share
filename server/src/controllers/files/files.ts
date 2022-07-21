@@ -73,9 +73,7 @@ export const uploadFile = [
 
 export const downloadFile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const file = await DBManager(File).findById(req.params.id);
-    if (!file) throw errorResponse("File not found", 404);
-
+    const file = await fetchFile(req.params.id);
     const filePath = path.resolve(config.FILE_STORAGE_PATH, file.filename);
     res.download(filePath, file.filename);
   }
@@ -83,56 +81,44 @@ export const downloadFile = asyncHandler(
 
 export const streamFile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const fileName = req.params.id;
-    const filePath = path.resolve(__dirname, "..", "files", fileName);
+    const file = await fetchFile(req.params.id);
+    const filePath = path.resolve(config.FILE_STORAGE_PATH, file.filename);
+    const fileStats = await fsPromises.stat(filePath);
 
-    fs.stat(filePath, function (err, stats) {
-      if (err) {
-        return res.status(404).json({ status: false });
+    const option: { start: number | undefined; end: number | undefined } =
+      Object.create(null);
+    let len = fileStats.size;
+
+    if (req.headers.range) {
+      console.log(">>> Found range request", req.headers.range);
+      const { start, end } = processRange(req.headers.range, len);
+      option.end = end;
+      option.start = start;
+
+      if (option.start > len - 1) {
+        res.setHeader("Content-Range", "bytes */" + len);
+        res.status(416);
+        return res.end();
       }
 
-      if (!stats.isFile()) {
-        return res.json({
-          status: false,
-          msg: "Directory access is forbidden",
-        });
-      }
+      len = option.end - option.start + 1;
+      const contentTypeString = `bytes ${option.start}-${option.end}/${fileStats.size}`;
 
-      let option: { start: number | undefined; end: number | undefined } =
-        Object.create(null);
-      let len = stats.size;
+      res.status(206); // partial content
+      res.setHeader("Content-Range", contentTypeString);
+    }
 
-      if (req.headers.range) {
-        console.log(">>> Found range request", req.headers.range);
-        const { start, end } = processRange(req.headers.range, len);
-        option.end = end;
-        option.start = start;
+    const type = mime.lookup(filePath);
+    res.setHeader("Content-Type", type);
+    res.setHeader("Content-Length", len);
+    res.setHeader("Accept-Ranges", "bytes");
 
-        if (option.start > len - 1) {
-          res.setHeader("Content-Range", "bytes */" + len);
-          res.status(416);
-          return res.end();
-        }
-
-        len = option.end - option.start + 1;
-        let contentTypeString = `bytes ${option.start}-${option.end}/${stats.size}`;
-
-        res.status(206); // partial content
-        res.setHeader("Content-Range", contentTypeString);
-      }
-
-      let type = mime.lookup(filePath);
-      res.setHeader("Content-Type", type);
-      res.setHeader("Content-Length", len);
-      res.setHeader("Accept-Ranges", "bytes");
-
-      let file = fs.createReadStream(filePath, option);
-      file.on("open", function () {
-        file.pipe(res);
-      });
-      file.on("error", function (err) {
-        console.log(err);
-      });
+    const fileStream = fs.createReadStream(filePath, option);
+    fileStream.on("open", function () {
+      fileStream.pipe(res);
+    });
+    fileStream.on("error", function (err) {
+      console.log(err);
     });
   }
 );

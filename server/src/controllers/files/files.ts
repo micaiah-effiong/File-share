@@ -49,14 +49,13 @@ export const uploadFile = [
       filename: filename,
       size: convertByte(req.file.size),
       fileType: mime.lookup(filename),
-      short: "",
+      short: getShortName(filename),
       downloadLink: "",
       link: "",
       streamLink: "",
     });
 
     fileSample.set({
-      short: getShortName(fileSample.id),
       downloadLink: getDownloadLink(fileSample.id),
       link: getFileLink(fileSample.id),
       streamLink: getStreamLink(fileSample.id),

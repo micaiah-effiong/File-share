@@ -9,9 +9,8 @@ export const listFiles = async (): Promise<FileModel[]> => {
 };
 
 export const fetchFile = async (id: string): Promise<FileModel> => {
-  const data = await DBManager(File).findById(id);
-  console.log({ data, id });
-
+  const data = await DBManager(File).findById(id, { raw: true });
   if (!data) throw errorResponse("Documents not found", 404);
+
   return data;
 };

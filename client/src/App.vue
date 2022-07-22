@@ -96,7 +96,7 @@
             </div>
           </nav>
         </header>
-        <main class="max-h-[calc(100%-90px)] md:max-h-[calc(100%-105px)">
+        <main class="max-h-[calc(100%-109px)] md:max-h-[calc(100%-105px)">
           <div class="h-full outer relative">
             <AllFilesMenu
               :files="mainStore.allFetchedFiles"

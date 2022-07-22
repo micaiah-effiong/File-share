@@ -22,6 +22,7 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>(
         downloadLink: "",
         streamLink: "",
         fileType: "",
+        id: "",
       },
       allFetchedFiles: [],
       previewStatus: false,

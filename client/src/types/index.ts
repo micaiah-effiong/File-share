@@ -1,4 +1,5 @@
 export type DisplayFile = {
+  id: string;
   filename: string;
   size: string;
   short: string;

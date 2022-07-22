@@ -77,6 +77,7 @@
             </ActionBtn>
             <ActionBtn label="Save">
               <a
+                method
                 v-if="mainStore.previewFileInformation"
                 :href="mainStore.previewFileInformation.downloadLink"
               >
@@ -86,7 +87,11 @@
             <ActionBtn label="Edit">
               <PencilIcon />
             </ActionBtn>
-            <ActionBtn label="Delete">
+            <ActionBtn
+              label="Delete"
+              :onclick="handleDelete"
+              :is-disabled="deleteBtnDisabled"
+            >
               <TrashIcon />
             </ActionBtn>
           </div>
@@ -109,9 +114,26 @@ import {
 import AvatarVue from "../../components/Avatar/Avatar.vue";
 import ActionBtn from "../../components/Buttons/ActionBtn.vue";
 import { useMainStore } from "../../store";
+import { removeFile } from "../../utils";
+import { ref, Ref } from "vue";
 
 const mainStore = useMainStore();
 function closePreview() {
   mainStore.togglePreview(true);
+}
+
+const deleteBtnDisabled: Ref<boolean> = ref(false);
+
+async function handleDelete() {
+  try {
+    deleteBtnDisabled.value = true;
+    await removeFile(mainStore.previewFileInformation.id);
+    await mainStore.fetchAllFiles();
+    alert("File deleted");
+  } catch (error) {
+    console.error("Failed to delete file", error);
+  } finally {
+    deleteBtnDisabled.value = false;
+  }
 }
 </script>

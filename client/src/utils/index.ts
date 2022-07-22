@@ -32,6 +32,11 @@ export async function getFiles(): Promise<DisplayFile[]> {
   return res.data.data;
 }
 
+export async function removeFile(fileId: string) {
+  const res = await axios.delete(`${API_ORIGIN}/api/files/${fileId}`);
+  return res.data;
+}
+
 export async function uploadService(
   data: any,
   options: {

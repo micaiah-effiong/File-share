@@ -12,13 +12,28 @@
       @click="() => handleClick(file, file.filename)"
     />
   </div>
+
+  <div
+    class="grid gap-2 grid-cols-2 lg:grid-cols-3 h-full py-3 overflow-auto px-1"
+    v-if="mainStore.fileViewType === FileViewTypes.SEMI_LIST"
+    @scroll="scrollHandler"
+  >
+    <SemiListFileItem
+      v-for="file in files"
+      :file="file"
+      :key="file.filename"
+      :isSelected="selectedFileName === file.filename"
+      @click="() => handleClick(file, file.filename)"
+    />
+  </div>
   <div
     class="
       h-full
       grid
       gap-2
+      md:gap-3
       grid-cols-2
-      md:grid-cols-3
+      lg:grid-cols-3
       xl:grid-cols-4
       2xl:grid-cols-6
       py-3
@@ -45,6 +60,7 @@ import { DisplayFile } from "../../types";
 import { FileViewTypes } from "../../store/types";
 import GridFileItem from "../../components/File/GridFileItem/GridFileItem.vue";
 import ListFileItem from "../../components/File/ListFileItem/ListFileItem.vue";
+import SemiListFileItem from "../../components/File/SemiListFileItem/SemiListFileItem.vue";
 
 const props = defineProps<{ files: DisplayFile[]; handleScroll: Function }>();
 const mainStore = useMainStore();

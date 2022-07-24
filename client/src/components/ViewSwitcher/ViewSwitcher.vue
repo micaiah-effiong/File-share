@@ -17,27 +17,21 @@
     <button
       class="py-1 px-1"
       @click="mainStore.switchFileView(FileViewTypes.LIST)"
-      :class="
-        mainStore.fileViewType === FileViewTypes.LIST ? activeClasses : ''
-      "
+      :class="viewType === FileViewTypes.LIST && activeClasses"
     >
       <MenuIcon class="text-xs w-5" />
     </button>
     <button
       class="py-1 px-1"
       @click="mainStore.switchFileView(FileViewTypes.GRID)"
-      :class="
-        mainStore.fileViewType === FileViewTypes.GRID ? activeClasses : ''
-      "
+      :class="viewType === FileViewTypes.GRID && activeClasses"
     >
       <ViewBoardsIcon class="text-md w-5" />
     </button>
     <button
       class="py-1 px-1"
       @click="mainStore.switchFileView(FileViewTypes.SEMI_LIST)"
-      :class="
-        mainStore.fileViewType === FileViewTypes.SEMI_LIST ? activeClasses : ''
-      "
+      :class="viewType === FileViewTypes.SEMI_LIST && activeClasses"
     >
       <ViewGridIcon class="text-xs w-5" />
     </button>
@@ -46,11 +40,14 @@
 
 <script lang="ts" setup>
 import { MenuIcon, ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/outline";
+import { toRefs } from "vue";
 import { useMainStore } from "../../store";
-import {} from "pinia";
-import { FileViewTypes } from "../../store/types";
+import { FileViewTypes, FileViewTypesList } from "../../store/types";
 
 const mainStore = useMainStore();
+const props = defineProps<{ fileViewType: FileViewTypesList }>();
+
+const { fileViewType: viewType } = toRefs(props);
 const activeClasses: string = "shadow-md rounded-[4px] bg-white ";
 </script>
 

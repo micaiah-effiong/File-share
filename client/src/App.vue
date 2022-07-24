@@ -19,6 +19,7 @@
                 "
                 type=""
                 name=""
+                @input="handleFileSearch"
                 id="searchField"
                 placeholder="Ctrl + k"
               />
@@ -90,8 +91,7 @@
               </div>
 
               <div class="flex items-center">
-                <!-- VIEW SWITCHER -->
-                <ViewSwitcher />
+                <ViewSwitcher :file-view-type="mainStore.fileViewType" />
               </div>
             </div>
           </nav>
@@ -99,8 +99,9 @@
         <main class="max-h-[calc(100%-109px)] md:max-h-[calc(100%-105px)">
           <div class="h-full outer relative">
             <AllFilesMenu
-              :files="mainStore.allFetchedFiles"
+              :files="mainStore.filesOnDisplay"
               :handle-scroll="scrollDirection"
+              :file-view-type="mainStore.fileViewType"
             >
             </AllFilesMenu>
           </div>
@@ -129,8 +130,9 @@ import { SideNav, ButtomNav } from "./layouts/Nav";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
 import AllFilesMenu from "./layouts/AllFilesMenu/AllFilesMenu.vue";
-import { throttle, uploadFiles } from "./utils";
+import { debounce, throttle, uploadFiles } from "./utils";
 import { useMainStore } from "./store";
+import { DisplayFile } from "./types";
 
 const mainStore = useMainStore();
 const initialScrollPosition: Ref<number> = ref(0);
@@ -148,11 +150,25 @@ const scrollDirection: Function = throttle((event: Event) => {
 }, 100);
 const uploadPercentage: Ref<number | null> = ref(null);
 
-mainStore.fetchAllFiles();
+mainStore.fetchAllFiles().then((loadedFiles: DisplayFile[]) => {
+  mainStore.setFilesOnDisplay(loadedFiles);
+});
 
 function updateProgress(num: number | null) {
   uploadPercentage.value = num;
   if (num === null) mainStore.fetchAllFiles();
+}
+
+const debounceSearchHanler = debounce((filename: string) => {
+  const matchedFiles = mainStore.searchFile(filename);
+  mainStore.setFilesOnDisplay(matchedFiles);
+}, 10);
+
+function handleFileSearch(event: Event) {
+  event.preventDefault();
+  const eventTarget = event.target as HTMLInputElement;
+  const filename: string = eventTarget.value;
+  debounceSearchHanler(filename);
 }
 </script>
 

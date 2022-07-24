@@ -1,6 +1,5 @@
 <template>
   <div
-    :class="isSelected ? 'bg-blue-50' : 'bg-white'"
     class="
       min-w-auto
       max-h-fit

@@ -1,6 +1,5 @@
 <template>
   <div
-    :class="isSelected ? 'bg-blue-50' : 'bg-white'"
     class="
       w-auto
       min-w-fix
@@ -58,7 +57,7 @@
           }}</span>
         </div>
 
-        <div class="hidden md:flex ml-auto">
+        <div class="hidden lg:flex ml-auto">
           <div class="hidden md:flex h-full justify-center flex-col">
             <AvatarGroup :max="2">
               <Avatar label="Tim" />
@@ -82,6 +81,7 @@ import AvatarGroup from "../../Avatar/AvatarGroup.vue";
 import Avatar from "../../Avatar/Avatar.vue";
 import { DisplayFile } from "../../../types";
 
-const { file, isSelected = false } =
-  defineProps<{ file: DisplayFile; isSelected: boolean }>();
+withDefaults(defineProps<{ file: DisplayFile; isSelected?: boolean }>(), {
+  isSelected: false,
+});
 </script>

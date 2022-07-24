@@ -1,70 +1,41 @@
 <template>
-  <div
-    class="grid gap-2 h-full py-3 overflow-auto px-1"
-    v-if="mainStore.fileViewType === FileViewTypes.LIST"
-    @scroll="scrollHandler"
-  >
-    <ListFileItem
-      v-for="file in files"
-      :file="file"
-      :key="file.filename"
-      :isSelected="selectedFileName === file.filename"
-      @click="() => handleClick(file, file.filename)"
-    />
-  </div>
-
-  <div
-    class="grid gap-2 grid-cols-2 lg:grid-cols-3 h-full py-3 overflow-auto px-1"
-    v-if="mainStore.fileViewType === FileViewTypes.SEMI_LIST"
-    @scroll="scrollHandler"
-  >
-    <SemiListFileItem
-      v-for="file in files"
-      :file="file"
-      :key="file.filename"
-      :isSelected="selectedFileName === file.filename"
-      @click="() => handleClick(file, file.filename)"
-    />
-  </div>
-  <div
-    class="
-      h-full
-      grid
-      gap-2
-      md:gap-3
-      grid-cols-2
-      lg:grid-cols-3
-      xl:grid-cols-4
-      2xl:grid-cols-6
-      py-3
-      overflow-auto
-      px-1
-    "
-    v-bind="$attrs"
-    v-if="mainStore.fileViewType === FileViewTypes.GRID"
-    @scroll="scrollHandler"
-  >
-    <GridFileItem
+  <div :class="renderClasses">
+    <MasterFileItem
       v-for="file in props.files"
       :file="file"
-      :key="file.filename"
+      :key="file.id"
       :isSelected="selectedFileName === file.filename"
       @click="() => handleClick(file, file.filename)"
+      :viewType="fileViewType"
     />
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, ref } from "vue";
+import { computed, defineProps, ref } from "vue";
 import { useMainStore } from "../../store";
 import { DisplayFile } from "../../types";
-import { FileViewTypes } from "../../store/types";
-import GridFileItem from "../../components/File/GridFileItem/GridFileItem.vue";
-import ListFileItem from "../../components/File/ListFileItem/ListFileItem.vue";
-import SemiListFileItem from "../../components/File/SemiListFileItem/SemiListFileItem.vue";
+import { FileViewTypes, FileViewTypesList } from "../../store/types";
 
-const props = defineProps<{ files: DisplayFile[]; handleScroll: Function }>();
+import MasterFileItem from "../../components/File/MasterFileItem/MasterFileItem.vue";
+const props =
+  defineProps<{
+    files: DisplayFile[];
+    handleScroll: Function;
+    fileViewType: FileViewTypesList;
+  }>();
 const mainStore = useMainStore();
 const selectedFileName = ref<string | null>("");
+
+const renderClasses = computed(() => {
+  switch (props.fileViewType) {
+    case FileViewTypes.LIST:
+      return "grid gap-2 h-full py-3 overflow-auto px-1";
+    case FileViewTypes.SEMI_LIST:
+      return "grid gap-2 grid-cols-2 lg:grid-cols-3 h-full py-3 overflow-auto px-1";
+    case FileViewTypes.GRID:
+      return " h-full grid gap-2 md:gap-3 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 py-3 overflow-auto px-1";
+  }
+});
 
 function handleClick(file: DisplayFile, fileName: string) {
   console.log("CALLED", { file, state: mainStore.previewStatus });

@@ -119,7 +119,7 @@ import { ref, Ref } from "vue";
 
 const mainStore = useMainStore();
 function closePreview() {
-  mainStore.togglePreview(true);
+  mainStore.togglePreview(false);
 }
 
 const deleteBtnDisabled: Ref<boolean> = ref(false);

@@ -24,6 +24,7 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>(
         fileType: "",
         id: "",
       },
+      filesOnDisplay: [],
       allFetchedFiles: [],
       previewStatus: false,
       fileViewType: useStorage<FileViewTypesList>(
@@ -36,13 +37,11 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>(
         const files = await getFiles();
         this.allFetchedFiles = files;
         console.log("files =>", files);
+        return files;
       },
-
       switchFileView(payload: FileViewTypesList) {
         this.fileViewType = payload;
       },
-
-      // mutations
       updatePreviewFile(payload: DisplayFile) {
         this.previewFileInformation = payload;
       },
@@ -52,8 +51,21 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>(
       setFetchedFiles(payload: DisplayFile[]) {
         this.allFetchedFiles = payload;
       },
+      setFilesOnDisplay(payload: DisplayFile[]) {
+        this.filesOnDisplay = payload;
+      },
       toggleFileView(payload: FileViewTypesList) {
         this.fileViewType = payload;
+      },
+      searchFile(name: string) {
+        if (!name) return this.allFetchedFiles;
+
+        const searchRx = new RegExp(name, "i");
+        const matchedFiles = this.allFetchedFiles.filter((file: DisplayFile) =>
+          searchRx.test(file.filename)
+        );
+
+        return matchedFiles;
       },
     },
   }
@@ -67,21 +79,18 @@ function useStorage<T>(key: string, stateDate: T) {
 
   watch(
     () => {
-      console.log("reading...");
       return data.value;
     },
 
     (newState, oldState) => {
       write(key, newState);
       data.value = newState;
-      console.log("writing...", { newState, oldState });
     }
   );
 
   console.log({ storedState, state: data.value });
 
   function read(key: string) {
-    console.log("reading()...");
     const storageData = localStorage.getItem(key);
     return JSON.parse(JSON.stringify(storageData));
   }
@@ -91,7 +100,6 @@ function useStorage<T>(key: string, stateDate: T) {
       key,
       typeof payload === "object" ? JSON.stringify(payload) : payload.toString()
     );
-    console.log("writing()...", { key, payload });
   }
 
   return data;

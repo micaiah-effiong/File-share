@@ -3,16 +3,19 @@ import { DisplayFile } from "../types";
 export interface RootState {
   previewFileInformation: DisplayFile;
   previewStatus: boolean;
-  allFetchedFiles: Array<DisplayFile>;
+  allFetchedFiles: DisplayFile[];
+  filesOnDisplay: DisplayFile[];
   fileViewType: FileViewTypesList;
 }
 export interface RootActions {
-  fetchAllFiles: () => void;
+  fetchAllFiles: () => Promise<DisplayFile[]>;
   switchFileView: (payload: FileViewTypesList) => void;
   updatePreviewFile: (payload: DisplayFile) => void;
   togglePreview: (payload: boolean) => void;
   setFetchedFiles: (payload: DisplayFile[]) => void;
-  toggleFileView(payload: FileViewTypesList): void;
+  setFilesOnDisplay: (payload: DisplayFile[]) => void;
+  toggleFileView: (payload: FileViewTypesList) => void;
+  searchFile: (name: string) => DisplayFile[];
 }
 
 export enum FileViewTypes {

@@ -1,5 +1,6 @@
 <template>
-  <div :class="isSelected ? 'bg-blue-50' : 'bg-white'" class="
+  <div
+    class="
       w-full
       min-w-min
       max-h-fit
@@ -11,7 +12,8 @@
       mono:hover:bg-ash-secondary
       mono:hover:transition-colors
       transition-colors
-    ">
+    "
+  >
     <div class="flex w-full p-3 rounded-md">
       <div class="flex gap-3 w-full text-left">
         <div class="flex justify-center flex-col">
@@ -20,24 +22,48 @@
           </span>
         </div>
 
-        <div class="text-[0.8rem] md:w-2/6 w-4/6 text-left text-ocean-blue-dark flex justify-center flex-col">
-          <span class="font-semibold ">
+        <div
+          class="
+            text-[0.8rem]
+            md:w-2/6
+            w-4/6
+            text-left text-ocean-blue-dark
+            flex
+            justify-center
+            flex-col
+          "
+        >
+          <span class="font-semibold">
             {{ file.short }}
           </span>
           <span class="">{{ file.size }}</span>
         </div>
 
-        <div class="text-[0.8rem] hidden md:flex w-2/6 text-left text-ocean-blue-dark  justify-center flex-col">
+        <div
+          class="
+            text-[0.8rem]
+            hidden
+            md:flex
+            w-2/6
+            text-left text-ocean-blue-dark
+            justify-center
+            flex-col
+          "
+        >
           <span class="">{{ new Date(file.createdAt).toDateString() }}</span>
-          <span class="">{{ new Date(file.createdAt).toLocaleTimeString() }}</span>
+          <span class="">{{
+            new Date(file.createdAt).toLocaleTimeString()
+          }}</span>
         </div>
 
         <div class="hidden md:flex ml-auto">
           <div class="hidden md:flex h-full justify-center flex-col">
-
             <AvatarGroup :max="2">
               <Avatar label="Tim" />
-              <Avatar label="Tim" url="https://randomuser.me/api/portraits/women/21.jpg" />
+              <Avatar
+                label="Tim"
+                url="https://randomuser.me/api/portraits/women/21.jpg"
+              />
               <Avatar label="something" />
             </AvatarGroup>
           </div>
@@ -48,11 +74,13 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, } from "vue";
+import { defineProps } from "vue";
 import { DocumentIcon } from "@heroicons/vue/solid";
 import AvatarGroup from "../../Avatar/AvatarGroup.vue";
 import Avatar from "../../Avatar/Avatar.vue";
 import { DisplayFile } from "../../../types";
 
-const { file, isSelected = false } = defineProps<{ file: DisplayFile, isSelected: boolean }>()
+withDefaults(defineProps<{ file: DisplayFile; isSelected?: boolean }>(), {
+  isSelected: false,
+});
 </script>

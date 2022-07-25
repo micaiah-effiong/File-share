@@ -1,7 +1,7 @@
-import { DisplayFile } from "../types";
+import { DisplayFile, Nullable } from "../types";
 
 export interface RootState {
-  previewFileInformation: DisplayFile;
+  previewFileInformation: Nullable<DisplayFile>;
   previewStatus: boolean;
   allFetchedFiles: DisplayFile[];
   filesOnDisplay: DisplayFile[];
@@ -10,7 +10,7 @@ export interface RootState {
 export interface RootActions {
   fetchAllFiles: () => Promise<DisplayFile[]>;
   switchFileView: (payload: FileViewTypesList) => void;
-  updatePreviewFile: (payload: DisplayFile) => void;
+  updatePreviewFile: (payload: Nullable<DisplayFile>) => void;
   togglePreview: (payload: boolean) => void;
   setFetchedFiles: (payload: DisplayFile[]) => void;
   setFilesOnDisplay: (payload: DisplayFile[]) => void;

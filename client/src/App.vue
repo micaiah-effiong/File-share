@@ -108,7 +108,12 @@
         </main>
       </main>
 
-      <FilePreview />
+      <FilePreview
+        :is-open="mainStore.previewStatus"
+        :preview-file="mainStore.previewFileInformation"
+        :close-preview="() => mainStore.togglePreview(false)"
+        :delete-item="handleDelete"
+      />
       <div v-if="!mainStore.previewStatus" class="md:block hidden"></div>
     </div>
     <ButtomNav :should-hide="shouldHideButtomNav" />
@@ -130,7 +135,7 @@ import { SideNav, ButtomNav } from "./layouts/Nav";
 import FilePreview from "./layouts/FilePreview/FilePreview.vue";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
 import AllFilesMenu from "./layouts/AllFilesMenu/AllFilesMenu.vue";
-import { debounce, throttle, uploadFiles } from "./utils";
+import { debounce, removeFile, throttle, uploadFiles } from "./utils";
 import { useMainStore } from "./store";
 import { DisplayFile } from "./types";
 
@@ -169,6 +174,16 @@ function handleFileSearch(event: Event) {
   const eventTarget = event.target as HTMLInputElement;
   const filename: string = eventTarget.value;
   debounceSearchHanler(filename);
+}
+
+async function handleDelete(fileId: string, file: DisplayFile) {
+  await removeFile(fileId);
+  await mainStore.fetchAllFiles();
+  const files = new Set(mainStore.filesOnDisplay);
+  files.delete(file);
+
+  const filesArr = Array.from(files);
+  mainStore.setFilesOnDisplay(filesArr);
 }
 </script>
 

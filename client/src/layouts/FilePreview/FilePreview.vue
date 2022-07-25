@@ -4,14 +4,16 @@
       h-full
       max-w-5/12
       w-5/12
+      lg:w-3/12
+      md:w-4/12
+      shrink-0
       py-7
       bg-white
       hidden
       md:block
       shadow-md shadow-ocean-blue-accent
     "
-    v-if="mainStore.previewStatus"
-    v-bind="$attrs"
+    v-if="isOpen"
   >
     <div class="flex flex-col h-full">
       <header class="px-3">
@@ -28,8 +30,8 @@
           <div class="cut"></div>
         </div>
       </header>
-      <main class="h-full grid overflow-auto">
-        <main class="px-10 text-sm text-ocean-blue-dark">
+      <main class="h-full grid overflow-auto" v-if="previewFile">
+        <main class="px-9 text-sm text-ocean-blue-dark w-full">
           <div class="grid gap-7">
             <div class="grid gap-3">
               <div class="flex justify-center">
@@ -37,10 +39,10 @@
               </div>
               <div class="grid gap-2">
                 <div class="font-semibold break-all">
-                  {{ mainStore.previewFileInformation?.filename }}
+                  {{ previewFile.filename }}
                 </div>
                 <div class="text-xs">
-                  {{ mainStore.previewFileInformation?.size }}
+                  {{ previewFile.size }}
                 </div>
               </div>
             </div>
@@ -70,17 +72,13 @@
             </div>
           </div>
         </main>
-        <div class="border-t self-end mt-7 py-5 px-10">
+        <div class="border-t self-end mt-7 py-5 px-9">
           <div class="flex justify-between text-xs text-ocean-blue-dark gap-3">
             <ActionBtn label="Share">
               <ExternalLinkIcon />
             </ActionBtn>
             <ActionBtn label="Save">
-              <a
-                method
-                v-if="mainStore.previewFileInformation"
-                :href="mainStore.previewFileInformation.downloadLink"
-              >
+              <a :href="previewFile.downloadLink">
                 <DownloadIcon />
               </a>
             </ActionBtn>
@@ -113,22 +111,29 @@ import {
 } from "@heroicons/vue/outline";
 import AvatarVue from "../../components/Avatar/Avatar.vue";
 import ActionBtn from "../../components/Buttons/ActionBtn.vue";
-import { useMainStore } from "../../store";
-import { removeFile } from "../../utils";
 import { ref, Ref } from "vue";
+import { DisplayFile, Nullable } from "../../types";
 
-const mainStore = useMainStore();
-function closePreview() {
-  mainStore.togglePreview(false);
-}
+const props = withDefaults(
+  defineProps<{
+    previewFile: Nullable<DisplayFile>;
+    isOpen: boolean;
+    closePreview: (payload: MouseEvent) => void;
+    deleteItem: (fileId: string, file: DisplayFile) => void;
+  }>(),
+  {
+    isOpen: false,
+  }
+);
 
 const deleteBtnDisabled: Ref<boolean> = ref(false);
 
 async function handleDelete() {
+  if (!props.previewFile) return;
+
   try {
     deleteBtnDisabled.value = true;
-    await removeFile(mainStore.previewFileInformation.id);
-    await mainStore.fetchAllFiles();
+    props.deleteItem(props.previewFile.id, props.previewFile);
     alert("File deleted");
   } catch (error) {
     console.error("Failed to delete file", error);

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
-import { DisplayFile } from "../types";
+import { DisplayFile, Nullable } from "../types";
 import { getFiles } from "../utils";
 import {
   FileViewTypes,
@@ -42,7 +42,7 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>(
       switchFileView(payload: FileViewTypesList) {
         this.fileViewType = payload;
       },
-      updatePreviewFile(payload: DisplayFile) {
+      updatePreviewFile(payload: Nullable<DisplayFile>) {
         this.previewFileInformation = payload;
       },
       togglePreview(payload: boolean) {

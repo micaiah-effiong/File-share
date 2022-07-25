@@ -9,3 +9,4 @@ export type DisplayFile = {
   streamLink: string;
   fileType: string;
 };
+export type Nullable<T> = T | null;

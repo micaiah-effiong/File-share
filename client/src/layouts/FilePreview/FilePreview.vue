@@ -112,11 +112,11 @@ import {
 import AvatarVue from "../../components/Avatar/Avatar.vue";
 import ActionBtn from "../../components/Buttons/ActionBtn.vue";
 import { ref, Ref } from "vue";
-import { DisplayFile } from "../../types";
+import { DisplayFile, Nullable } from "../../types";
 
 const props = withDefaults(
   defineProps<{
-    previewFile: DisplayFile | null;
+    previewFile: Nullable<DisplayFile>;
     isOpen: boolean;
     closePreview: (payload: MouseEvent) => void;
     deleteItem: (fileId: string, file: DisplayFile) => void;

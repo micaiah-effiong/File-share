@@ -41,6 +41,7 @@ function handleClick(file: DisplayFile, fileName: string) {
   console.log("CALLED", { file, state: mainStore.previewStatus });
   if (selectedFileName.value === fileName) {
     selectedFileName.value = null;
+    mainStore.updatePreviewFile(null);
     return;
   }
   mainStore.togglePreview(true);

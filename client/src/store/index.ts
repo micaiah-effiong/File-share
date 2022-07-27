@@ -13,17 +13,7 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>(
   "mainStore",
   {
     state: (): RootState => ({
-      previewFileInformation: {
-        filename: "",
-        size: "",
-        short: "",
-        createdAt: "",
-        link: "",
-        downloadLink: "",
-        streamLink: "",
-        fileType: "",
-        id: "",
-      },
+      previewFileInformation: null,
       filesOnDisplay: [],
       allFetchedFiles: [],
       previewStatus: false,

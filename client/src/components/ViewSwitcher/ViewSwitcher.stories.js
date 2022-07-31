@@ -1,18 +1,18 @@
 import ViewSwitcher from "./ViewSwitcher.vue";
 
 export default {
-  title: "Example/ViewSwitcher",
-  component: ViewSwitcher,
+	title: "Example/ViewSwitcher",
+	component: ViewSwitcher,
 };
 
 const Template = (args) => ({
-  components: { ViewSwitcher },
+	components: { ViewSwitcher },
 
-  setup() {
-    return { args };
-  },
+	setup() {
+		return { args };
+	},
 
-  template: '<div class="max-w-sm"><ViewSwitcher v-bind="args" /></div>',
+	template: '<div class="max-w-sm"><ViewSwitcher v-bind="args" /></div>',
 });
 
 export const Primary = Template.bind({});

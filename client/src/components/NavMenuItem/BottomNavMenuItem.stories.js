@@ -2,19 +2,18 @@ import { HomeIcon } from "@heroicons/vue/outline";
 import BottomNavMenuItem from "./BottomNavMenuItem.vue";
 
 export default {
-  title: "Example/BottomNavMenuItem",
-  component: BottomNavMenuItem,
+	title: "Example/BottomNavMenuItem",
+	component: BottomNavMenuItem,
 };
 
 const Template = (args) => ({
-  components: { BottomNavMenuItem, HomeIcon },
+	components: { BottomNavMenuItem, HomeIcon },
 
-  setup() {
-    return { args };
-  },
+	setup() {
+		return { args };
+	},
 
-  template:
-    '<BottomNavMenuItem v-bind="args" class="w-20"><template #icon><HomeIcon /></template></BottomNavMenuItem>',
+	template: '<BottomNavMenuItem v-bind="args" class="w-20"><template #icon><HomeIcon /></template></BottomNavMenuItem>',
 });
 
 export const Primary = Template.bind({});

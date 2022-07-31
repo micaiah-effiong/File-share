@@ -1,13 +1,6 @@
 import express from "express";
 import { files } from "../controllers";
-const {
-  getAllFiles,
-  getOneFile,
-  uploadFile,
-  downloadFile,
-  deleteFile,
-  streamFile,
-} = files;
+const { getAllFiles, getOneFile, uploadFile, downloadFile, deleteFile, streamFile } = files;
 
 const router = express.Router();
 

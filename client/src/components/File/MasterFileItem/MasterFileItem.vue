@@ -1,31 +1,31 @@
 <template>
-  <GridFileItem
-    v-if="viewType === FileViewTypes.GRID"
-    :file="file"
-    :is-selected="isSelected"
-    :key="FileViewTypes.GRID"
-    :class="selectedClass"
-    @click="emit('click', file, file.filename)"
-    v-bind="$attrs"
-  />
-  <ListFileItem
-    v-if="viewType === FileViewTypes.LIST"
-    :file="file"
-    :is-selected="isSelected"
-    :key="FileViewTypes.LIST"
-    :class="selectedClass"
-    @click="emit('click', file, file.filename)"
-    v-bind="$attrs"
-  />
-  <SemiListFileItem
-    v-if="viewType === FileViewTypes.SEMI_LIST"
-    :file="file"
-    :is-selected="isSelected"
-    :key="FileViewTypes.SEMI_LIST"
-    :class="selectedClass"
-    @click="emit('click', file, file.filename)"
-    v-bind="$attrs"
-  />
+	<GridFileItem
+		v-if="viewType === FileViewTypes.GRID"
+		:file="file"
+		:is-selected="isSelected"
+		:key="FileViewTypes.GRID"
+		:class="selectedClass"
+		@click="emit('click', file, file.filename)"
+		v-bind="$attrs"
+	/>
+	<ListFileItem
+		v-if="viewType === FileViewTypes.LIST"
+		:file="file"
+		:is-selected="isSelected"
+		:key="FileViewTypes.LIST"
+		:class="selectedClass"
+		@click="emit('click', file, file.filename)"
+		v-bind="$attrs"
+	/>
+	<SemiListFileItem
+		v-if="viewType === FileViewTypes.SEMI_LIST"
+		:file="file"
+		:is-selected="isSelected"
+		:key="FileViewTypes.SEMI_LIST"
+		:class="selectedClass"
+		@click="emit('click', file, file.filename)"
+		v-bind="$attrs"
+	/>
 </template>
 
 <script lang="ts" setup>
@@ -40,16 +40,14 @@ import SemiListFileItem from "../SemiListFileItem/SemiListFileItem.vue";
 const emit = defineEmits(["click"]);
 
 const props = withDefaults(
-  defineProps<{
-    file: DisplayFile;
-    isSelected?: boolean;
-    viewType: FileViewTypesList;
-  }>(),
-  {
-    isSelected: false,
-  }
+	defineProps<{
+		file: DisplayFile;
+		isSelected?: boolean;
+		viewType: FileViewTypesList;
+	}>(),
+	{
+		isSelected: false,
+	}
 );
-const selectedClass = computed(() =>
-  props.isSelected ? "bg-blue-50" : "bg-white"
-);
+const selectedClass = computed(() => (props.isSelected ? "bg-blue-50" : "bg-white"));
 </script>

@@ -16,7 +16,7 @@ const app = express();
  */
 const server = http.createServer(app);
 const peerServer = ExpressPeerServer(server, {
-  // debug: true,
+	// debug: true,
 });
 
 app.use(logger("dev"));
@@ -29,31 +29,31 @@ app.use("/peer", peerServer);
 
 // catch 404 and forward to error handler
 app.use(function (_, res, next: NextFunction) {
-  return res.status(404).json({
-    success: false,
-    error: "NOT FOUND",
-    message: "Resource not found",
-    result: null,
-  });
+	return res.status(404).json({
+		success: false,
+		error: "NOT FOUND",
+		message: "Resource not found",
+		result: null,
+	});
 });
 
 // error handler
 app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+	// set locals, only providing error in development
+	res.locals.message = err.message;
+	res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  if (err instanceof multer.MulterError) {
-    // A Multer error occurred when uploading.
-  }
+	if (err instanceof multer.MulterError) {
+		// A Multer error occurred when uploading.
+	}
 
-  res.status(err.statusCode || 500);
-  res.json({
-    success: false,
-    error: err.name || "SERVER ERROR",
-    message: err.message || "",
-    result: null,
-  });
+	res.status(err.statusCode || 500);
+	res.json({
+		success: false,
+		error: err.name || "SERVER ERROR",
+		message: err.message || "",
+		result: null,
+	});
 });
 
 export { app, server, peerServer };

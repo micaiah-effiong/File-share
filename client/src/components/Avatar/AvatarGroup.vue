@@ -1,5 +1,5 @@
 <template>
-  <AvatarGroup />
+	<AvatarGroup />
 </template>
 
 <script lang="ts" setup>
@@ -12,26 +12,24 @@ const maxSlotItems = ref(props.max);
 const slotDefaults = Array.from(slots.default ? slots.default() : []);
 
 function AvatarGroup() {
-  if (slotDefaults.length > maxSlotItems.value) {
-    const slotSize = slotDefaults.length;
-    slotDefaults.length = maxSlotItems.value;
+	if (slotDefaults.length > maxSlotItems.value) {
+		const slotSize = slotDefaults.length;
+		slotDefaults.length = maxSlotItems.value;
 
-    slotDefaults.push(
-      h(Avatar, { count: slotSize - maxSlotItems.value, label: "" })
-    );
-  }
+		slotDefaults.push(h(Avatar, { count: slotSize - maxSlotItems.value, label: "" }));
+	}
 
-  return h("div", { ...attrs, class: "flex w-auto px-1" }, [
-    h("ul", { class: "avatars md:flex hidden" }, slotDefaults),
-  ]);
+	return h("div", { ...attrs, class: "flex w-auto px-1" }, [
+		h("ul", { class: "avatars md:flex hidden" }, slotDefaults),
+	]);
 }
 </script>
 
 <style scoped>
 .avatars {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+	display: flex;
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 </style>

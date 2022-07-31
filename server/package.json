@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "cross-env NODE_ENV=production node dist/bin/www.js",
-    "dev": "cross-env NODE_ENV=development tsc-watch  --onSuccess 'node --trace-warnings --enable-source-maps ./dist/bin/www.js'"
+    "dev": "cross-env NODE_ENV=development tsc-watch  --onSuccess 'node --trace-warnings --enable-source-maps ./dist/bin/www.js'",
+    "format": "prettier --write ."
   },
   "engines": {
     "node": ">=16.x.x",

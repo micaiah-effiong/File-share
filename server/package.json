@@ -7,7 +7,7 @@
     "start": "cross-env NODE_ENV=production node dist/bin/www.js",
     "dev": "cross-env NODE_ENV=development tsc-watch  --onSuccess 'node --trace-warnings --enable-source-maps ./dist/bin/www.js'",
     "format": "prettier --write .",
-    "test": "jest --passWithNoTests"
+    "test": "cross-env NODE_ENV=test jest --passWithNoTests"
   },
   "engines": {
     "node": ">=16.x.x",
@@ -44,9 +44,11 @@
     ]
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.3.0",
     "@types/debug": "^4.1.7",
     "@types/express": "^4.17.13",
     "@types/http-errors": "^1.8.2",
+    "@types/jest": "^28.1.6",
     "@types/morgan": "^1.9.3",
     "@types/multer": "^1.4.7",
     "@types/node": "^17.0.21",

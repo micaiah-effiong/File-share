@@ -17,7 +17,9 @@
     "story": "yarn workspace client storybook",
     "build-story": "yarn workspace client build-storybook",
     "build": "yarn workspace client build && yarn workspace server build",
-    "postbuild": "copyfiles -u 2 client/dist/** client/dist/**/* server/dist/public"
+    "postbuild": "copyfiles -u 2 client/dist/** client/dist/**/* server/dist/public",
+    "prepare": "husky install",
+    "prettier-format": "prettier --write ."
   },
   "private": true,
   "engines": {
@@ -27,6 +29,9 @@
   },
   "devDependencies": {
     "copyfiles": "^2.4.1",
+    "husky": "^8.0.1",
+    "prettier": "^2.7.1",
+    "pretty-quick": "^3.1.3",
     "yarn-audit-fix": "^9.3.1"
   }
 }

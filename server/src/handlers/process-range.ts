@@ -5,10 +5,10 @@ type BufferRange = {
 	end: number;
 };
 
-function processRange(ranges: string, len: number): BufferRange {
+function processRange(ranges: string, len: number, MAX_SIZE: number = config.STREAM_CUNK_SIZE): BufferRange {
 	let [startRange, endRange] = ranges.split("=")[1].split("-"); //"bytes=32324-44353"
 	let start = parseInt(startRange) || 0;
-	let end = parseInt(endRange) || Math.min(start + config.STREAM_CUNK_SIZE, len - 1);
+	let end = parseInt(endRange) || Math.min(start + MAX_SIZE, len - 1);
 
 	if (end > len - 1) {
 		end = len - 1;

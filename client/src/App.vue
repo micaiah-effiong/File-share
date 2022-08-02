@@ -84,6 +84,7 @@
 			<div v-if="!mainStore.previewStatus" class="md:block hidden"></div>
 		</div>
 		<ButtomNav :should-hide="shouldHideButtomNav" />
+		<UploadPreview :total="0" :uploaded="0" :isOnDisplay="true" :percent-uploaded="uploadPercentage || 0" />
 	</div>
 </template>
 
@@ -99,6 +100,7 @@ import AllFilesMenu from "./layouts/AllFilesMenu/AllFilesMenu.vue";
 import { debounce, removeFile, throttle, uploadFiles } from "./utils";
 import { useMainStore } from "./store";
 import { DisplayFile } from "./types";
+import UploadPreview from "./components/UploadPreview/UploadPreview.vue";
 
 const mainStore = useMainStore();
 const initialScrollPosition: Ref<number> = ref(0);

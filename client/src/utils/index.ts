@@ -51,17 +51,15 @@ export async function uploadService(
 	return res.data;
 }
 
-export async function uploadFiles(evt: Event, cb: (num: number | null) => void) {
-	const evtTarget = evt.target as HTMLInputElement;
-
-	if (!evtTarget.files) return;
-	if (evtTarget.files.length < 0) return;
-
+export async function uploadFiles(
+	_files: FileList,
+	cb: (num: number | null, completedUploads: number, totalUploads: number) => void
+) {
 	const uploadTracker: Record<string, number> = {};
 
-	const files = Array.from(evtTarget.files);
+	const files = Array.from(_files);
 	console.log("upload files", files);
-
+	let completedUploads: number = 0;
 	const uploadFilesPromises = files.map(async (file: File) => {
 		let formDataFile = new FormData();
 		formDataFile.append("upload", file);
@@ -81,14 +79,14 @@ export async function uploadFiles(evt: Event, cb: (num: number | null) => void) 
 					}, 0) / scores.length
 				);
 
-				cb(percentCompleted);
+				completedUploads = scores.filter((score) => score === 100).length;
+
+				cb(percentCompleted, completedUploads, files.length);
 				// console.log(percentCompleted, scores, scores.length);
 			},
 		});
 	});
 
 	await Promise.all(uploadFilesPromises);
-
-	alert("Upload complete");
-	cb(null);
+	cb(null, completedUploads, files.length);
 }

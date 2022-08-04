@@ -17,16 +17,20 @@
 							/>
 						</div>
 						<div class="flex gap-5">
-							<input type="file" multiple hidden id="uploadField" @change="uploadFiles($event, updateProgress)" />
+							<input type="file" multiple hidden id="uploadField" @change="handleUpload" />
 							<label for="uploadField" class="cursor-pointer">
 								<button class="pointer-events-none justify-center items-center flex h-5 w-5">
-									<PlusCircleIcon class="w-5" v-if="uploadPercentage === null" />
-									<div
-										v-if="typeof uploadPercentage === 'number'"
-										class="rounded-full border-2 border-ocean-blue-dark text-[10px] p-0.5"
-									>
-										{{ uploadPercentage }}
-									</div>
+									<UploadPreview
+										:class="'bg-none drop-shadow-none'"
+										v-if="uploadMeta.status === 'OPEN'"
+										:size="'SM'"
+										:total="uploadMeta.total"
+										:uploaded="uploadMeta.completed"
+										:displayStatus="uploadMeta.status"
+										:percent-uploaded="uploadMeta.percent"
+										@close="handleClose"
+									/>
+									<PlusCircleIcon class="w-5" v-else="(uploadMeta.status = 'CLOSE')" />
 								</button>
 							</label>
 							<label for="searchField">
@@ -84,6 +88,14 @@
 			<div v-if="!mainStore.previewStatus" class="md:block hidden"></div>
 		</div>
 		<ButtomNav :should-hide="shouldHideButtomNav" />
+		<UploadPreview
+			:size="'MD'"
+			:total="uploadMeta.total"
+			:uploaded="uploadMeta.completed"
+			:displayStatus="uploadMeta.status"
+			:percent-uploaded="uploadMeta.percent"
+			@close="handleClose"
+		/>
 	</div>
 </template>
 
@@ -99,6 +111,7 @@ import AllFilesMenu from "./layouts/AllFilesMenu/AllFilesMenu.vue";
 import { debounce, removeFile, throttle, uploadFiles } from "./utils";
 import { useMainStore } from "./store";
 import { DisplayFile } from "./types";
+import UploadPreview from "./components/UploadPreview/UploadPreview.vue";
 
 const mainStore = useMainStore();
 const initialScrollPosition: Ref<number> = ref(0);
@@ -113,15 +126,54 @@ const scrollDirection: Function = throttle((event: Event) => {
 	shouldHideButtomNav.value = movementDifference !== Math.abs(movementDifference);
 	initialScrollPosition.value = target.scrollTop;
 }, 100);
-const uploadPercentage: Ref<number | null> = ref(null);
+const uploadPercentage = ref<number | null>(null);
+
+const uploadMeta = ref<{
+	total: number;
+	completed: number;
+	percent: number;
+	status: "OPEN" | "DONE" | "CLOSE";
+}>({
+	completed: 0,
+	total: 0,
+	percent: 0,
+	status: "CLOSE",
+});
 
 mainStore.fetchAllFiles().then((loadedFiles: DisplayFile[]) => {
 	mainStore.setFilesOnDisplay(loadedFiles);
 });
+function handleClose() {
+	console.log("closing...");
 
-function updateProgress(num: number | null) {
-	uploadPercentage.value = num;
-	if (num === null) mainStore.fetchAllFiles();
+	uploadMeta.value.status = "CLOSE";
+	uploadMeta.value.completed = 0;
+	uploadMeta.value.percent = 0;
+	uploadMeta.value.total = 0;
+}
+
+async function handleUpload(event: Event) {
+	const evtTarget = event.target as HTMLInputElement;
+	if (!evtTarget.files) return;
+	if (evtTarget.files.length < 0) return;
+
+	try {
+		uploadMeta.value.status = "OPEN";
+		await uploadFiles(evtTarget.files, updateProgress);
+	} catch (err: any) {
+		console.log("An error occured while uploading file");
+	} finally {
+		uploadMeta.value.status = "DONE";
+	}
+}
+
+function updateProgress(percent: number | null, completed: number, total: number) {
+	if (percent === null) mainStore.fetchAllFiles();
+	if (percent !== null) uploadMeta.value.percent = percent;
+
+	uploadPercentage.value = percent;
+	uploadMeta.value.completed = completed;
+	uploadMeta.value.total = total;
 }
 
 const debounceSearchHanler = debounce((filename: string) => {

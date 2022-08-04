@@ -1,5 +1,5 @@
 <template>
-	<div :class="renderClasses">
+	<div :class="renderClasses" @scroll="scrollHandler">
 		<MasterFileItem
 			v-for="file in props.files"
 			:file="file"

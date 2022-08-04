@@ -4,7 +4,7 @@
 			ref="circle"
 			class="progress-ring__circle"
 			:stroke-width="stroke"
-			stroke="#078dee"
+			:stroke="color"
 			fill="transparent"
 			:r="normalizedRadius"
 			:cx="radius"
@@ -12,7 +12,7 @@
 			:style="{ strokeDashoffset }"
 			:stroke-dasharray="`${circumference} ${circumference}`"
 		/>
-		<text class="progress-ring__text" text-anchor="middle" x="50%" y="58%" :font-size="radius / 2" fill="#078dee">
+		<text class="progress-ring__text" text-anchor="middle" x="50%" y="58%" :font-size="radius / 2" :fill="color">
 			{{ percent }}
 		</text>
 	</svg>
@@ -21,10 +21,11 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 
-const props = withDefaults(defineProps<{ radius: number; stroke: number; percent: number }>(), {
+const props = withDefaults(defineProps<{ radius?: number; stroke?: number; percent?: number; color?: string }>(), {
 	radius: 15,
 	percent: 0,
 	stroke: 2,
+	color: "#078dee",
 });
 const circle = ref<SVGAElement | null>(null);
 

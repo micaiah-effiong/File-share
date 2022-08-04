@@ -24,6 +24,7 @@
     "@storybook/addon-postcss": "^2.0.0",
     "@storybook/builder-vite": "^0.1.29",
     "@storybook/vue3": "^6.4.22",
+    "@types/tailwindcss": "^3.1.0",
     "@vitejs/plugin-vue": "^2.2.0",
     "autoprefixer": "^10.4.4",
     "postcss": "^8.4.12",

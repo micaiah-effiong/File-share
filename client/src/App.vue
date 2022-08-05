@@ -161,6 +161,8 @@ async function handleUpload(event: Event) {
 	try {
 		uploadMeta.value.status = "OPEN";
 		await uploadFiles(evtTarget.files, updateProgress);
+		await mainStore.fetchAllFiles();
+		mainStore.applyFilters();
 	} catch (err: any) {
 		console.log("An error occured while uploading file");
 	} finally {

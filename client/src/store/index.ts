@@ -51,7 +51,10 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>("mainSt
 		setFileFilters(key, value) {
 			this.fileFilters[key] = value;
 		},
-		applyFilters() {},
+		applyFilters() {
+			const searchFilesFound = this.searchFile(this.fileFilters.search);
+			this.setFilesOnDisplay(searchFilesFound);
+		},
 		removeFileOnDisplay(file) {
 			const displayFiles = this.filesOnDisplay;
 			const fileId: string = typeof file === "string" ? file : file.id;

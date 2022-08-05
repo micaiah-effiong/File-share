@@ -11,6 +11,9 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>("mainSt
 		allFetchedFiles: [],
 		previewStatus: false,
 		fileViewType: useStorage<FileViewTypesList>("fileViewType", FileViewTypes.GRID),
+		fileFilters: {
+			search: "",
+		},
 	}),
 	actions: {
 		async fetchAllFiles() {
@@ -44,6 +47,31 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>("mainSt
 			const matchedFiles = this.allFetchedFiles.filter((file: DisplayFile) => searchRx.test(file.filename));
 
 			return matchedFiles;
+		},
+		setFileFilters(key, value) {
+			this.fileFilters[key] = value;
+		},
+		applyFilters() {},
+		removeFileOnDisplay(file) {
+			const displayFiles = this.filesOnDisplay;
+			const fileId: string = typeof file === "string" ? file : file.id;
+
+			if (typeof file === "string") {
+				for (let index = 0; index < displayFiles.length; index++) {
+					if (displayFiles[index].id === file) {
+						displayFiles.splice(index, 1);
+						break;
+					}
+				}
+			} else {
+				const files = new Set(displayFiles);
+				files.delete(file);
+				this.setFilesOnDisplay(Array.from(files));
+			}
+
+			if (this.previewFileInformation && fileId === this.previewFileInformation.id) {
+				this.updatePreviewFile(null);
+			}
 		},
 	},
 });

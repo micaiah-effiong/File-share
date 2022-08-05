@@ -6,6 +6,9 @@ export interface RootState {
 	allFetchedFiles: DisplayFile[];
 	filesOnDisplay: DisplayFile[];
 	fileViewType: FileViewTypesList;
+	fileFilters: {
+		search: string;
+	};
 }
 export interface RootActions {
 	fetchAllFiles: () => Promise<DisplayFile[]>;
@@ -16,6 +19,9 @@ export interface RootActions {
 	setFilesOnDisplay: (payload: DisplayFile[]) => void;
 	toggleFileView: (payload: FileViewTypesList) => void;
 	searchFile: (name: string) => DisplayFile[];
+	setFileFilters: (key: keyof RootState["fileFilters"], value: any) => void;
+	applyFilters: () => void;
+	removeFileOnDisplay: (file: string | DisplayFile) => void;
 }
 
 export enum FileViewTypes {

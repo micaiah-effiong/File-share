@@ -5,7 +5,7 @@
 		:is-selected="isSelected"
 		:key="FileViewTypes.GRID"
 		:class="selectedClass"
-		@click="emit('click', file, file.filename)"
+		@click="emit('click', file, file.id)"
 		v-bind="$attrs"
 	/>
 	<ListFileItem
@@ -14,7 +14,7 @@
 		:is-selected="isSelected"
 		:key="FileViewTypes.LIST"
 		:class="selectedClass"
-		@click="emit('click', file, file.filename)"
+		@click="emit('click', file, file.id)"
 		v-bind="$attrs"
 	/>
 	<SemiListFileItem
@@ -23,16 +23,15 @@
 		:is-selected="isSelected"
 		:key="FileViewTypes.SEMI_LIST"
 		:class="selectedClass"
-		@click="emit('click', file, file.filename)"
+		@click="emit('click', file, file.id)"
 		v-bind="$attrs"
 	/>
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps, useAttrs } from "vue";
+import { computed, defineProps } from "vue";
 import { DisplayFile } from "../../../types";
 import { FileViewTypesList, FileViewTypes } from "../../../store/types";
-import type { FileItemProps } from "../types";
 
 import GridFileItem from "../GridFileItem/GridFileItem.vue";
 import ListFileItem from "../ListFileItem/ListFileItem.vue";

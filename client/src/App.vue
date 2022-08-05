@@ -143,6 +143,7 @@ const uploadMeta = ref<{
 mainStore.fetchAllFiles().then((loadedFiles: DisplayFile[]) => {
 	mainStore.setFilesOnDisplay(loadedFiles);
 });
+
 function handleClose() {
 	console.log("closing...");
 
@@ -183,19 +184,18 @@ const debounceSearchHanler = debounce((filename: string) => {
 
 function handleFileSearch(event: Event) {
 	event.preventDefault();
+
 	const eventTarget = event.target as HTMLInputElement;
-	const filename: string = eventTarget.value;
-	debounceSearchHanler(filename);
+	const filenameSearchString: string = eventTarget.value;
+
+	mainStore.setFileFilters("search", filenameSearchString);
+	debounceSearchHanler(filenameSearchString);
 }
 
 async function handleDelete(fileId: string, file: DisplayFile) {
 	await removeFile(fileId);
+	mainStore.removeFileOnDisplay(fileId);
 	await mainStore.fetchAllFiles();
-	const files = new Set(mainStore.filesOnDisplay);
-	files.delete(file);
-
-	const filesArr = Array.from(files);
-	mainStore.setFilesOnDisplay(filesArr);
 }
 </script>
 

@@ -4,8 +4,8 @@
 			v-for="file in props.files"
 			:file="file"
 			:key="file.id"
-			:isSelected="selectedFileName === file.filename"
-			@click="() => handleClick(file, file.filename)"
+			:isSelected="selectedFileId === file.id"
+			@click="() => handleClick(file, file.id)"
 			:viewType="fileViewType"
 		/>
 	</div>
@@ -23,7 +23,7 @@ const props = defineProps<{
 	fileViewType: FileViewTypesList;
 }>();
 const mainStore = useMainStore();
-const selectedFileName = ref<string | null>("");
+const selectedFileId = ref<string | null>("");
 
 const renderClasses = computed(() => {
 	switch (props.fileViewType) {
@@ -36,16 +36,16 @@ const renderClasses = computed(() => {
 	}
 });
 
-function handleClick(file: DisplayFile, fileName: string) {
+function handleClick(file: DisplayFile, fileId: string) {
 	console.log("CALLED", { file, state: mainStore.previewStatus });
-	if (selectedFileName.value === fileName) {
-		selectedFileName.value = null;
+	if (selectedFileId.value === fileId) {
+		selectedFileId.value = null;
 		mainStore.updatePreviewFile(null);
 		return;
 	}
 	mainStore.togglePreview(true);
 	mainStore.updatePreviewFile(file);
-	selectedFileName.value = fileName;
+	selectedFileId.value = fileId;
 }
 
 function scrollHandler(event: Event) {

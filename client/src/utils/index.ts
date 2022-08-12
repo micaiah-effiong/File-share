@@ -1,5 +1,5 @@
 import axios from "axios";
-import { DisplayFile } from "../types";
+import { DisplayFile, UploadFilesProgressDetails } from "../types";
 
 export function debounce(cb: Function, delay: number): Function {
 	let timeout: number;
@@ -51,10 +51,7 @@ export async function uploadService(
 	return res.data;
 }
 
-export async function uploadFiles(
-	_files: FileList,
-	cb: (num: number | null, completedUploads: number, totalUploads: number) => void
-) {
+export async function uploadFiles(_files: FileList, cb: (uploadDetails: UploadFilesProgressDetails) => void) {
 	const uploadTracker: Record<string, number> = {};
 
 	const files = Array.from(_files);
@@ -81,12 +78,29 @@ export async function uploadFiles(
 
 				completedUploads = scores.filter((score) => score === 100).length;
 
-				cb(percentCompleted, completedUploads, files.length);
+				cb({
+					percentCompleted,
+					completedUploads,
+					totalUploads: files.length,
+					uploadingFilesDetails: computeUploadingFilesDetails(uploadTracker),
+				});
 				// console.log(percentCompleted, scores, scores.length);
 			},
 		});
 	});
 
 	await Promise.all(uploadFilesPromises);
-	cb(null, completedUploads, files.length);
+	cb({
+		percentCompleted: null,
+		completedUploads,
+		totalUploads: files.length,
+		uploadingFilesDetails: computeUploadingFilesDetails(uploadTracker),
+	});
+}
+
+function computeUploadingFilesDetails(uploadingFilesObj: Record<string, number>) {
+	return Object.keys(uploadingFilesObj).map((key) => ({
+		filename: key,
+		progress: uploadingFilesObj[key],
+	}));
 }

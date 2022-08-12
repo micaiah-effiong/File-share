@@ -14,7 +14,7 @@
     "@heroicons/vue": "^1.0.6",
     "axios": "^0.27.2",
     "pinia": "^2.0.16",
-    "vue": "^3.2.25"
+    "vue": "^3.2.37"
   },
   "devDependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.3",

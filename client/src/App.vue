@@ -94,6 +94,7 @@
 			:uploaded="uploadMeta.completed"
 			:displayStatus="uploadMeta.status"
 			:percent-uploaded="uploadMeta.percent"
+			:uploading-files-list="uploadMeta.uploadDetails"
 			@close="handleClose"
 		/>
 	</div>
@@ -112,6 +113,7 @@ import { debounce, removeFile, throttle, uploadFiles } from "./utils";
 import { useMainStore } from "./store";
 import { DisplayFile } from "./types";
 import UploadPreview from "./components/UploadPreview/UploadPreview.vue";
+import { UploadFilesProgressDetails } from "./types";
 
 const mainStore = useMainStore();
 const initialScrollPosition: Ref<number> = ref(0);
@@ -133,11 +135,13 @@ const uploadMeta = ref<{
 	completed: number;
 	percent: number;
 	status: "OPEN" | "DONE" | "CLOSE";
+	uploadDetails: Array<{ filename: string; progress: number }>;
 }>({
 	completed: 0,
 	total: 0,
 	percent: 0,
 	status: "CLOSE",
+	uploadDetails: [],
 });
 
 mainStore.fetchAllFiles().then((loadedFiles: DisplayFile[]) => {
@@ -170,13 +174,14 @@ async function handleUpload(event: Event) {
 	}
 }
 
-function updateProgress(percent: number | null, completed: number, total: number) {
-	if (percent === null) mainStore.fetchAllFiles();
-	if (percent !== null) uploadMeta.value.percent = percent;
+function updateProgress(uploadDetails: UploadFilesProgressDetails) {
+	if (uploadDetails.percentCompleted === null) mainStore.fetchAllFiles();
+	if (uploadDetails.percentCompleted !== null) uploadMeta.value.percent = uploadDetails.percentCompleted;
 
-	uploadPercentage.value = percent;
-	uploadMeta.value.completed = completed;
-	uploadMeta.value.total = total;
+	uploadPercentage.value = uploadDetails.percentCompleted;
+	uploadMeta.value.completed = uploadDetails.completedUploads;
+	uploadMeta.value.total = uploadDetails.totalUploads;
+	uploadMeta.value.uploadDetails = uploadDetails.uploadingFilesDetails;
 }
 
 const debounceSearchHanler = debounce((filename: string) => {

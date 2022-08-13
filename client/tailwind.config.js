@@ -20,6 +20,7 @@ module.exports = {
 					// secondary: "#81c5f6",
 					// "":"#668b9e"
 					// #e8f0f7
+					"mid-night": "#243742",
 					secondary: "#beccd7",
 				},
 			},

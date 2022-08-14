@@ -1,5 +1,5 @@
-import axios from "axios";
-import { DisplayFile, UploadFilesProgressDetails } from "../types";
+import axios, { AxiosRequestConfig } from "axios";
+import { DisplayFile, UploadDetailsTracker, UploadFilesProgressDetails } from "../types";
 
 export function debounce(cb: Function, delay: number): Function {
 	let timeout: number;
@@ -37,22 +37,15 @@ export async function removeFile(fileId: string) {
 	return res.data;
 }
 
-export async function uploadService(
-	data: any,
-	options: {
-		onUploadProgress?: (progressEvent: any) => void;
-		[key: string]: any;
-	} = {}
-): Promise<any> {
-	options.headers = {
-		"Content-Type": "multipart/form-data",
-	};
+export async function uploadService(data: any, options: AxiosRequestConfig = {}): Promise<any> {
+	options.headers = { ...options.headers, "Content-Type": "multipart/form-data" };
 	const res = await axios.post(`${API_ORIGIN}/api/files`, data, options);
+
 	return res.data;
 }
 
 export async function uploadFiles(_files: FileList, cb: (uploadDetails: UploadFilesProgressDetails) => void) {
-	const uploadTracker: Record<string, number> = {};
+	const uploadTracker: UploadDetailsTracker = {};
 
 	const files = Array.from(_files);
 	console.log("upload files", files);
@@ -60,22 +53,23 @@ export async function uploadFiles(_files: FileList, cb: (uploadDetails: UploadFi
 	const uploadFilesPromises = files.map(async (file: File) => {
 		let formDataFile = new FormData();
 		formDataFile.append("upload", file);
-		uploadTracker[file.name] = 0;
+		const abortController = new AbortController();
+		uploadTracker[file.name] = { progress: 0, abortController };
 
 		return uploadService(formDataFile, {
+			signal: abortController.signal,
 			onUploadProgress: (event: ProgressEvent) => {
 				if (!event.lengthComputable) return;
 
 				const uploadProgress: number = (event.loaded * 100) / event.total;
-				uploadTracker[file.name] = Math.round(uploadProgress);
+				uploadTracker[file.name].progress = Math.round(uploadProgress);
 
-				const scores: number[] = Object.values(uploadTracker);
+				const scores: number[] = Object.values(uploadTracker).map((tracker) => tracker.progress);
 				const percentCompleted = Math.floor(
 					scores.reduce((prevScore: number, currentScore: number) => {
 						return prevScore + currentScore;
 					}, 0) / scores.length
 				);
-
 				completedUploads = scores.filter((score) => score === 100).length;
 
 				cb({
@@ -98,9 +92,10 @@ export async function uploadFiles(_files: FileList, cb: (uploadDetails: UploadFi
 	});
 }
 
-function computeUploadingFilesDetails(uploadingFilesObj: Record<string, number>) {
+function computeUploadingFilesDetails(uploadingFilesObj: UploadDetailsTracker) {
 	return Object.keys(uploadingFilesObj).map((key) => ({
 		filename: key,
-		progress: uploadingFilesObj[key],
+		progress: uploadingFilesObj[key].progress,
+		abortController: uploadingFilesObj[key].abortController,
 	}));
 }

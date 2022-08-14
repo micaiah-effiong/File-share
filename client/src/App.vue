@@ -20,17 +20,13 @@
 							<input type="file" multiple hidden id="uploadField" @change="handleUpload" />
 							<label for="uploadField" class="cursor-pointer">
 								<button class="pointer-events-none justify-center items-center flex h-5 w-5">
-									<UploadPreview
+									<UploadProgressBadge
 										:class="'bg-none drop-shadow-none'"
-										v-if="uploadMeta.status === 'OPEN'"
-										:size="'SM'"
-										:total="uploadMeta.total"
-										:uploaded="uploadMeta.completed"
 										:displayStatus="uploadMeta.status"
 										:percent-uploaded="uploadMeta.percent"
 										@close="handleClose"
 									/>
-									<PlusCircleIcon class="w-5" v-else="(uploadMeta.status = 'CLOSE')" />
+									<PlusCircleIcon class="w-5" />
 								</button>
 							</label>
 							<label for="searchField">
@@ -89,7 +85,6 @@
 		</div>
 		<ButtomNav :should-hide="shouldHideButtomNav" />
 		<UploadPreview
-			:size="'MD'"
 			:total="uploadMeta.total"
 			:uploaded="uploadMeta.completed"
 			:displayStatus="uploadMeta.status"
@@ -114,6 +109,7 @@ import { useMainStore } from "./store";
 import { DisplayFile } from "./types";
 import UploadPreview from "./components/UploadPreview/UploadPreview.vue";
 import { UploadFilesProgressDetails } from "./types";
+import UploadProgressBadge from "./components/UploadPreview/UploadProgressBadge.vue";
 
 const mainStore = useMainStore();
 const initialScrollPosition: Ref<number> = ref(0);
@@ -135,7 +131,7 @@ const uploadMeta = ref<{
 	completed: number;
 	percent: number;
 	status: "OPEN" | "DONE" | "CLOSE";
-	uploadDetails: Array<{ filename: string; progress: number }>;
+	uploadDetails: UploadFilesProgressDetails["uploadingFilesDetails"];
 }>({
 	completed: 0,
 	total: 0,

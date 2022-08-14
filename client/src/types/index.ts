@@ -15,5 +15,7 @@ export type UploadFilesProgressDetails = {
 	percentCompleted: number | null;
 	completedUploads: number;
 	totalUploads: number;
-	uploadingFilesDetails: Array<{ filename: string; progress: number }>;
+	uploadingFilesDetails: Array<{ filename: string; progress: number; abortController: AbortController }>;
 };
+
+export type UploadDetailsTracker = Record<string, { progress: number; abortController: AbortController }>;

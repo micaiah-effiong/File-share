@@ -108,7 +108,7 @@ async function handleDelete() {
 
 	try {
 		deleteBtnDisabled.value = true;
-		props.deleteItem(props.previewFile.id, props.previewFile);
+		await props.deleteItem(props.previewFile.id, props.previewFile);
 	} catch (error) {
 		console.error("Failed to delete file", error);
 	} finally {

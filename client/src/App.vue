@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col h-screen w-full justify-between">
+	<div class="flex flex-col h-full w-full justify-between">
 		<div class="w-full h-full flex gap-14 bg-ocean-blue-light">
 			<SideNav />
 			<main class="h-full w-full md:py-7 gap-5 md:gap-8 flex flex-col px-2 md:px-0">
@@ -42,7 +42,7 @@
 						</div>
 					</div>
 					<div class="py-5">
-						<div class="cut"></div>
+						<div class="cut hidden md:block"></div>
 					</div>
 
 					<!-- <nav class=""> -->
@@ -63,7 +63,7 @@
 						</div>
 					</nav>
 				</header>
-				<main class="max-h-[calc(100%-109px)] md:max-h-[calc(100%-105px)">
+				<main class="max-h-[calc(100%-110px)] md:max-h-[calc(100%-105px)">
 					<div class="h-full outer relative">
 						<AllFilesMenu
 							:files="mainStore.filesOnDisplay"
@@ -84,6 +84,12 @@
 			<div v-if="!mainStore.previewStatus" class="md:block hidden"></div>
 		</div>
 		<ButtomNav :should-hide="shouldHideButtomNav" />
+		<MobileFilePreview
+			:is-open="mainStore.previewStatus"
+			:preview-file="mainStore.previewFileInformation"
+			:close-preview="() => mainStore.togglePreview(false)"
+			:delete-item="handleDelete"
+		/>
 		<UploadPreview
 			:total="uploadMeta.total"
 			:uploaded="uploadMeta.completed"
@@ -101,7 +107,7 @@ import { StarIcon, PlusCircleIcon, SearchIcon, ChevronDownIcon, RssIcon } from "
 import { FolderIcon } from "@heroicons/vue/solid";
 import "./App.css";
 import { SideNav, ButtomNav } from "./layouts/Nav";
-import FilePreview from "./layouts/FilePreview/FilePreview.vue";
+import { FilePreview, MobileFilePreview } from "./layouts/FilePreview";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
 import AllFilesMenu from "./layouts/AllFilesMenu/AllFilesMenu.vue";
 import { debounce, removeFile, throttle, uploadFiles } from "./utils";

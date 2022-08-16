@@ -1,2 +1,2 @@
-import FilePreview from "./FilePreview.vue";
-export default FilePreview;
+export { default as FilePreview } from "./FilePreview.vue";
+export { default as MobileFilePreview } from "./MobilePreview.vue";

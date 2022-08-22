@@ -8,6 +8,7 @@ export interface RootState {
 	fileViewType: FileViewTypesList;
 	fileFilters: {
 		search: string;
+		fileTypes: Array<string>;
 	};
 }
 export interface RootActions {
@@ -18,9 +19,10 @@ export interface RootActions {
 	setFetchedFiles: (payload: DisplayFile[]) => void;
 	setFilesOnDisplay: (payload: DisplayFile[]) => void;
 	toggleFileView: (payload: FileViewTypesList) => void;
-	searchFile: (name: string) => DisplayFile[];
-	setFileFilters: (key: keyof RootState["fileFilters"], value: any) => void;
+
+	setFileFilters: <T extends keyof RootState["fileFilters"]>(key: T, value: RootState["fileFilters"][T]) => void;
 	applyFilters: () => void;
+
 	removeFileOnDisplay: (file: string | DisplayFile) => void;
 }
 

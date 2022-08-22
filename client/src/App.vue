@@ -17,6 +17,11 @@
 							/>
 						</div>
 						<div class="flex gap-5">
+							<label for="searchField">
+								<button>
+									<SearchIcon class="w-5" />
+								</button>
+							</label>
 							<input type="file" multiple hidden id="uploadField" @change="handleUpload" />
 							<label for="uploadField" class="cursor-pointer">
 								<button class="pointer-events-none justify-center items-center flex h-5 w-5">
@@ -27,11 +32,6 @@
 										@close="handleClose"
 									/>
 									<PlusCircleIcon class="w-5" />
-								</button>
-							</label>
-							<label for="searchField">
-								<button>
-									<SearchIcon class="w-5" />
 								</button>
 							</label>
 							<label>
@@ -49,12 +49,7 @@
 					<nav class="hidden md:block py-2 md:py-0">
 						<div class="flex justify-between text-ocean-blue-dark">
 							<div class="flex gap-2 md:gap-6 flex-1">
-								<div class="flex gap-2 shadow-md p-2 rounded-lg bg-white">
-									<FolderIcon class="w-5 text-ocean-blue-normal" />
-									<ChevronDownIcon class="w-3" />
-								</div>
-
-								<button class="hidden align-middle md:block">Recent Files</button>
+								<FileTypeFilter @file-filter-change="handleFileTypeFilter" />
 							</div>
 
 							<div class="flex items-center">
@@ -103,8 +98,7 @@
 
 <script lang="ts" setup>
 import { Ref, ref } from "vue";
-import { StarIcon, PlusCircleIcon, SearchIcon, ChevronDownIcon, RssIcon } from "@heroicons/vue/outline";
-import { FolderIcon } from "@heroicons/vue/solid";
+import { StarIcon, PlusCircleIcon, SearchIcon, RssIcon } from "@heroicons/vue/outline";
 import "./App.css";
 import { SideNav, ButtomNav } from "./layouts/Nav";
 import { FilePreview, MobileFilePreview } from "./layouts/FilePreview";
@@ -116,6 +110,7 @@ import { DisplayFile } from "./types";
 import UploadPreview from "./components/UploadPreview/UploadPreview.vue";
 import { UploadFilesProgressDetails } from "./types";
 import UploadProgressBadge from "./components/UploadPreview/UploadProgressBadge.vue";
+import FileTypeFilter from "./components/FileFilters/FileTypeFilter.vue";
 
 const mainStore = useMainStore();
 const initialScrollPosition: Ref<number> = ref(0);
@@ -187,8 +182,8 @@ function updateProgress(uploadDetails: UploadFilesProgressDetails) {
 }
 
 const debounceSearchHanler = debounce((filename: string) => {
-	const matchedFiles = mainStore.searchFile(filename);
-	mainStore.setFilesOnDisplay(matchedFiles);
+	mainStore.setFileFilters("search", filename);
+	mainStore.applyFilters();
 }, 10);
 
 function handleFileSearch(event: Event) {
@@ -197,8 +192,12 @@ function handleFileSearch(event: Event) {
 	const eventTarget = event.target as HTMLInputElement;
 	const filenameSearchString: string = eventTarget.value;
 
-	mainStore.setFileFilters("search", filenameSearchString);
 	debounceSearchHanler(filenameSearchString);
+}
+
+function handleFileTypeFilter(selectedFileTypes: Array<string>) {
+	mainStore.setFileFilters("fileTypes", selectedFileTypes);
+	mainStore.applyFilters();
 }
 
 async function handleDelete(fileId: string, file: DisplayFile) {

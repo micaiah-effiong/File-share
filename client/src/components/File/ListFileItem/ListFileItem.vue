@@ -11,7 +11,7 @@
 				</div>
 
 				<div class="text-[0.8rem] md:w-2/6 w-4/6 text-left text-ocean-blue-dark flex justify-center flex-col">
-					<span class="font-semibold">
+					<span class="font-semibold truncate">
 						{{ file.short }}
 					</span>
 					<span class="">{{ file.size }}</span>

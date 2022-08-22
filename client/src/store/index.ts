@@ -13,6 +13,7 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>("mainSt
 		fileViewType: useStorage<FileViewTypesList>("fileViewType", FileViewTypes.GRID),
 		fileFilters: {
 			search: "",
+			fileTypes: [],
 		},
 	}),
 	actions: {
@@ -40,19 +41,15 @@ export const useMainStore = defineStore<any, RootState, {}, RootActions>("mainSt
 		toggleFileView(payload: FileViewTypesList) {
 			this.fileViewType = payload;
 		},
-		searchFile(name: string) {
-			if (!name) return this.allFetchedFiles;
-
-			const searchRx = new RegExp(name, "i");
-			const matchedFiles = this.allFetchedFiles.filter((file: DisplayFile) => searchRx.test(file.filename));
-
-			return matchedFiles;
-		},
 		setFileFilters(key, value) {
 			this.fileFilters[key] = value;
 		},
 		applyFilters() {
-			const searchFilesFound = this.searchFile(this.fileFilters.search);
+			const allFiles = this.allFetchedFiles;
+			const foundAfterFilter = filterFileByType(this.fileFilters.fileTypes, allFiles);
+			const searchFilesFound = searchFile(this.fileFilters.search, foundAfterFilter);
+			console.log({ searchFilesFound });
+
 			this.setFilesOnDisplay(searchFilesFound);
 		},
 		removeFileOnDisplay(file) {
@@ -108,4 +105,24 @@ function useStorage<T>(key: string, stateDate: T) {
 	}
 
 	return data;
+}
+
+function searchFile(name: string, allFiles: DisplayFile[]) {
+	if (!name) return allFiles;
+
+	const searchRx = new RegExp(name, "i");
+	const matchedFiles = allFiles.filter((file: DisplayFile) => searchRx.test(file.filename));
+
+	return matchedFiles;
+}
+
+function filterFileByType(fileTypesSelected: string[], allFiles: DisplayFile[]) {
+	if (fileTypesSelected.length === 0) return allFiles;
+
+	const mainTypeForSelectedFiles = fileTypesSelected.map((type) => type.split("/")[0]);
+
+	return allFiles.filter((file) => {
+		const mainFileType = file.fileType.split("/")[0];
+		return mainTypeForSelectedFiles.includes(mainFileType);
+	});
 }

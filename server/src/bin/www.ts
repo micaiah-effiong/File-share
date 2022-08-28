@@ -14,6 +14,7 @@ import path from "path";
 import { promises as fsPromise } from "fs";
 import getMyIPAddress from "../handlers/local-ip";
 import config from "../config/env";
+import { Logger } from "../handlers";
 
 const fileShareDebugger: debug.Debugger = debug("file-share:server");
 
@@ -21,7 +22,7 @@ const fileShareDebugger: debug.Debugger = debug("file-share:server");
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(Number(process.env.PORT || "3000"));
+const port = normalizePort(config.PORT);
 app.set("port", port);
 
 /**
@@ -39,8 +40,8 @@ async function createStoreDir(dirPath: string): Promise<string | undefined> {
 createStoreDir(filesPath).then(async () => {
 	await DB.sync({ force: false });
 	server.listen(port, async () => {
-		console.log("Server has started");
-		console.log(`> \tlocalhost:${port}`);
+		Logger.info("Server has started");
+		Logger.info(`> \tlocalhost:${port}`);
 
 		const ips: string[] = await getMyIPAddress();
 		ips.forEach(async (ipAddress: string, _: number, arr: string[]) => {
@@ -49,7 +50,7 @@ createStoreDir(filesPath).then(async () => {
 			if (ipAddress === localhost && !config.ORIGIN && arr.length > 1) return;
 			config.ORIGIN = config.ORIGIN || `http://${ipAddress || localhost}:${port}`;
 
-			console.log(`> \t${config.ORIGIN}`);
+			Logger.info(`> \t${config.ORIGIN}`);
 			const start = process.platform == "darwin" ? "open" : process.platform == "win32" ? "start" : "xdg-open";
 
 			const command: string = `${start} ${config.ORIGIN}`;
@@ -63,7 +64,6 @@ createStoreDir(filesPath).then(async () => {
 				const dUrl: string = await QRcode.toString(config.ORIGIN, {
 					type: "terminal",
 				});
-				console.log(dUrl);
 			}
 		});
 	});
@@ -76,10 +76,8 @@ createStoreDir(filesPath).then(async () => {
  */
 function normalizePort(val: number) {
 	if (val >= 0) {
-		// port number
 		return val;
 	}
-
 	return false;
 }
 
@@ -108,11 +106,11 @@ function onError(error: SystemError) {
 	// handle specific listen errors with friendly messages
 	switch (error.code) {
 		case "EACCES":
-			console.error(bind + " requires elevated privileges");
+			Logger.error(bind + " requires elevated privileges");
 			process.exit(1);
 			break;
 		case "EADDRINUSE":
-			console.error(bind + " is already in use");
+			Logger.error(bind + " is already in use");
 			process.exit(1);
 			break;
 		default:

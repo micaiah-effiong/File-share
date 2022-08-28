@@ -111,6 +111,8 @@ import UploadPreview from "./components/UploadPreview/UploadPreview.vue";
 import { UploadFilesProgressDetails } from "./types";
 import UploadProgressBadge from "./components/UploadPreview/UploadProgressBadge.vue";
 import FileTypeFilter from "./components/FileFilters/FileTypeFilter.vue";
+import { main } from "./socket";
+main();
 
 const mainStore = useMainStore();
 const initialScrollPosition: Ref<number> = ref(0);

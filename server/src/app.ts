@@ -2,11 +2,12 @@ import dotenv from "dotenv";
 import http from "http";
 import express, { Request, Response, NextFunction } from "express";
 import multer from "multer";
-import logger from "morgan";
+import { morganMiddleware } from "./middlewares";
 import indexRouter from "./routes/index";
 import { ExpressPeerServer } from "peer";
 import cors from "cors";
 import path from "path";
+import { initIOServer } from "./io";
 
 dotenv.config();
 const app = express();
@@ -19,13 +20,14 @@ const peerServer = ExpressPeerServer(server, {
 	// debug: true,
 });
 
-app.use(logger("dev"));
+initIOServer(server);
+
+app.use(morganMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.resolve(__dirname, "public")));
 app.use(cors());
 app.use("/", indexRouter);
-app.use("/peer", peerServer);
 
 // catch 404 and forward to error handler
 app.use(function (_, res, next: NextFunction) {
@@ -56,4 +58,4 @@ app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
 	});
 });
 
-export { app, server, peerServer };
+export { app, server /* peerServer */ };

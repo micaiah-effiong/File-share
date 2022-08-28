@@ -1,13 +1,14 @@
 import multer from "multer";
 import config from "../config/env";
+import { Logger } from "./logger";
 
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		console.log(file, "destination");
+		Logger.info("destination", file);
 		cb(null, config.FILE_STORAGE_PATH);
 	},
 	filename: function (req, file, cb) {
-		console.log(file, "filename");
+		Logger.info("filename", file);
 		cb(null, file.originalname);
 	},
 });

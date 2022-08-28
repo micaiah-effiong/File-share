@@ -4,7 +4,7 @@ import mime from "mime";
 import path from "path";
 // import zlib from "zlib";
 import { Request, Response, NextFunction } from "express";
-import { convertByte, getDownloadLink, getFileLink, getShortName, getStreamLink, upload } from "../../handlers";
+import { convertByte, getDownloadLink, getFileLink, getShortName, getStreamLink, Logger, upload } from "../../handlers";
 
 import { errorResponse, asyncHandler, processRange } from "../../handlers";
 import { DBManager } from "../../models";
@@ -76,7 +76,7 @@ export const streamFile = asyncHandler(async (req: Request, res: Response, next:
 	let len = fileStats.size;
 
 	if (req.headers.range) {
-		console.log(">>> Found range request", req.headers.range);
+		Logger.info(">>> Found range request", req.headers.range);
 		const { start, end } = processRange(req.headers.range, len);
 		option.end = end;
 		option.start = start;
@@ -104,7 +104,7 @@ export const streamFile = asyncHandler(async (req: Request, res: Response, next:
 		fileStream.pipe(res);
 	});
 	fileStream.on("error", function (err) {
-		console.log(err);
+		Logger.info(err);
 	});
 });
 

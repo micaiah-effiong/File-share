@@ -1,4 +1,5 @@
 import config from "../config/env";
+import { Logger } from "./logger";
 
 type BufferRange = {
 	start: number;
@@ -14,7 +15,7 @@ function processRange(ranges: string, len: number, MAX_SIZE: number = config.STR
 		end = len - 1;
 	}
 
-	console.log("bytes", start, end, len);
+	Logger.info("bytes", start, end, len);
 	const result: BufferRange = { start, end };
 	return result;
 }

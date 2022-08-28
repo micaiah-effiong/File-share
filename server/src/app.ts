@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import http from "http";
 import express, { Request, Response, NextFunction } from "express";
 import multer from "multer";
-import logger from "morgan";
+import { morganMiddleware } from "./middlewares";
 import indexRouter from "./routes/index";
 import { ExpressPeerServer } from "peer";
 import cors from "cors";
@@ -19,7 +19,7 @@ const peerServer = ExpressPeerServer(server, {
 	// debug: true,
 });
 
-app.use(logger("dev"));
+app.use(morganMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.resolve(__dirname, "public")));

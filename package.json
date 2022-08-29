@@ -20,7 +20,8 @@
     "build": "yarn workspace client build && yarn workspace server build",
     "postbuild": "copyfiles -u 2 client/dist/** client/dist/**/* server/dist/public",
     "prepare": "husky install",
-    "prettier-format": "prettier --write ."
+    "prettier-format": "prettier --write .",
+    "test": "yarn workspace server test"
   },
   "private": true,
   "engines": {

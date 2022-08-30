@@ -111,8 +111,14 @@ import UploadPreview from "./components/UploadPreview/UploadPreview.vue";
 import { UploadFilesProgressDetails } from "./types";
 import UploadProgressBadge from "./components/UploadPreview/UploadProgressBadge.vue";
 import FileTypeFilter from "./components/FileFilters/FileTypeFilter.vue";
-import { main } from "./socket";
-main();
+import { socketClient, registerFiles } from "./socket";
+import { Socket } from "socket.io-client";
+
+function setUpSocketRegister(socket: Socket) {
+	registerFiles.listen.created(socket);
+	registerFiles.listen.removed(socket);
+}
+socketClient.initSocket(setUpSocketRegister);
 
 const mainStore = useMainStore();
 const initialScrollPosition: Ref<number> = ref(0);
@@ -164,8 +170,6 @@ async function handleUpload(event: Event) {
 	try {
 		uploadMeta.value.status = "OPEN";
 		await uploadFiles(evtTarget.files, updateProgress);
-		await mainStore.fetchAllFiles();
-		mainStore.applyFilters();
 	} catch (err: any) {
 		console.log("An error occured while uploading file");
 	} finally {
@@ -204,8 +208,6 @@ function handleFileTypeFilter(selectedFileTypes: Array<string>) {
 
 async function handleDelete(fileId: string, file: DisplayFile) {
 	await removeFile(fileId);
-	mainStore.removeFileOnDisplay(fileId);
-	await mainStore.fetchAllFiles();
 }
 </script>
 

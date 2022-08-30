@@ -1,10 +1,14 @@
-const user = {
-	name: "Alex",
-	age: 3,
+import { EventEmitter } from "events";
+
+type ServerEvents = "FILE" | "FOLDER";
+type ServerEventMode = "CREATED" | "UPDATED" | "DELETED" | "READ";
+type ServerEventNames<T extends ServerEvents = ServerEvents> = `${T}::${ServerEventMode}`;
+
+const socketServerEvent = new EventEmitter();
+export const socketServerEventEmit = (event: ServerEventNames, ...args: any[]) => {
+	socketServerEvent.emit(event, ...args);
 };
 
-export const getUser = () => user;
-export const setUser = <T extends keyof typeof user>(key: T, value: typeof user[T]) => {
-	user[key] = value;
-	const f = user[key];
+export const socketServerEventListenOn = (event: ServerEventNames, listener: (...args: any[]) => void) => {
+	return socketServerEvent.on(event, listener);
 };

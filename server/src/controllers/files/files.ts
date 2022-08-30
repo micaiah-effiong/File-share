@@ -11,6 +11,7 @@ import { DBManager } from "../../models";
 import { File } from "../../models/file";
 import { fetchFile, listFiles } from "./files.service";
 import config from "../../config/env";
+import { socketServerEventEmit } from "../../config/socket-server";
 
 // endpoint controller functions goes here
 export const getAllFiles = asyncHandler(async (_: Request, res: Response) => {
@@ -53,6 +54,7 @@ export const uploadFile = [
 		});
 
 		await fileSample.save();
+		socketServerEventEmit("FILE::CREATED");
 
 		res.json({
 			status: true,
@@ -113,7 +115,9 @@ export const deleteFile = asyncHandler(async (req: Request, res: Response, next:
 	if (!file) throw errorResponse("File does not exist", 400);
 
 	const filePath = path.resolve(config.FILE_STORAGE_PATH, file.filename);
-	await Promise.all([file.destroy(), fsPromises.unlink(filePath).catch((error) => console.error(error))]);
+	await Promise.all([file.destroy(), fsPromises.unlink(filePath).catch((error) => Logger.error(error))]);
+
+	socketServerEventEmit("FILE::DELETED", file.id);
 
 	res.json({
 		status: true,

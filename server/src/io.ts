@@ -1,5 +1,6 @@
 import http from "http";
 import { Server } from "socket.io";
+import { socketServerEventListenOn } from "./config/socket-server";
 
 export const initIOServer = (httpServer: http.Server) => {
 	const io: Server = new Server(httpServer, {
@@ -8,26 +9,20 @@ export const initIOServer = (httpServer: http.Server) => {
 
 	io.on("connection", function (socket) {
 		socket.emit("JOINED", socket.id);
-		console.log("client connected", socket.id); //log client connect
+		console.log("client connected", socket.id);
 
 		socket.on("disconnect", function (id) {
-			console.log("client disconnected", id); //log client disconnect
+			console.log("client disconnected", id);
+		});
+
+		socketServerEventListenOn("FILE::CREATED", () => {
+			socket.emit("FILE::CREATED");
+		});
+
+		socketServerEventListenOn("FILE::DELETED", (fileId: string) => {
+			socket.emit("FILE::DELETED", fileId);
 		});
 	});
 
 	return io;
-
-	// peerIO.on("connection", function (socket) {
-	// 	socket.broadcast.emit("JOINED", socket.id);
-	// 	console.log("P client connected", socket.id); //log client connect
-
-	// 	socket.on("PEER::CONNECTION", (peerId) => {
-	// 		console.log("P peer connected", peerId); //log client connect
-	// 		peerIO.emit("PEER::CONNECTION", peerId);
-	// 	});
-
-	// 	socket.on("disconnect", function (id) {
-	// 		console.log("P client disconnected", id); //log client disconnect
-	// 	});
-	// });
 };

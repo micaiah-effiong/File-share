@@ -28,7 +28,7 @@ app.set("port", port);
 /**
  * Create a files directory if not exist
  */
-let filesPath: string = process.env.STORAGE_PATH || path.resolve(process.cwd(), "dist", "files");
+let filesPath: string = config.FILE_STORAGE_PATH || path.resolve(process.cwd(), "src", "files");
 
 async function createStoreDir(dirPath: string): Promise<string | undefined> {
 	return await fsPromise.mkdir(dirPath, { recursive: true });

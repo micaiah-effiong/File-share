@@ -8,6 +8,7 @@ import { ExpressPeerServer } from "peer";
 import cors from "cors";
 import path from "path";
 import { initIOServer } from "./io";
+import { Logger } from "./handlers";
 
 dotenv.config();
 const app = express();
@@ -48,6 +49,8 @@ app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
 	if (err instanceof multer.MulterError) {
 		// A Multer error occurred when uploading.
 	}
+
+	Logger.error(err);
 
 	res.status(err.statusCode || 500);
 	res.json({

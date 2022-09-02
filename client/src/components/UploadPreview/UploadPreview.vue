@@ -43,6 +43,7 @@ import { UploadFilesProgressDetails } from "../../types";
 import CircleProgressVue from "./CircleProgress.vue";
 import UploadFileItem from "./UploadFileItem.vue";
 
+const TIME_TO_CLOSE_PREVIEW = 10000;
 const emit = defineEmits<{ (event: "close"): void }>();
 const props = withDefaults(
 	defineProps<{
@@ -72,7 +73,7 @@ watch(
 				}
 
 				console.log("gone");
-			}, 10000);
+			}, TIME_TO_CLOSE_PREVIEW);
 		}
 	}
 );

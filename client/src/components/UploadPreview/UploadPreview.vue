@@ -38,13 +38,14 @@
 
 <script lang="ts" setup>
 import { XIcon, ChevronDownIcon } from "@heroicons/vue/outline";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { UploadFilesProgressDetails } from "../../types";
 import CircleProgressVue from "./CircleProgress.vue";
 import UploadFileItem from "./UploadFileItem.vue";
 
+const TIME_TO_CLOSE_PREVIEW = 10000;
 const emit = defineEmits<{ (event: "close"): void }>();
-withDefaults(
+const props = withDefaults(
 	defineProps<{
 		uploaded: number;
 		total: number;
@@ -60,6 +61,20 @@ withDefaults(
 		uploadingFilesList: () => [],
 	}
 );
-
 const showDetails = ref(true);
+
+watch(
+	() => props.displayStatus,
+	(update) => {
+		if (update === "DONE") {
+			setTimeout(() => {
+				if (props.displayStatus === "DONE") {
+					emit("close");
+				}
+
+				console.log("gone");
+			}, TIME_TO_CLOSE_PREVIEW);
+		}
+	}
+);
 </script>

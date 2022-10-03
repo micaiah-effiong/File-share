@@ -1,0 +1,17 @@
+{
+	"name": "share-box",
+	"short_name": "unbox",
+	"description": "Share files with friends and family",
+	"start_url": "/?source=pwa",
+	"display": "standalone",
+	"icons": [
+		{
+			"src": "/src/assets/icon-4167.png",
+			"type": "image/png",
+			"sizes": "4167x4167"
+		}
+	],
+	"scope": "/",
+	"theme_color": "#f5f9fd",
+	"background_color": "#e8f0f7"
+}

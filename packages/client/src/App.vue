@@ -105,7 +105,7 @@ import { FilePreview, MobileFilePreview } from "./layouts/FilePreview";
 import ViewSwitcher from "./components/ViewSwitcher/ViewSwitcher.vue";
 import AllFilesMenu from "./layouts/AllFilesMenu/AllFilesMenu.vue";
 import { debounce, removeFile, throttle, uploadFiles } from "./utils";
-import { useMainStore } from "./store";
+import { notification, useMainStore } from "./store";
 import { DisplayFile } from "./types";
 import UploadPreview from "./components/UploadPreview/UploadPreview.vue";
 import { UploadFilesProgressDetails } from "./types";
@@ -170,6 +170,9 @@ async function handleUpload(event: Event) {
 	try {
 		uploadMeta.value.status = "OPEN";
 		await uploadFiles(evtTarget.files, updateProgress);
+		await notification("Upload completed", {
+			body: `${evtTarget.files.length} file(s) uploaded successfully.`,
+		});
 	} catch (err: any) {
 		console.log("An error occured while uploading file");
 	} finally {
@@ -208,6 +211,7 @@ function handleFileTypeFilter(selectedFileTypes: Array<string>) {
 
 async function handleDelete(fileId: string, file: DisplayFile) {
 	await removeFile(fileId);
+	await notification("Document removed", { body: "Successfully removed a file" });
 }
 </script>
 

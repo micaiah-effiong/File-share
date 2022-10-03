@@ -1,27 +1,22 @@
 {
-  "name": "share-box",
+  "name": "root",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:micaiah-effiong/File-share.git",
   "author": "Micah Effiong <micaiah.effiong@gmail.com>",
   "license": "MIT",
   "workspaces": [
-    "server",
-    "client"
+    "packages/*"
   ],
   "scripts": {
-    "client:dev": "yarn workspace client dev",
-    "server:dev": "yarn workspace server dev",
-    "server:start": "yarn workspace server start",
-    "start": "yarn workspace server start",
-    "story": "yarn workspace client storybook",
-    "build-story": "yarn workspace client build-storybook",
-    "prebuild": "rimraf ./server/dist",
-    "build": "yarn workspace client build && yarn workspace server build",
-    "postbuild": "copyfiles -u 2 client/dist/** client/dist/**/* server/dist/public",
+    "client:dev": "lerna run dev --scope=@share-box/client",
+    "server:dev": "lerna run dev --scope=@share-box/server",
+    "server:start": "lerna run start --scope=@share-box/server",
+    "start": "lerna run start",
+    "build": "lerna run build",
     "prepare": "husky install",
-    "prettier-format": "prettier --write .",
-    "test": "yarn workspace server test"
+    "prettier-format": "lerna run prettier-format",
+    "test": "lerna run test"
   },
   "private": true,
   "engines": {
@@ -30,11 +25,11 @@
     "npm": ">=8.x.x"
   },
   "devDependencies": {
-    "copyfiles": "^2.4.1",
+    "lerna": "^5.5.4",
+    "nx": "^14.8.2",
     "husky": "^8.0.1",
     "prettier": "^2.7.1",
     "pretty-quick": "^3.1.3",
-    "rimraf": "^3.0.2",
-    "yarn-audit-fix": "^9.3.1"
+    "rimraf": "^3.0.2"
   }
 }

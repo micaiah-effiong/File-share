@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 import { DisplayFile, Nullable } from "../types";
 import { getFiles } from "../utils";
 import { FileViewTypes, FileViewTypesList, RootActions, RootState } from "./types";
+import logo from "../assets/icon-4167.png";
 
 export const useMainStore = defineStore<any, RootState, {}, RootActions>("mainStore", {
 	state: (): RootState => ({
@@ -125,4 +126,13 @@ function filterFileByType(fileTypesSelected: string[], allFiles: DisplayFile[]) 
 		const mainFileType = file.fileType.split("/")[0];
 		return mainTypeForSelectedFiles.includes(mainFileType);
 	});
+}
+
+export async function notification(title: string, options: NotificationOptions = {}) {
+	const notificationPermission = await Notification.requestPermission();
+	if (notificationPermission !== "granted") return void 0;
+
+	const newNotification = new Notification(title, { ...options, icon: logo });
+
+	return newNotification;
 }

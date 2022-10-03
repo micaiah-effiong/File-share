@@ -11,6 +11,7 @@
   "scripts": {
     "client:dev": "lerna run dev --scope=@share-box/client",
     "server:dev": "lerna run dev --scope=@share-box/server",
+    "dev": "lerna run dev",
     "server:start": "lerna run start --scope=@share-box/server",
     "start": "lerna run start",
     "build": "lerna run build",

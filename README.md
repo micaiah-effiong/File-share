@@ -6,12 +6,22 @@ This project helps to transfer file over HTTP/HTTPS
 
 ```bash
 git clone https://github.com/micaiah-effiong/File-share.git
+
+cd File-share
 ```
 
-### Install node modules
+## Install node modules
+
+To install all dependencies execute
 
 ```bash
-lerna add boostrap --hoist
+npm install
+```
+
+Adding dependencies with lerna can be done be executing
+
+```bash
+npm run bootstrap
 ```
 
 ### Installing packages

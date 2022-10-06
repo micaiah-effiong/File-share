@@ -17,7 +17,8 @@
     "build": "lerna run build",
     "prepare": "husky install",
     "prettier-format": "lerna run prettier-format",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "bootstrap": "lerna add boostrap --hoist"
   },
   "private": true,
   "engines": {
